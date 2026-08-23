@@ -68,7 +68,7 @@ function createTestPageHtml(test, view) {
     <meta name="robots" content="noindex,nofollow">
     <meta name="description" content="${escapeHtml(description)}">
     <title>${escapeHtml(title)}</title>
-    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step3-1">
   </head>
   <body class="test-detail-page" data-test-slug="${escapeHtml(test.slug)}" data-test-view="${view}">
     <header class="site-header">
@@ -111,7 +111,7 @@ function createTestPageHtml(test, view) {
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
       <a href="/"><span>⌂</span>홈</a><a href="/test/" aria-current="page"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/"><span>●</span>MY</a>
     </nav>
-    <script type="module" src="/assets/js/test-app.js"></script>
+    <script type="module" src="/assets/js/test-app.js?v=step3-1"></script>
   </body>
 </html>
 `;
