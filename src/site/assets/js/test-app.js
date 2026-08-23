@@ -1,9 +1,9 @@
 import { calculateTestResult } from './test-engine.js';
+import { loadPublishedTests, loadTestBundle } from './content-repository.js';
 
-const buildStep = 'REF-DAILYFUN-STEP3-TEST-01';
+const buildStep = 'REF-DAILYFUN-STEP8-CONTENT-CRUD-01';
 const appUrl = new URL(import.meta.url);
 const siteBasePath = appUrl.pathname.replace(/\/assets\/js\/test-app\.js$/, '');
-const testsUrl = new URL('../../data/tests.json', import.meta.url);
 const testSlug = document.body.dataset.testSlug;
 const initialView = document.body.dataset.testView || 'intro';
 const app = document.querySelector('#test-app');
@@ -297,11 +297,10 @@ function renderLoadError() {
 
 async function loadTest() {
   try {
-    const response = await fetch(testsUrl, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`tests ${response.status}`);
-    const data = await response.json();
-    state.allTests = (data.items || []).filter((test) => test.status === 'published');
-    state.test = state.allTests.find((test) => test.slug === testSlug);
+    [state.allTests, state.test] = await Promise.all([
+      loadPublishedTests(),
+      loadTestBundle(testSlug)
+    ]);
     if (!state.test) throw new Error('test not found');
     renderRecommendations();
 
