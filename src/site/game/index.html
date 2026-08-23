@@ -1,10 +1,69 @@
 <!doctype html>
 <html lang="ko">
   <head>
-    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex,nofollow"><title>10초 게임 — DAILY TEST LAB</title>
-    <link rel="stylesheet" href="/assets/css/app.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4a100">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="description" content="반응속도, 기억력, 숫자 순서 게임을 설치 없이 무료로 즐기고 최고 기록에 도전하세요.">
+    <title>10초 미니게임 3종 | DAILY TEST LAB</title>
+    <link rel="stylesheet" href="/assets/css/app.css?v=step5-1">
   </head>
-  <body class="centered-page"><main class="simple-card"><p class="eyebrow">10 SECOND GAME</p><h1>미니게임</h1><p>STEP 6에서 반응속도·기억력·숫자 순서 게임을 연결합니다.</p><a class="primary-button" href="/">홈으로</a></main></body>
-</html>
+  <body class="mini-game-list-page">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="DAILY TEST LAB 홈">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span>DAILY TEST LAB</span>
+      </a>
+      <a class="header-action" href="#mini-game-catalog">게임 선택</a>
+    </header>
 
+    <main class="mini-game-page-shell">
+      <section class="mini-game-list-hero" aria-labelledby="mini-game-title">
+        <div>
+          <p class="eyebrow">10 SECOND GAME LAB</p>
+          <h1 id="mini-game-title">짧게 놀고<br><span>기록은 길게</span></h1>
+          <p>설치도 로그인도 없이 바로 시작하세요.<br>반응속도·기억력·집중력 기록을 매일 갱신해 보세요.</p>
+        </div>
+        <div class="mini-game-list-stat" aria-label="이 기기 누적 도전 횟수">
+          <strong id="game-total-attempts">0</strong>
+          <span>누적 도전</span>
+          <small>이 기기에 자동 기록</small>
+        </div>
+      </section>
+
+      <section class="mini-game-catalog-section" aria-labelledby="mini-game-catalog-title">
+        <div class="section-heading">
+          <div><p class="section-kicker">PICK A GAME</p><h2 id="mini-game-catalog-title">오늘의 3가지 도전</h2></div>
+          <span class="catalog-status">전부 무료</span>
+        </div>
+        <div class="mini-game-catalog" id="mini-game-catalog" aria-live="polite">
+          <div class="mini-game-card-skeleton" aria-hidden="true"></div>
+          <div class="mini-game-card-skeleton" aria-hidden="true"></div>
+          <div class="mini-game-card-skeleton" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <aside class="ad-placeholder" aria-label="광고 게재 예정 영역">
+        <span>AD</span><p>게임 선택을 방해하지 않는 광고 영역</p>
+      </aside>
+
+      <section class="mini-game-list-note" aria-labelledby="game-record-note">
+        <span aria-hidden="true">🏅</span>
+        <div><h2 id="game-record-note">내 최고 기록은 자동으로 남아요</h2><p>현재 브라우저에만 저장되며 개인정보는 수집하지 않습니다. 회원 저장은 다음 단계에서 연결합니다.</p></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>매일 가볍게, 나를 발견하는 시간</span></div>
+      <nav aria-label="운영 정책">
+        <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+      </nav>
+    </footer>
+
+    <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
+      <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/" aria-current="page"><span>⚡</span>게임</a><a href="/#today-me"><span>●</span>MY</a>
+    </nav>
+    <script type="module" src="/assets/js/game-list.js?v=step5-1"></script>
+  </body>
+</html>

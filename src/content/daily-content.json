@@ -34,10 +34,10 @@
       "description": "화면이 바뀌는 순간 얼마나 빠르게 누를 수 있을까요?",
       "duration": "10초",
       "actionLabel": "기록 도전",
-      "note": "최고 기록 저장 예정",
+      "note": "최고 기록 자동 저장",
       "icon": "⚡",
       "accent": "orange",
-      "route": "/game/"
+      "route": "/game/reaction-speed/"
     },
     {
       "id": "friend-view",
@@ -61,7 +61,7 @@
       "note": "라운드별 난이도 상승",
       "icon": "🧩",
       "accent": "mint",
-      "route": "/game/"
+      "route": "/game/memory/"
     }
   ]
 }

@@ -18,6 +18,9 @@ const requiredFiles = [
   'assets/js/test-engine.js',
   'assets/js/balance-app.js',
   'assets/js/balance-engine.js',
+  'assets/js/game-list.js',
+  'assets/js/game-app.js',
+  'assets/js/mini-game-engine.js',
   'assets/js/firebase-client.js',
   'assets/js/firebase-config.js',
   'test/index.html',
@@ -30,6 +33,7 @@ const requiredFiles = [
   'contact/index.html',
   'data/tests.json',
   'data/balance-games.json',
+  'data/mini-games.json',
   'data/daily-content.json'
 ];
 
@@ -78,6 +82,15 @@ const {
   calculateVotePercentages,
   selectDailyGame
 } = await import(pathToFileURL(balanceEnginePath).href);
+const miniGameEnginePath = path.join(outputDirectory, 'assets/js/mini-game-engine.js');
+const {
+  createNumberBoard,
+  createReactionDelay,
+  extendMemorySequence,
+  formatGameScore,
+  getGameRating,
+  isBetterScore
+} = await import(pathToFileURL(miniGameEnginePath).href);
 if (
   !testListJavaScript.includes('REF-DAILYFUN-STEP3-TEST-01') ||
   !testAppJavaScript.includes('REF-DAILYFUN-STEP3-TEST-01')
@@ -85,7 +98,7 @@ if (
   throw new Error('STEP 3 test script reference is missing.');
 }
 
-for (const fileName of ['tests.json', 'balance-games.json', 'daily-content.json']) {
+for (const fileName of ['tests.json', 'balance-games.json', 'mini-games.json', 'daily-content.json']) {
   JSON.parse(await readFile(path.join(outputDirectory, 'data', fileName), 'utf8'));
 }
 
@@ -266,6 +279,56 @@ if (!dailyGame || !balanceSlugs.includes(dailyGame.slug)) {
 const balanceListHtml = await readFile(path.join(outputDirectory, 'vote/index.html'), 'utf8');
 if (!balanceListHtml.includes('balance-app.js') || !balanceListHtml.includes('오늘의 밸런스')) {
   throw new Error('Balance game list page is incomplete.');
+}
+
+const miniGameData = JSON.parse(
+  await readFile(path.join(outputDirectory, 'data/mini-games.json'), 'utf8')
+);
+const publishedMiniGames = (miniGameData.items || []).filter((game) => game.status === 'published');
+const requiredMiniGameSlugs = ['reaction-speed', 'memory', 'number-order'];
+const publishedMiniGameSlugs = publishedMiniGames.map((game) => game.slug);
+if (
+  publishedMiniGames.length !== 3 ||
+  requiredMiniGameSlugs.some((slug) => !publishedMiniGameSlugs.includes(slug))
+) {
+  throw new Error('The three required mini games are missing.');
+}
+
+for (const game of publishedMiniGames) {
+  if (!game.seo?.title || !game.seo?.description || !game.shareText) {
+    throw new Error(`Mini game SEO or sharing data is missing: ${game.slug}`);
+  }
+  if (!['lower', 'higher'].includes(game.scoreDirection)) {
+    throw new Error(`Invalid mini game score direction: ${game.slug}`);
+  }
+  const detailHtml = await readFile(
+    path.join(outputDirectory, 'game', game.slug, 'index.html'),
+    'utf8'
+  );
+  if (!detailHtml.includes(game.title) || !detailHtml.includes('game-app.js')) {
+    throw new Error(`Generated mini game detail is incomplete: ${game.slug}`);
+  }
+}
+
+const gameListHtml = await readFile(path.join(outputDirectory, 'game/index.html'), 'utf8');
+if (!gameListHtml.includes('game-list.js') || !gameListHtml.includes('오늘의 3가지 도전')) {
+  throw new Error('Mini game list page is incomplete.');
+}
+
+const numberBoard = createNumberBoard(12, () => 0.25);
+const memorySequence = extendMemorySequence([0, 1], 6, () => 0.5);
+if (
+  new Set(numberBoard).size !== 12 ||
+  numberBoard.some((number) => number < 1 || number > 12) ||
+  createReactionDelay(() => 0, 1500, 3500) !== 1500 ||
+  memorySequence.join(',') !== '0,1,3' ||
+  !isBetterScore('lower', 210, 250) ||
+  !isBetterScore('higher', 6, 5) ||
+  formatGameScore('reaction-speed', 217) !== '217ms' ||
+  formatGameScore('memory', 5) !== '5단계' ||
+  getGameRating('number-order', 4500).title !== '숫자 탐색 달인'
+) {
+  throw new Error('Mini game calculation engine failed.');
 }
 
 const rules = await readFile(path.join(projectRoot, 'firestore.rules'), 'utf8');

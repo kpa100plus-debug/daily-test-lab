@@ -12,6 +12,7 @@ const siteBasePath = (process.env.SITE_BASE_PATH ?? '').replace(/\/$/, '');
 const contentFiles = [
   'tests.json',
   'balance-games.json',
+  'mini-games.json',
   'daily-content.json'
 ];
 
@@ -198,6 +199,88 @@ function createBalancePageHtml(game) {
 `;
 }
 
+function createMiniGamePageHtml(game, allGames) {
+  const recommendations = allGames
+    .filter((item) => item.status === 'published' && item.slug !== game.slug)
+    .slice(0, 2)
+    .map((item) => `
+          <a class="mini-game-related-card" href="/game/${escapeHtml(item.slug)}/">
+            <span>${escapeHtml(item.icon)}</span>
+            <div><small>${escapeHtml(item.category)}</small><strong>${escapeHtml(item.title)}</strong></div>
+            <b aria-hidden="true">→</b>
+          </a>`)
+    .join('');
+
+  return `<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4a100">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="description" content="${escapeHtml(game.seo.description)}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="${escapeHtml(game.seo.title)}">
+    <meta property="og:description" content="${escapeHtml(game.seo.description)}">
+    <title>${escapeHtml(game.seo.title)} | DAILY TEST LAB</title>
+    <link rel="stylesheet" href="/assets/css/app.css?v=step5-1">
+  </head>
+  <body class="mini-game-detail-page" data-game-slug="${escapeHtml(game.slug)}">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="DAILY TEST LAB 홈">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span>DAILY TEST LAB</span>
+      </a>
+      <a class="header-action" href="/game/">게임 목록</a>
+    </header>
+
+    <main class="mini-game-page-shell">
+      <nav class="breadcrumb" aria-label="현재 위치">
+        <a href="/">홈</a><span aria-hidden="true">›</span><a href="/game/">10초 게임</a><span aria-hidden="true">›</span><span>${escapeHtml(game.shortTitle)}</span>
+      </nav>
+
+      <section class="mini-game-app-card" id="mini-game-app" aria-live="polite" tabindex="-1">
+        <div class="mini-game-intro" data-screen="intro" data-accent="${escapeHtml(game.accent)}">
+          <span class="mini-game-main-icon" aria-hidden="true">${escapeHtml(game.icon)}</span>
+          <div class="mini-game-meta-row"><span>${escapeHtml(game.category)}</span><span>${escapeHtml(game.duration)}</span><span>무료 · 설치 없음</span></div>
+          <p class="section-kicker">10 SECOND GAME LAB</p>
+          <h1>${escapeHtml(game.title)}</h1>
+          <p class="mini-game-lead">${escapeHtml(game.description)}</p>
+          <div class="mini-game-intro-record"><span>${escapeHtml(game.recordLabel)}</span><strong>기록 불러오는 중</strong><small>잠시만 기다려 주세요</small></div>
+          <button class="mini-game-start-button" type="button">게임 시작</button>
+          <p class="mini-game-instruction">${escapeHtml(game.instruction)}</p>
+        </div>
+      </section>
+
+      <aside class="ad-placeholder mini-game-ad" aria-label="광고 게재 예정 영역">
+        <span>AD</span><p>게임 진행을 방해하지 않는 결과 하단 광고 영역</p>
+      </aside>
+
+      <section class="mini-game-related-section" aria-labelledby="related-game-title">
+        <div class="section-heading">
+          <div><p class="section-kicker">NEXT CHALLENGE</p><h2 id="related-game-title">다음 기록도 도전해 보세요</h2></div>
+          <a class="text-link" href="/game/">전체 보기 <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="mini-game-related-grid">${recommendations}</div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>매일 가볍게, 나를 발견하는 시간</span></div>
+      <nav aria-label="운영 정책">
+        <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+      </nav>
+    </footer>
+
+    <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
+      <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/" aria-current="page"><span>⚡</span>게임</a><a href="/#today-me"><span>●</span>MY</a>
+    </nav>
+    <script type="module" src="/assets/js/game-app.js?v=step5-1"></script>
+  </body>
+</html>
+`;
+}
+
 await rm(outputDirectory, { recursive: true, force: true });
 await mkdir(outputDirectory, { recursive: true });
 await cp(sourceDirectory, outputDirectory, { recursive: true });
@@ -238,6 +321,17 @@ for (const game of balanceGames.filter((item) => item.status === 'published')) {
   );
 }
 
+const miniGames = parsedContent.get('mini-games.json')?.items ?? [];
+for (const game of miniGames.filter((item) => item.status === 'published')) {
+  const detailDirectory = path.join(outputDirectory, 'game', game.slug);
+  await mkdir(detailDirectory, { recursive: true });
+  await writeFile(
+    path.join(detailDirectory, 'index.html'),
+    createMiniGamePageHtml(game, miniGames),
+    'utf8'
+  );
+}
+
 if (siteBasePath) {
   const outputEntries = await readdir(outputDirectory, {
     recursive: true,
@@ -259,7 +353,7 @@ if (siteBasePath) {
 
 await writeFile(
   path.join(outputDirectory, 'build-meta.json'),
-  `${JSON.stringify({ service: 'DAILY TEST LAB', build: 'step-4-balance-games', siteBasePath }, null, 2)}\n`,
+  `${JSON.stringify({ service: 'DAILY TEST LAB', build: 'step-5-mini-games', siteBasePath }, null, 2)}\n`,
   'utf8'
 );
 

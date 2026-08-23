@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "updatedAt": "2026-08-23",
+  "items": [
+    {
+      "id": "mini-001",
+      "slug": "reaction-speed",
+      "title": "반응속도 테스트",
+      "shortTitle": "반응속도",
+      "category": "순발력",
+      "icon": "⚡",
+      "accent": "yellow",
+      "duration": "약 10초",
+      "description": "화면이 초록색으로 바뀌는 순간 터치하고 나의 반응 시간을 확인하세요.",
+      "instruction": "기다리는 동안 누르면 실패예요. 초록색이 된 순간 최대한 빠르게 터치하세요.",
+      "recordLabel": "최고 반응",
+      "scoreDirection": "lower",
+      "shareText": "내 반응속도 기록에 도전해 보세요!",
+      "status": "published",
+      "seo": {
+        "title": "무료 반응속도 테스트 — 몇 ms인지 바로 측정",
+        "description": "설치 없이 무료로 반응속도를 측정하고 최고 기록에 다시 도전하세요."
+      }
+    },
+    {
+      "id": "mini-002",
+      "slug": "memory",
+      "title": "기억력 게임",
+      "shortTitle": "기억력",
+      "category": "집중력",
+      "icon": "🧠",
+      "accent": "violet",
+      "duration": "약 1분",
+      "description": "빛나는 타일 순서를 기억하고 같은 순서로 눌러 기억 단계를 높여보세요.",
+      "instruction": "처음에는 3개가 빛나고 단계마다 하나씩 늘어납니다. 틀리기 전까지 도전하세요.",
+      "recordLabel": "최고 단계",
+      "scoreDirection": "higher",
+      "shareText": "내 기억력 최고 단계에 도전해 보세요!",
+      "status": "published",
+      "seo": {
+        "title": "무료 기억력 게임 — 빛나는 순서 기억하기",
+        "description": "타일 순서를 기억하는 무료 집중력 게임으로 오늘의 최고 단계를 기록하세요."
+      }
+    },
+    {
+      "id": "mini-003",
+      "slug": "number-order",
+      "title": "숫자 순서 게임",
+      "shortTitle": "숫자 순서",
+      "category": "집중력",
+      "icon": "🔢",
+      "accent": "mint",
+      "duration": "약 20초",
+      "description": "뒤섞인 숫자 1부터 12까지 순서대로 빠르게 찾아 눌러보세요.",
+      "instruction": "1부터 시작해 12까지 순서대로 누르면 기록이 완성됩니다. 틀린 숫자는 선택되지 않아요.",
+      "recordLabel": "최단 시간",
+      "scoreDirection": "lower",
+      "shareText": "내 숫자 순서 찾기 기록을 이겨보세요!",
+      "status": "published",
+      "seo": {
+        "title": "무료 숫자 순서 게임 — 1부터 12까지 빠르게",
+        "description": "뒤섞인 숫자를 순서대로 누르고 집중력과 속도 기록을 무료로 측정하세요."
+      }
+    }
+  ]
+}
