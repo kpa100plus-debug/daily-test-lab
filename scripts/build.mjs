@@ -1,6 +1,12 @@
 import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  createBalanceSlotSlugs,
+  createBlankBalanceGame,
+  createBlankTest,
+  createTestSlotSlugs
+} from '../src/site/assets/js/content-admin-engine.js';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, '..');
@@ -69,7 +75,7 @@ function createTestPageHtml(test, view) {
     <meta name="robots" content="noindex,nofollow">
     <meta name="description" content="${escapeHtml(description)}">
     <title>${escapeHtml(title)}</title>
-    <link rel="stylesheet" href="/assets/css/app.css?v=step7-1">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step8-1">
   </head>
   <body class="test-detail-page" data-test-slug="${escapeHtml(test.slug)}" data-test-view="${view}">
     <header class="site-header">
@@ -112,7 +118,7 @@ function createTestPageHtml(test, view) {
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
       <a href="/"><span>⌂</span>홈</a><a href="/test/" aria-current="page"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/my/"><span>●</span>MY</a>
     </nav>
-    <script type="module" src="/assets/js/test-app.js?v=step3-1"></script>
+    <script type="module" src="/assets/js/test-app.js?v=step8-1"></script>
   </body>
 </html>
 `;
@@ -134,7 +140,7 @@ function createBalancePageHtml(game) {
     <meta property="og:title" content="${escapeHtml(game.seo.title)}">
     <meta property="og:description" content="${escapeHtml(game.seo.description)}">
     <title>${escapeHtml(game.seo.title)} | DAILY TEST LAB</title>
-    <link rel="stylesheet" href="/assets/css/app.css?v=step7-1">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step8-1">
   </head>
   <body class="balance-detail-page" data-balance-page="detail" data-balance-slug="${escapeHtml(game.slug)}">
     <header class="site-header">
@@ -193,7 +199,7 @@ function createBalancePageHtml(game) {
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
       <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/" aria-current="page"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/my/"><span>●</span>MY</a>
     </nav>
-    <script type="module" src="/assets/js/balance-app.js?v=step4-1"></script>
+    <script type="module" src="/assets/js/balance-app.js?v=step8-1"></script>
   </body>
 </html>
 `;
@@ -223,7 +229,7 @@ function createMiniGamePageHtml(game, allGames) {
     <meta property="og:title" content="${escapeHtml(game.seo.title)}">
     <meta property="og:description" content="${escapeHtml(game.seo.description)}">
     <title>${escapeHtml(game.seo.title)} | DAILY TEST LAB</title>
-    <link rel="stylesheet" href="/assets/css/app.css?v=step7-1">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step8-1">
   </head>
   <body class="mini-game-detail-page" data-game-slug="${escapeHtml(game.slug)}">
     <header class="site-header">
@@ -310,6 +316,17 @@ for (const test of tests.filter((item) => item.status === 'published')) {
   );
 }
 
+// GitHub Pages는 런타임에 새 경로를 만들 수 없으므로 무료 관리자 슬롯의
+// 물리 페이지를 미리 생성한다. 실제 콘텐츠는 Firebase에서 교체된다.
+for (const slotSlug of createTestSlotSlugs()) {
+  const test = createBlankTest(slotSlug);
+  const detailDirectory = path.join(outputDirectory, 'test', test.slug);
+  const resultDirectory = path.join(detailDirectory, 'result');
+  await mkdir(resultDirectory, { recursive: true });
+  await writeFile(path.join(detailDirectory, 'index.html'), createTestPageHtml(test, 'intro'), 'utf8');
+  await writeFile(path.join(resultDirectory, 'index.html'), createTestPageHtml(test, 'result'), 'utf8');
+}
+
 const balanceGames = parsedContent.get('balance-games.json')?.items ?? [];
 for (const game of balanceGames.filter((item) => item.status === 'published')) {
   const detailDirectory = path.join(outputDirectory, 'vote', game.slug);
@@ -319,6 +336,13 @@ for (const game of balanceGames.filter((item) => item.status === 'published')) {
     createBalancePageHtml(game),
     'utf8'
   );
+}
+
+for (const slotSlug of createBalanceSlotSlugs()) {
+  const game = createBlankBalanceGame(slotSlug);
+  const detailDirectory = path.join(outputDirectory, 'vote', game.slug);
+  await mkdir(detailDirectory, { recursive: true });
+  await writeFile(path.join(detailDirectory, 'index.html'), createBalancePageHtml(game), 'utf8');
 }
 
 const miniGames = parsedContent.get('mini-games.json')?.items ?? [];
@@ -353,7 +377,7 @@ if (siteBasePath) {
 
 await writeFile(
   path.join(outputDirectory, 'build-meta.json'),
-  `${JSON.stringify({ service: 'DAILY TEST LAB', build: 'step-7-admin-daily-content', siteBasePath }, null, 2)}\n`,
+  `${JSON.stringify({ service: 'DAILY TEST LAB', build: 'step-8-content-crud', siteBasePath }, null, 2)}\n`,
   'utf8'
 );
 
