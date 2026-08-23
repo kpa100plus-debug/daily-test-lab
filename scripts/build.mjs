@@ -14,7 +14,11 @@ const sourceDirectory = path.join(projectRoot, 'src', 'site');
 const contentDirectory = path.join(projectRoot, 'src', 'content');
 const outputDirectory = path.join(projectRoot, 'dist');
 const siteBasePath = (process.env.SITE_BASE_PATH ?? '').replace(/\/$/, '');
-const publicSiteUrl = (process.env.PUBLIC_SITE_URL ?? 'https://kpa100plus-debug.github.io/daily-test-lab')
+const defaultPublicSiteUrl = 'https://kpa100plus-debug.github.io/daily-test-lab';
+const cloudflarePagesUrl = process.env.CF_PAGES === '1'
+  ? process.env.CF_PAGES_URL
+  : '';
+const publicSiteUrl = (process.env.PUBLIC_SITE_URL || cloudflarePagesUrl || defaultPublicSiteUrl)
   .replace(/\/$/, '');
 const releaseDate = '2026-08-23';
 
@@ -672,7 +676,7 @@ await writeFile(
   path.join(outputDirectory, 'build-meta.json'),
   `${JSON.stringify({
     service: 'DAILY TEST LAB',
-    build: 'step-9-seo-adsense',
+    build: 'step-10-cloudflare-pages',
     siteBasePath,
     publicSiteUrl,
     indexableUrlCount: indexableRoutes.length,
