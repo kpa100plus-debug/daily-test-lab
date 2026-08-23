@@ -1,10 +1,81 @@
 <!doctype html>
 <html lang="ko">
   <head>
-    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex,nofollow"><title>오늘 테스트 — DAILY TEST LAB</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#6d4aff">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="description" content="성격, 관계, 업무 성향을 재미있게 알아보는 DAILY TEST LAB 무료 심리테스트">
+    <title>무료 심리테스트 모음 | DAILY TEST LAB</title>
     <link rel="stylesheet" href="/assets/css/app.css">
   </head>
-  <body class="centered-page"><main class="simple-card"><p class="eyebrow">TODAY TEST</p><h1>심리테스트</h1><p>STEP 4에서 질문·결과 계산 구조를 연결합니다.</p><a class="primary-button" href="/">홈으로</a></main></body>
-</html>
+  <body class="test-list-page">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="DAILY TEST LAB 홈">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span>DAILY TEST LAB</span>
+      </a>
+      <a class="header-action" href="/#today-me">내 기록</a>
+    </header>
 
+    <main class="test-page-shell">
+      <section class="test-list-hero" aria-labelledby="test-list-title">
+        <div>
+          <p class="eyebrow">TODAY TEST</p>
+          <h1 id="test-list-title">오늘은 어떤<br><span>나를 만날까?</span></h1>
+          <p>가볍게 답하고 바로 결과를 확인하세요.<br>모든 테스트는 무료이며 설치가 필요 없어요.</p>
+        </div>
+        <div class="test-list-hero-stat" aria-label="콘텐츠 현황">
+          <strong id="published-test-count">3</strong>
+          <span>지금 공개</span>
+          <small>50개까지 확장 준비</small>
+        </div>
+      </section>
+
+      <section class="test-catalog" aria-labelledby="catalog-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">PICK YOUR TEST</p>
+            <h2 id="catalog-title">나에게 맞는 테스트</h2>
+          </div>
+          <span class="catalog-status" id="catalog-status" aria-live="polite">불러오는 중</span>
+        </div>
+        <div class="test-filter" id="test-filter" role="group" aria-label="테스트 분류">
+          <button type="button" class="active" data-category="all">전체</button>
+          <button type="button" data-category="성격">성격</button>
+          <button type="button" data-category="관계">관계</button>
+          <button type="button" data-category="업무">업무</button>
+        </div>
+        <div class="test-grid" id="test-grid">
+          <div class="test-card-skeleton" aria-hidden="true"></div>
+          <div class="test-card-skeleton" aria-hidden="true"></div>
+          <div class="test-card-skeleton" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <aside class="ad-placeholder" aria-label="광고 게재 예정 영역">
+        <span>AD</span><p>테스트 선택을 방해하지 않는 광고 영역</p>
+      </aside>
+
+      <section class="test-list-note" aria-labelledby="test-note-title">
+        <span aria-hidden="true">🔬</span>
+        <div>
+          <h2 id="test-note-title">재미있게 보고, 가볍게 참고하세요</h2>
+          <p>DAILY TEST LAB의 심리테스트는 자기이해를 돕는 재미 콘텐츠이며 전문적인 심리 진단이나 의학적 판단을 대신하지 않습니다.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>매일 가볍게, 나를 발견하는 시간</span></div>
+      <nav aria-label="운영 정책">
+        <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+      </nav>
+    </footer>
+
+    <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
+      <a href="/"><span>⌂</span>홈</a><a href="/test/" aria-current="page"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/#today-me"><span>●</span>MY</a>
+    </nav>
+    <script type="module" src="/assets/js/test-list.js"></script>
+  </body>
+</html>
