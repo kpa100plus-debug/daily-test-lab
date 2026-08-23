@@ -1,6 +1,67 @@
 {
   "schemaVersion": 1,
   "activeDate": null,
-  "items": []
+  "activeItemId": null,
+  "items": [
+    {
+      "id": "hidden-energy-type",
+      "category": "심리테스트",
+      "title": "나의 숨은 에너지 유형은?",
+      "description": "나는 사람에게 충전될까, 혼자 있을 때 충전될까?",
+      "duration": "약 2분",
+      "actionLabel": "테스트 시작",
+      "note": "결과 유형 6개",
+      "icon": "✨",
+      "accent": "violet",
+      "route": "/test/"
+    },
+    {
+      "id": "coffee-vs-dessert",
+      "category": "밸런스",
+      "title": "평생 커피 vs 평생 디저트",
+      "description": "둘 다 포기할 수 없다면 당신의 최종 선택은?",
+      "duration": "10초",
+      "actionLabel": "하나 선택",
+      "note": "실시간 선택 결과 예정",
+      "icon": "☕",
+      "accent": "coral",
+      "route": "/vote/"
+    },
+    {
+      "id": "reaction-speed",
+      "category": "미니게임",
+      "title": "내 반응속도는 상위 몇 %?",
+      "description": "화면이 바뀌는 순간 얼마나 빠르게 누를 수 있을까요?",
+      "duration": "10초",
+      "actionLabel": "기록 도전",
+      "note": "최고 기록 저장 예정",
+      "icon": "⚡",
+      "accent": "orange",
+      "route": "/game/"
+    },
+    {
+      "id": "friend-view",
+      "category": "성격테스트",
+      "title": "친구들이 보는 진짜 내 모습",
+      "description": "내가 생각하는 나와 친구가 보는 나는 얼마나 다를까요?",
+      "duration": "약 3분",
+      "actionLabel": "확인하기",
+      "note": "친구에게 결과 공유",
+      "icon": "🎭",
+      "accent": "blue",
+      "route": "/test/"
+    },
+    {
+      "id": "memory-challenge",
+      "category": "미니게임",
+      "title": "순간 기억력 챌린지",
+      "description": "잠깐 나타난 카드의 위치를 얼마나 정확히 기억할까요?",
+      "duration": "1분",
+      "actionLabel": "기억력 측정",
+      "note": "라운드별 난이도 상승",
+      "icon": "🧩",
+      "accent": "mint",
+      "route": "/game/"
+    }
+  ]
 }
-
