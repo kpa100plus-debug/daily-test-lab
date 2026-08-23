@@ -1,7 +1,8 @@
-const buildStep = 'REF-DAILYFUN-STEP3-TEST-01';
+import { loadPublishedTests } from './content-repository.js';
+
+const buildStep = 'REF-DAILYFUN-STEP8-CONTENT-CRUD-01';
 const appUrl = new URL(import.meta.url);
 const siteBasePath = appUrl.pathname.replace(/\/assets\/js\/test-list\.js$/, '');
-const testsUrl = new URL('../../data/tests.json', import.meta.url);
 
 document.documentElement.dataset.buildStep = buildStep;
 
@@ -95,10 +96,7 @@ function setupFilters() {
 async function loadTests() {
   const status = document.querySelector('#catalog-status');
   try {
-    const response = await fetch(testsUrl, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`tests ${response.status}`);
-    const data = await response.json();
-    publishedTests = (data.items || []).filter((test) => test.status === 'published');
+    publishedTests = await loadPublishedTests();
     document.querySelector('#published-test-count')?.replaceChildren(String(publishedTests.length));
     renderTests();
   } catch (error) {
