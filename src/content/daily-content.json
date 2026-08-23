@@ -10,10 +10,10 @@
       "description": "나는 사람에게 충전될까, 혼자 있을 때 충전될까?",
       "duration": "약 2분",
       "actionLabel": "테스트 시작",
-      "note": "결과 유형 6개",
+      "note": "결과 유형 4개",
       "icon": "✨",
       "accent": "violet",
-      "route": "/test/"
+      "route": "/test/hidden-energy/"
     },
     {
       "id": "coffee-vs-dessert",
@@ -49,7 +49,7 @@
       "note": "친구에게 결과 공유",
       "icon": "🎭",
       "accent": "blue",
-      "route": "/test/"
+      "route": "/test/friend-view/"
     },
     {
       "id": "memory-challenge",
