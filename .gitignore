@@ -1,0 +1,11 @@
+dist/
+node_modules/
+.firebase/
+.wrangler/
+.dev.vars
+.env
+.env.*
+firebase-debug.log*
+npm-debug.log*
+.DS_Store
+Thumbs.db

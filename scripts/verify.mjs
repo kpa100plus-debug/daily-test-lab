@@ -548,7 +548,12 @@ if (
   throw new Error('STEP 8 unpublished content slot fallback is incomplete.');
 }
 
-const publicSiteUrl = 'https://kpa100plus-debug.github.io/daily-test-lab';
+const defaultPublicSiteUrl = 'https://kpa100plus-debug.github.io/daily-test-lab';
+const cloudflarePagesUrl = process.env.CF_PAGES === '1'
+  ? process.env.CF_PAGES_URL
+  : '';
+const publicSiteUrl = (process.env.PUBLIC_SITE_URL || cloudflarePagesUrl || defaultPublicSiteUrl)
+  .replace(/\/$/, '');
 const staticIndexableRoutes = [
   '/',
   '/test/',
@@ -627,8 +632,10 @@ if (
 }
 
 const robotsText = await readFile(path.join(outputDirectory, 'robots.txt'), 'utf8');
+const publicPath = new URL(publicSiteUrl).pathname.replace(/\/$/, '') || '/';
+const expectedAllowRule = `Allow: ${publicPath === '/' ? '/' : `${publicPath}/`}`;
 if (
-  !robotsText.includes('Allow: /daily-test-lab/') ||
+  !robotsText.includes(expectedAllowRule) ||
   !robotsText.includes(`Sitemap: ${publicSiteUrl}/sitemap.xml`) ||
   robotsText.includes('Disallow: /')
 ) {
@@ -674,7 +681,7 @@ if (
 
 const buildMeta = JSON.parse(await readFile(path.join(outputDirectory, 'build-meta.json'), 'utf8'));
 if (
-  buildMeta.build !== 'step-9-seo-adsense' ||
+  buildMeta.build !== 'step-10-cloudflare-pages' ||
   buildMeta.publicSiteUrl !== publicSiteUrl ||
   buildMeta.indexableUrlCount !== expectedIndexableRoutes.length
 ) {

@@ -56,10 +56,13 @@ Cloudflare 대시보드에서 아래 순서로 연결합니다.
 1. **Workers & Pages → Create application → Pages → Connect to Git**
 2. GitHub 저장소 `daily-test-lab` 선택
 3. Production branch: `main`
-4. Build command: `npm run build`
+4. Build command: `npm test`
 5. Build output directory: `dist`
 6. Root directory: 비워 둠
 7. **Save and Deploy**
+
+Cloudflare가 빌드 시 제공하는 `CF_PAGES_URL`이 canonical, sitemap.xml,
+robots.txt에 자동 반영됩니다. 별도의 유료 도메인이나 URL 환경변수는 필요하지 않습니다.
 
 `Direct Upload`은 선택하지 않습니다. Git 자동배포 방식과 나중에 전환할 수 없기 때문입니다.
 
@@ -76,4 +79,3 @@ git push
 ```
 
 Cloudflare에서 새 배포가 성공하고 `/`, `/test/`, `/vote/`, `/game/`, `/admin/`이 모두 열리면 STEP 1 완료입니다.
-
