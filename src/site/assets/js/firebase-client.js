@@ -13,13 +13,16 @@ export function getFirebaseServices() {
     import(`https://www.gstatic.com/firebasejs/${sdkVersion}/firebase-auth.js`),
     import(`https://www.gstatic.com/firebasejs/${sdkVersion}/firebase-firestore.js`),
     import(`https://www.gstatic.com/firebasejs/${sdkVersion}/firebase-analytics.js`)
-  ]).then(([appSdk, authSdk, firestoreSdk, analyticsSdk]) => {
+  ]).then(async ([appSdk, authSdk, firestoreSdk, analyticsSdk]) => {
     const app = appSdk.initializeApp(firebaseConfig);
+    const analytics = await analyticsSdk.isSupported()
+      .then((supported) => supported ? analyticsSdk.getAnalytics(app) : null)
+      .catch(() => null);
     return {
       app,
       auth: authSdk.getAuth(app),
       db: firestoreSdk.getFirestore(app),
-      analytics: analyticsSdk.getAnalytics(app),
+      analytics,
       authSdk,
       firestoreSdk,
       analyticsSdk

@@ -22,10 +22,10 @@
       "description": "둘 다 포기할 수 없다면 당신의 최종 선택은?",
       "duration": "10초",
       "actionLabel": "하나 선택",
-      "note": "실시간 선택 결과 예정",
+      "note": "참여 즉시 결과 비율 확인",
       "icon": "☕",
       "accent": "coral",
-      "route": "/vote/"
+      "route": "/vote/coffee-vs-dessert/"
     },
     {
       "id": "reaction-speed",

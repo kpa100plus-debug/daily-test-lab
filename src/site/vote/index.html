@@ -1,10 +1,94 @@
 <!doctype html>
 <html lang="ko">
   <head>
-    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex,nofollow"><title>밸런스 게임 — DAILY TEST LAB</title>
-    <link rel="stylesheet" href="/assets/css/app.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ff5f8f">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="description" content="둘 중 하나만 고르고 다른 사람들의 선택 비율을 확인하는 DAILY TEST LAB 무료 밸런스 게임">
+    <title>무료 밸런스 게임 모음 | DAILY TEST LAB</title>
+    <link rel="stylesheet" href="/assets/css/app.css?v=step4-1">
   </head>
-  <body class="centered-page"><main class="simple-card"><p class="eyebrow">BALANCE GAME</p><h1>밸런스 게임</h1><p>STEP 5에서 투표·비율·참여자 수를 연결합니다.</p><a class="primary-button" href="/">홈으로</a></main></body>
-</html>
+  <body class="balance-list-page" data-balance-page="list">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="DAILY TEST LAB 홈">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span>DAILY TEST LAB</span>
+      </a>
+      <a class="header-action" href="/#today-me">내 기록</a>
+    </header>
 
+    <main class="balance-page-shell">
+      <section class="balance-list-hero" aria-labelledby="balance-list-title">
+        <div>
+          <p class="eyebrow">ONE OR THE OTHER</p>
+          <h1 id="balance-list-title">오늘은 딱 하나만<br><span>고른다면?</span></h1>
+          <p>고민은 짧게, 결과는 바로.<br>친구와 공유하면 취향 차이가 더 재미있어요.</p>
+        </div>
+        <div class="balance-list-stat" aria-label="밸런스 게임 콘텐츠 현황">
+          <strong id="published-balance-count">20</strong>
+          <span>지금 공개</span>
+          <small>120개까지 확장 준비</small>
+        </div>
+      </section>
+
+      <section class="balance-daily-section" aria-labelledby="daily-balance-title">
+        <div class="section-heading">
+          <div><p class="section-kicker">TODAY BALANCE</p><h2 id="daily-balance-title">오늘의 밸런스</h2></div>
+          <span class="live-badge"><i></i> 매일 변경</span>
+        </div>
+        <div class="balance-app-card" id="balance-app" aria-live="polite" tabindex="-1">
+          <div class="test-loading" role="status">
+            <span class="test-loading-icon" aria-hidden="true">⚖️</span>
+            <strong>오늘의 질문을 고르고 있어요</strong>
+            <p>잠시만 기다려 주세요.</p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="ad-placeholder balance-ad" aria-label="광고 게재 예정 영역">
+        <span>AD</span><p>투표와 결과 확인을 방해하지 않는 광고 영역</p>
+      </aside>
+
+      <section class="balance-catalog" aria-labelledby="balance-catalog-title">
+        <div class="section-heading">
+          <div><p class="section-kicker">MORE CHOICES</p><h2 id="balance-catalog-title">다른 질문도 골라보세요</h2></div>
+          <span class="catalog-status" id="balance-catalog-status" aria-live="polite">불러오는 중</span>
+        </div>
+        <div class="test-filter" role="group" aria-label="밸런스 게임 분류">
+          <button type="button" class="active" data-balance-category="all">전체</button>
+          <button type="button" data-balance-category="음식">음식</button>
+          <button type="button" data-balance-category="일상">일상</button>
+          <button type="button" data-balance-category="관계">관계</button>
+          <button type="button" data-balance-category="직장·돈">직장·돈</button>
+          <button type="button" data-balance-category="상상">상상</button>
+        </div>
+        <div class="balance-catalog-grid" id="balance-catalog-grid">
+          <div class="test-card-skeleton" aria-hidden="true"></div>
+          <div class="test-card-skeleton" aria-hidden="true"></div>
+          <div class="test-card-skeleton" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <section class="balance-list-note" aria-labelledby="balance-note-title">
+        <span aria-hidden="true">🔒</span>
+        <div>
+          <h2 id="balance-note-title">질문마다 한 번만 선택할 수 있어요</h2>
+          <p>선택을 마치면 결과 비율이 공개됩니다. 로그인 전에는 이 브라우저에 선택 기록을 저장하고, Firebase 연결 시 익명 전체 집계로 자동 전환합니다.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>매일 가볍게, 나를 발견하는 시간</span></div>
+      <nav aria-label="운영 정책">
+        <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+      </nav>
+    </footer>
+
+    <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
+      <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/" aria-current="page"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/#today-me"><span>●</span>MY</a>
+    </nav>
+    <script type="module" src="/assets/js/balance-app.js?v=step4-1"></script>
+  </body>
+</html>

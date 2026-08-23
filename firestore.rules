@@ -2,10 +2,97 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // STEP 1 안전 기본값: 기능별 규칙을 확정하기 전에는 모든 접근을 차단한다.
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function validChoice(choice) {
+      return choice == 'a' || choice == 'b';
+    }
+
+    function votePath(gameId) {
+      return /databases/$(database)/documents/votes/$(gameId + '_' + request.auth.uid);
+    }
+
+    function statsPath(gameId) {
+      return /databases/$(database)/documents/balance_games/$(gameId);
+    }
+
+    match /balance_games/{gameId} {
+      allow read: if true;
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['gameId', 'a', 'b', 'total', 'updatedAt'])
+        && request.resource.data.gameId == gameId
+        && request.resource.data.a is int
+        && request.resource.data.b is int
+        && request.resource.data.a >= 0
+        && request.resource.data.b >= 0
+        && request.resource.data.total == 1
+        && request.resource.data.a + request.resource.data.b == 1
+        && request.resource.data.updatedAt == request.time
+        && !exists(votePath(gameId))
+        && existsAfter(votePath(gameId))
+        && getAfter(votePath(gameId)).data.choice in ['a', 'b']
+        && (
+          (getAfter(votePath(gameId)).data.choice == 'a'
+            && request.resource.data.a == 1
+            && request.resource.data.b == 0)
+          ||
+          (getAfter(votePath(gameId)).data.choice == 'b'
+            && request.resource.data.a == 0
+            && request.resource.data.b == 1)
+        );
+
+      allow update: if signedIn()
+        && request.resource.data.keys().hasOnly(['gameId', 'a', 'b', 'total', 'updatedAt'])
+        && request.resource.data.gameId == resource.data.gameId
+        && request.resource.data.gameId == gameId
+        && request.resource.data.a is int
+        && request.resource.data.b is int
+        && request.resource.data.total == resource.data.total + 1
+        && request.resource.data.a + request.resource.data.b == request.resource.data.total
+        && request.resource.data.updatedAt == request.time
+        && !exists(votePath(gameId))
+        && existsAfter(votePath(gameId))
+        && (
+          (getAfter(votePath(gameId)).data.choice == 'a'
+            && request.resource.data.a == resource.data.a + 1
+            && request.resource.data.b == resource.data.b)
+          ||
+          (getAfter(votePath(gameId)).data.choice == 'b'
+            && request.resource.data.a == resource.data.a
+            && request.resource.data.b == resource.data.b + 1)
+        );
+
+      allow delete: if false;
+    }
+
+    match /votes/{voteId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['gameId', 'userId', 'choice', 'createdAt'])
+        && request.resource.data.userId == request.auth.uid
+        && voteId == request.resource.data.gameId + '_' + request.auth.uid
+        && validChoice(request.resource.data.choice)
+        && request.resource.data.createdAt == request.time
+        && existsAfter(statsPath(request.resource.data.gameId))
+        && (
+          (!exists(statsPath(request.resource.data.gameId))
+            && getAfter(statsPath(request.resource.data.gameId)).data.total == 1)
+          ||
+          (exists(statsPath(request.resource.data.gameId))
+            && getAfter(statsPath(request.resource.data.gameId)).data.total
+              == get(statsPath(request.resource.data.gameId)).data.total + 1)
+        );
+
+      allow update, delete: if false;
+    }
+
+    // 공개된 기능 외의 컬렉션은 계속 차단한다.
     match /{document=**} {
       allow read, write: if false;
     }
   }
 }
-

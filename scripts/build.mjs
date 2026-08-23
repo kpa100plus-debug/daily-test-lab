@@ -117,6 +117,87 @@ function createTestPageHtml(test, view) {
 `;
 }
 
+function createBalancePageHtml(game) {
+  const firstOption = game.options[0];
+  const secondOption = game.options[1];
+
+  return `<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ff5f8f">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="description" content="${escapeHtml(game.seo.description)}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="${escapeHtml(game.seo.title)}">
+    <meta property="og:description" content="${escapeHtml(game.seo.description)}">
+    <title>${escapeHtml(game.seo.title)} | DAILY TEST LAB</title>
+    <link rel="stylesheet" href="/assets/css/app.css?v=step4-1">
+  </head>
+  <body class="balance-detail-page" data-balance-page="detail" data-balance-slug="${escapeHtml(game.slug)}">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="DAILY TEST LAB 홈">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span>DAILY TEST LAB</span>
+      </a>
+      <a class="header-action" href="/vote/">밸런스 목록</a>
+    </header>
+
+    <main class="balance-page-shell">
+      <nav class="breadcrumb" aria-label="현재 위치">
+        <a href="/">홈</a><span aria-hidden="true">›</span><a href="/vote/">밸런스 게임</a><span aria-hidden="true">›</span><span>${escapeHtml(game.title)}</span>
+      </nav>
+
+      <section class="balance-app-card" id="balance-app" aria-live="polite" tabindex="-1">
+        <div class="balance-question-screen" data-screen="question">
+          <div class="balance-question-top"><span class="balance-category">${escapeHtml(game.category)}</span><span class="balance-once">질문별 1회 선택</span></div>
+          <span class="balance-main-icon" aria-hidden="true">${escapeHtml(game.icon)}</span>
+          <p class="section-kicker">BALANCE GAME</p>
+          <h1>${escapeHtml(game.question)}</h1>
+          <p class="balance-description">${escapeHtml(game.description)}</p>
+          <div class="balance-choices">
+            <button class="balance-choice balance-choice-a" type="button" data-choice="a" aria-label="${escapeHtml(firstOption.label)} 선택">
+              <span class="balance-choice-emoji">${escapeHtml(firstOption.emoji)}</span><strong>${escapeHtml(firstOption.label)}</strong><small>이것을 선택</small>
+            </button>
+            <span class="balance-vs">VS</span>
+            <button class="balance-choice balance-choice-b" type="button" data-choice="b" aria-label="${escapeHtml(secondOption.label)} 선택">
+              <span class="balance-choice-emoji">${escapeHtml(secondOption.emoji)}</span><strong>${escapeHtml(secondOption.label)}</strong><small>이것을 선택</small>
+            </button>
+          </div>
+          <p class="balance-vote-status" aria-live="polite">선택하면 바로 결과 비율을 볼 수 있어요.</p>
+        </div>
+      </section>
+
+      <aside class="ad-placeholder balance-ad" aria-label="광고 게재 예정 영역">
+        <span>AD</span><p>선택 결과를 방해하지 않는 광고 영역</p>
+      </aside>
+
+      <section class="balance-recommend-section" aria-labelledby="balance-recommend-title">
+        <div class="section-heading">
+          <div><p class="section-kicker">NEXT CHOICE</p><h2 id="balance-recommend-title">다음 밸런스도 골라보세요</h2></div>
+          <a class="text-link" href="/vote/">전체 보기 <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="balance-catalog-grid compact" id="recommended-balance-games"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>매일 가볍게, 나를 발견하는 시간</span></div>
+      <nav aria-label="운영 정책">
+        <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+      </nav>
+    </footer>
+
+    <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
+      <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/" aria-current="page"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/"><span>●</span>MY</a>
+    </nav>
+    <script type="module" src="/assets/js/balance-app.js?v=step4-1"></script>
+  </body>
+</html>
+`;
+}
+
 await rm(outputDirectory, { recursive: true, force: true });
 await mkdir(outputDirectory, { recursive: true });
 await cp(sourceDirectory, outputDirectory, { recursive: true });
@@ -146,6 +227,17 @@ for (const test of tests.filter((item) => item.status === 'published')) {
   );
 }
 
+const balanceGames = parsedContent.get('balance-games.json')?.items ?? [];
+for (const game of balanceGames.filter((item) => item.status === 'published')) {
+  const detailDirectory = path.join(outputDirectory, 'vote', game.slug);
+  await mkdir(detailDirectory, { recursive: true });
+  await writeFile(
+    path.join(detailDirectory, 'index.html'),
+    createBalancePageHtml(game),
+    'utf8'
+  );
+}
+
 if (siteBasePath) {
   const outputEntries = await readdir(outputDirectory, {
     recursive: true,
@@ -167,7 +259,7 @@ if (siteBasePath) {
 
 await writeFile(
   path.join(outputDirectory, 'build-meta.json'),
-  `${JSON.stringify({ service: 'DAILY TEST LAB', build: 'step-3-tests', siteBasePath }, null, 2)}\n`,
+  `${JSON.stringify({ service: 'DAILY TEST LAB', build: 'step-4-balance-games', siteBasePath }, null, 2)}\n`,
   'utf8'
 );
 

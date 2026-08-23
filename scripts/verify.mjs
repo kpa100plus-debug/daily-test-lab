@@ -16,6 +16,8 @@ const requiredFiles = [
   'assets/js/test-list.js',
   'assets/js/test-app.js',
   'assets/js/test-engine.js',
+  'assets/js/balance-app.js',
+  'assets/js/balance-engine.js',
   'assets/js/firebase-client.js',
   'assets/js/firebase-config.js',
   'test/index.html',
@@ -70,6 +72,12 @@ const testAppJavaScript = await readFile(
 );
 const testEnginePath = path.join(outputDirectory, 'assets/js/test-engine.js');
 const { calculateTestResult } = await import(pathToFileURL(testEnginePath).href);
+const balanceEnginePath = path.join(outputDirectory, 'assets/js/balance-engine.js');
+const {
+  applyVote,
+  calculateVotePercentages,
+  selectDailyGame
+} = await import(pathToFileURL(balanceEnginePath).href);
 if (
   !testListJavaScript.includes('REF-DAILYFUN-STEP3-TEST-01') ||
   !testAppJavaScript.includes('REF-DAILYFUN-STEP3-TEST-01')
@@ -186,6 +194,83 @@ for (const test of publishedTests) {
 const testListHtml = await readFile(path.join(outputDirectory, 'test/index.html'), 'utf8');
 if (!testListHtml.includes('test-list.js') || !testListHtml.includes('나에게 맞는 테스트')) {
   throw new Error('Test list page is incomplete.');
+}
+
+const balanceAppJavaScript = await readFile(
+  path.join(outputDirectory, 'assets/js/balance-app.js'),
+  'utf8'
+);
+if (!balanceAppJavaScript.includes('REF-DAILYFUN-STEP4-VOTE-01')) {
+  throw new Error('STEP 4 balance game script reference is missing.');
+}
+
+const balanceData = JSON.parse(
+  await readFile(path.join(outputDirectory, 'data/balance-games.json'), 'utf8')
+);
+if (balanceData.capacity < 100) {
+  throw new Error('The balance game structure must support at least 100 questions.');
+}
+
+const publishedBalanceGames = (balanceData.items || []).filter((game) => game.status === 'published');
+if (publishedBalanceGames.length < 20) {
+  throw new Error('At least 20 balance games are required for the STEP 4 launch set.');
+}
+
+const balanceSlugs = publishedBalanceGames.map((game) => game.slug);
+const balanceIds = publishedBalanceGames.map((game) => game.id);
+if (new Set(balanceSlugs).size !== balanceSlugs.length) {
+  throw new Error('Published balance game slugs must be unique.');
+}
+if (new Set(balanceIds).size !== balanceIds.length) {
+  throw new Error('Published balance game IDs must be unique.');
+}
+
+for (const game of publishedBalanceGames) {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(game.slug)) {
+    throw new Error(`Invalid balance game slug: ${game.slug}`);
+  }
+  if (!Array.isArray(game.options) || game.options.length !== 2) {
+    throw new Error(`Balance game must have exactly two options: ${game.slug}`);
+  }
+  if (game.options[0].id !== 'a' || game.options[1].id !== 'b') {
+    throw new Error(`Balance option IDs must be a and b: ${game.slug}`);
+  }
+  if (!game.seo?.title || !game.seo?.description || !game.shareText) {
+    throw new Error(`Balance share or SEO content is missing: ${game.slug}`);
+  }
+
+  const detailPath = path.join(outputDirectory, 'vote', game.slug, 'index.html');
+  await access(detailPath);
+  const detailHtml = await readFile(detailPath, 'utf8');
+  if (!detailHtml.includes(game.question) || !detailHtml.includes('balance-app.js')) {
+    throw new Error(`Generated balance detail is incomplete: ${game.slug}`);
+  }
+}
+
+const firstVote = applyVote({}, 'a');
+const secondVote = applyVote(firstVote, 'b');
+const percentages = calculateVotePercentages({ a: 3, b: 1 });
+if (
+  firstVote.a !== 1 || firstVote.total !== 1 ||
+  secondVote.a !== 1 || secondVote.b !== 1 || secondVote.total !== 2 ||
+  percentages.a !== 75 || percentages.b !== 25
+) {
+  throw new Error('Balance vote calculation engine failed.');
+}
+
+const dailyGame = selectDailyGame(publishedBalanceGames, '2026-08-23');
+if (!dailyGame || !balanceSlugs.includes(dailyGame.slug)) {
+  throw new Error('Daily balance game selection failed.');
+}
+
+const balanceListHtml = await readFile(path.join(outputDirectory, 'vote/index.html'), 'utf8');
+if (!balanceListHtml.includes('balance-app.js') || !balanceListHtml.includes('오늘의 밸런스')) {
+  throw new Error('Balance game list page is incomplete.');
+}
+
+const rules = await readFile(path.join(projectRoot, 'firestore.rules'), 'utf8');
+if (!rules.includes('match /balance_games/{gameId}') || !rules.includes('match /votes/{voteId}')) {
+  throw new Error('Balance vote Firestore security rules are missing.');
 }
 
 console.log(`Verification complete: ${requiredFiles.length} required files`);
