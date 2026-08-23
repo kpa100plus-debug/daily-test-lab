@@ -1,0 +1,208 @@
+:root {
+  color-scheme: light;
+  --background: #f7f7ff;
+  --surface: #ffffff;
+  --ink: #24223b;
+  --muted: #6f6b87;
+  --primary: #6d4aff;
+  --primary-soft: #eeeaff;
+  --accent: #ffca5c;
+  --success: #178557;
+  --border: #e6e3f2;
+  --shadow: 0 18px 50px rgba(61, 43, 128, 0.12);
+  font-family: Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(109, 74, 255, 0.12), transparent 28rem),
+    var(--background);
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+}
+
+.site-header,
+.page-shell,
+footer {
+  width: min(100% - 32px, 720px);
+  margin-inline: auto;
+}
+
+.site-header {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+.step-badge,
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.step-badge {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.hero {
+  padding: 58px 0 34px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--primary);
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 14px;
+  font-size: clamp(2.35rem, 10vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.07em;
+}
+
+.hero-copy {
+  color: var(--muted);
+  font-size: 1.06rem;
+  line-height: 1.65;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.menu-card {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+}
+
+.menu-card span {
+  font-size: 1.65rem;
+}
+
+.menu-card strong {
+  margin-top: 26px;
+  font-size: 1.08rem;
+}
+
+.menu-card small {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.status-panel,
+.simple-card {
+  margin-top: 26px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--surface);
+}
+
+.status-panel h2 {
+  font-size: 1.1rem;
+}
+
+.status-panel ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.status-panel li {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 13px 0;
+  border-top: 1px solid var(--border);
+}
+
+.status-panel b {
+  color: var(--success);
+}
+
+.status-panel .pending {
+  color: var(--muted);
+}
+
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 34px 0 46px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.centered-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.simple-card {
+  width: min(100%, 520px);
+  margin: 0;
+  text-align: center;
+}
+
+.simple-card h1 {
+  font-size: clamp(2rem, 8vw, 3rem);
+}
+
+.primary-button {
+  min-height: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+  padding: 0 22px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: white;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+@media (min-width: 680px) {
+  .card-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
