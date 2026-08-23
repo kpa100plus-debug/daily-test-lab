@@ -522,6 +522,8 @@ if (
   !adminAppJavaScript.includes("'test_results'") ||
   !adminAppJavaScript.includes("'balance_content'") ||
   !adminAppJavaScript.includes("'juyoungkim'") ||
+  !adminAppJavaScript.includes("provider.providerId === 'google.com'") ||
+  !adminAppJavaScript.includes('currentUser.getIdToken(true)') ||
   adminAppJavaScript.includes('김주영 관리자')
 ) {
   throw new Error('STEP 8 integrated administrator CRUD is incomplete.');
@@ -540,6 +542,8 @@ if (
   !rules.includes('match /balance_content/{gameSlug}') ||
   !rules.includes('function isAdmin()') ||
   !rules.includes("request.auth.token.email == 'kpa100plus@gmail.com'") ||
+  !rules.includes('request.auth.token.email_verified == true') ||
+  rules.includes('request.auth.token.firebase.sign_in_provider') ||
   !rules.includes('allow get: if signedIn()') ||
   !rules.includes('allow list: if false;')
 ) {
