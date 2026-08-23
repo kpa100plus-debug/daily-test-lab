@@ -493,11 +493,16 @@ if (
 const myPageHtml = await readFile(path.join(outputDirectory, 'my/index.html'), 'utf8');
 const myAppJavaScript = await readFile(path.join(outputDirectory, 'assets/js/my-app.js'), 'utf8');
 const privacyHtml = await readFile(path.join(outputDirectory, 'legal/privacy/index.html'), 'utf8');
+const termsHtml = await readFile(path.join(outputDirectory, 'legal/terms/index.html'), 'utf8');
+const contactHtml = await readFile(path.join(outputDirectory, 'contact/index.html'), 'utf8');
 if (
   !myPageHtml.includes('my-app.js') ||
   !myAppJavaScript.includes('Google로 기록 보관') ||
   !privacyHtml.includes('㈜ISEA GROUP') ||
-  !privacyHtml.includes('Firebase 사용자 식별값')
+  !privacyHtml.includes('Firebase 사용자 식별값') ||
+  !privacyHtml.includes('대표자 김주영') ||
+  !termsHtml.includes('총괄책임자는 김주영') ||
+  !contactHtml.includes('대표자 및 개인정보 관리책임자: 김주영')
 ) {
   throw new Error('Member dashboard or privacy disclosure is incomplete.');
 }
