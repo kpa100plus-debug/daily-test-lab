@@ -118,7 +118,7 @@ function createTestPageHtml(test, view) {
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
       <a href="/"><span>⌂</span>홈</a><a href="/test/" aria-current="page"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/my/"><span>●</span>MY</a>
     </nav>
-    <script type="module" src="/assets/js/test-app.js?v=step8-1"></script>
+    <script type="module" src="/assets/js/test-app.js?v=step8-2"></script>
   </body>
 </html>
 `;
@@ -199,7 +199,7 @@ function createBalancePageHtml(game) {
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
       <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/" aria-current="page"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/my/"><span>●</span>MY</a>
     </nav>
-    <script type="module" src="/assets/js/balance-app.js?v=step8-1"></script>
+    <script type="module" src="/assets/js/balance-app.js?v=step8-2"></script>
   </body>
 </html>
 `;
