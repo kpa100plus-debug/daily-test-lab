@@ -69,7 +69,14 @@ service cloud.firestore {
     }
 
     match /votes/{voteId} {
-      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      // 새 사용자의 첫 투표는 존재하지 않는 문서를 먼저 조회한다.
+      // 존재하는 투표는 작성자만 읽게 하고, 목록 조회는 계속 차단한다.
+      allow get: if signedIn()
+        && (
+          !exists(/databases/$(database)/documents/votes/$(voteId))
+          || resource.data.userId == request.auth.uid
+        );
+      allow list: if false;
 
       allow create: if signedIn()
         && request.resource.data.keys().hasOnly(['gameId', 'userId', 'choice', 'createdAt'])

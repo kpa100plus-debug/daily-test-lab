@@ -269,7 +269,12 @@ if (!balanceListHtml.includes('balance-app.js') || !balanceListHtml.includes('ì˜
 }
 
 const rules = await readFile(path.join(projectRoot, 'firestore.rules'), 'utf8');
-if (!rules.includes('match /balance_games/{gameId}') || !rules.includes('match /votes/{voteId}')) {
+if (
+  !rules.includes('match /balance_games/{gameId}') ||
+  !rules.includes('match /votes/{voteId}') ||
+  !rules.includes('allow get: if signedIn()') ||
+  !rules.includes('allow list: if false;')
+) {
   throw new Error('Balance vote Firestore security rules are missing.');
 }
 
