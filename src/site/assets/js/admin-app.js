@@ -837,6 +837,14 @@ async function initialize() {
       root?.replaceChildren(createLoginGate(message));
       return;
     }
+    // 오래 열린 관리자 탭도 최신 Firebase 인증 토큰으로 규칙을 평가하게 한다.
+    await currentUser.reload();
+    await currentUser.getIdToken(true);
+    currentUser = firebaseServices.auth.currentUser;
+    if (!isApprovedAdmin(currentUser)) {
+      root?.replaceChildren(createLoginGate('관리자 인증을 갱신하지 못했습니다. Google 계정으로 다시 로그인해 주세요.'));
+      return;
+    }
     const [remoteDailyContent] = await Promise.all([loadRemoteDailyContent(), loadAdminCollections()]);
     root?.replaceChildren(await createAdminDashboard(remoteDailyContent));
   } catch (error) {
