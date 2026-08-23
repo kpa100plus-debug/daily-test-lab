@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
-const rootDirectory = path.resolve(scriptDirectory, '..', 'src', 'site');
+const rootDirectory = path.resolve(scriptDirectory, '..', 'dist');
 const port = Number(process.env.PORT || 4173);
 
 const contentTypes = new Map([
@@ -59,4 +59,3 @@ const server = http.createServer(async (request, response) => {
 server.listen(port, '127.0.0.1', () => {
   console.log(`DAILY TEST LAB: http://localhost:${port}`);
 });
-
