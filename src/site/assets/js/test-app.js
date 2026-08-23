@@ -295,13 +295,29 @@ function renderLoadError() {
   replaceApp(screen);
 }
 
+function renderUnpublishedTest() {
+  const screen = createElement('div', 'test-empty-state');
+  screen.append(
+    createElement('span', 'test-loading-icon', '🧪'),
+    createElement('h1', '', '새 테스트를 준비 중이에요'),
+    createElement('p', '', '아직 공개되지 않은 슬롯입니다. 지금 이용 가능한 테스트를 먼저 즐겨보세요.')
+  );
+  const listLink = createElement('a', 'test-start-button', '공개 테스트 보기');
+  listLink.href = toSiteUrl('/test/');
+  screen.append(listLink);
+  replaceApp(screen);
+}
+
 async function loadTest() {
   try {
     [state.allTests, state.test] = await Promise.all([
       loadPublishedTests(),
       loadTestBundle(testSlug)
     ]);
-    if (!state.test) throw new Error('test not found');
+    if (!state.test) {
+      renderUnpublishedTest();
+      return;
+    }
     renderRecommendations();
 
     if (initialView === 'result') {
