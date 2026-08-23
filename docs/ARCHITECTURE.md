@@ -34,6 +34,18 @@
 
 콘텐츠별 `{slug}/index.html`을 빌드 시 생성하여 독립 URL과 검색 노출에 대응합니다.
 
+## 심리테스트 콘텐츠 구조
+
+`src/content/tests.json` 한 파일에서 테스트·질문·선택지 점수·결과·추천 항목을 관리합니다.
+
+- `capacity`: 1차 목표인 50개 등록 가능 여부를 검증합니다.
+- `slug`: `/test/{slug}/`와 `/test/{slug}/result/` 독립 주소를 생성합니다.
+- `questions[].options[].scores`: 결과 ID별 점수를 합산합니다.
+- `results`: 결과 제목·설명·특징·활용 팁·공유 문구를 보관합니다.
+- `recommendations`: 결과 하단에 연결할 다음 테스트를 지정합니다.
+
+빌드 시 공개 상태인 테스트마다 상세·결과 페이지를 자동 생성하므로 새 테스트 등록에 HTML 추가 작업이 필요하지 않습니다.
+
 ## 데이터 컬렉션
 
 ```text
@@ -58,4 +70,3 @@ analytics
 - Firebase Cloud Storage와 전화번호 인증은 사용하지 않습니다.
 - Cloudflare Pages의 `pages.dev` 주소는 개발·공개 테스트용입니다.
 - Google AdSense는 일반 무료 하위도메인을 신규 사이트로 받지 않으므로 수익화 단계에서 자체 도메인 또는 Blogger 호스트 연계를 별도로 결정해야 합니다.
-
