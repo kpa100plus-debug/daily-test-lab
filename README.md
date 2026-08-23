@@ -5,8 +5,14 @@
 ## 현재 단계
 
 - 참조코드: `REF-DAILYFUN-ZERO-COST-MVP-02`
-- 완료 범위: STEP 1 프로젝트 구조, 무의존성 빌드/검증, Firebase·Cloudflare 연결 준비
+- 완료 범위: STEP 1 프로젝트 구조, 무의존성 빌드/검증, Firebase·GitHub Pages 연결 및 자동 배포
 - 다음 범위: STEP 2 메인페이지 UI/콘텐츠 탐색 구조
+
+## 운영 주소
+
+- 서비스: https://kpa100plus-debug.github.io/daily-test-lab/
+- 저장소: https://github.com/kpa100plus-debug/daily-test-lab
+- Firebase 프로젝트 ID: `daily-test-lab` (Spark 무료 요금제)
 
 ## 로컬 실행
 
@@ -24,10 +30,10 @@ npm test
 
 ## 배포 설정
 
+- GitHub Pages: `main` 브랜치 푸시 시 Actions 자동 배포
 - Cloudflare Pages 빌드 명령: `npm run build`
 - 출력 폴더: `dist`
 - 운영 브랜치: `main`
 - Firebase Hosting과 Cloud Storage는 사용하지 않습니다.
 
 상세 연결 순서는 [`docs/STEP1_CONNECT.md`](docs/STEP1_CONNECT.md)를 확인합니다.
-
