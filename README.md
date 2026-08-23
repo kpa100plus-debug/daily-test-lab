@@ -4,9 +4,9 @@
 
 ## 현재 단계
 
-- 참조코드: `REF-DAILYFUN-ZERO-COST-MVP-02`
-- 완료 범위: STEP 1 프로젝트 구조, 무의존성 빌드/검증, Firebase·GitHub Pages 연결 및 자동 배포
-- 다음 범위: STEP 2 메인페이지 UI/콘텐츠 탐색 구조
+- 참조코드: `REF-DAILYFUN-STEP2-HOME-01`
+- 완료 범위: STEP 1 무료 개발환경·Firebase·GitHub Pages 연결, STEP 2 모바일 우선 메인페이지·오늘의 콘텐츠·퀴즈·방문 기록
+- 다음 범위: STEP 3 심리테스트 MVP(목록·상세·질문·결과·공유·추천)
 
 ## 운영 주소
 
