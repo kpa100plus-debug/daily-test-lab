@@ -63,6 +63,152 @@ service cloud.firestore {
         && request.resource.data.updatedAt == request.time;
     }
 
+    function validContentStatus(status) {
+      return status in ['draft', 'published', 'archived'];
+    }
+
+    function validContentAudit() {
+      return request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    function validSeo(seo) {
+      return seo is map
+        && seo.keys().hasOnly(['title', 'description'])
+        && seo.title is string
+        && seo.title.size() > 0
+        && seo.title.size() <= 120
+        && seo.description is string
+        && seo.description.size() > 0
+        && seo.description.size() <= 200;
+    }
+
+    function validTestMetadata(testSlug) {
+      return request.resource.data.keys().hasOnly([
+          'schemaVersion', 'id', 'slug', 'status', 'category', 'icon', 'accent',
+          'title', 'shortTitle', 'description', 'duration', 'questionCount',
+          'participantLabel', 'disclaimer', 'seo', 'recommendations',
+          'updatedBy', 'updatedAt'
+        ])
+        && request.resource.data.schemaVersion == 1
+        && request.resource.data.id is string
+        && request.resource.data.id.size() > 0
+        && request.resource.data.id.size() <= 80
+        && request.resource.data.slug == testSlug
+        && testSlug.matches('^[a-z0-9]+(-[a-z0-9]+)*$')
+        && validContentStatus(request.resource.data.status)
+        && request.resource.data.category is string
+        && request.resource.data.category.size() > 0
+        && request.resource.data.category.size() <= 40
+        && request.resource.data.icon is string
+        && request.resource.data.icon.size() > 0
+        && request.resource.data.icon.size() <= 16
+        && request.resource.data.accent in ['violet', 'coral', 'orange', 'blue', 'mint']
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.shortTitle is string
+        && request.resource.data.shortTitle.size() > 0
+        && request.resource.data.shortTitle.size() <= 50
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 0
+        && request.resource.data.description.size() <= 240
+        && request.resource.data.duration is string
+        && request.resource.data.duration.size() > 0
+        && request.resource.data.duration.size() <= 30
+        && request.resource.data.questionCount is int
+        && request.resource.data.questionCount >= 1
+        && request.resource.data.questionCount <= 50
+        && request.resource.data.participantLabel is string
+        && request.resource.data.participantLabel.size() > 0
+        && request.resource.data.participantLabel.size() <= 60
+        && request.resource.data.disclaimer is string
+        && request.resource.data.disclaimer.size() > 0
+        && request.resource.data.disclaimer.size() <= 240
+        && validSeo(request.resource.data.seo)
+        && request.resource.data.recommendations is list
+        && request.resource.data.recommendations.size() <= 6
+        && validContentAudit();
+    }
+
+    function validTestQuestions(testSlug) {
+      return request.resource.data.keys().hasOnly([
+          'schemaVersion', 'testId', 'items', 'updatedBy', 'updatedAt'
+        ])
+        && request.resource.data.schemaVersion == 1
+        && request.resource.data.testId == testSlug
+        && request.resource.data.items is list
+        && request.resource.data.items.size() >= 1
+        && request.resource.data.items.size() <= 50
+        && validContentAudit();
+    }
+
+    function validTestResults(testSlug) {
+      return request.resource.data.keys().hasOnly([
+          'schemaVersion', 'testId', 'items', 'updatedBy', 'updatedAt'
+        ])
+        && request.resource.data.schemaVersion == 1
+        && request.resource.data.testId == testSlug
+        && request.resource.data.items is list
+        && request.resource.data.items.size() >= 2
+        && request.resource.data.items.size() <= 20
+        && validContentAudit();
+    }
+
+    function validBalanceOption(option, optionId) {
+      return option is map
+        && option.keys().hasOnly(['id', 'label', 'shortLabel', 'emoji'])
+        && option.id == optionId
+        && option.label is string
+        && option.label.size() > 0
+        && option.label.size() <= 100
+        && option.shortLabel is string
+        && option.shortLabel.size() > 0
+        && option.shortLabel.size() <= 40
+        && option.emoji is string
+        && option.emoji.size() > 0
+        && option.emoji.size() <= 16;
+    }
+
+    function validBalanceContent(gameSlug) {
+      return request.resource.data.keys().hasOnly([
+          'schemaVersion', 'id', 'slug', 'status', 'category', 'icon', 'title',
+          'question', 'description', 'options', 'shareText', 'seo',
+          'updatedBy', 'updatedAt'
+        ])
+        && request.resource.data.schemaVersion == 1
+        && request.resource.data.id is string
+        && request.resource.data.id.size() > 0
+        && request.resource.data.id.size() <= 80
+        && request.resource.data.slug == gameSlug
+        && gameSlug.matches('^[a-z0-9]+(-[a-z0-9]+)*$')
+        && validContentStatus(request.resource.data.status)
+        && request.resource.data.category is string
+        && request.resource.data.category.size() > 0
+        && request.resource.data.category.size() <= 40
+        && request.resource.data.icon is string
+        && request.resource.data.icon.size() > 0
+        && request.resource.data.icon.size() <= 16
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.question is string
+        && request.resource.data.question.size() > 0
+        && request.resource.data.question.size() <= 180
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 0
+        && request.resource.data.description.size() <= 240
+        && request.resource.data.options is list
+        && request.resource.data.options.size() == 2
+        && validBalanceOption(request.resource.data.options[0], 'a')
+        && validBalanceOption(request.resource.data.options[1], 'b')
+        && request.resource.data.shareText is string
+        && request.resource.data.shareText.size() > 0
+        && request.resource.data.shareText.size() <= 180
+        && validSeo(request.resource.data.seo)
+        && validContentAudit();
+    }
+
     function validScore(userId, gameId) {
       return request.resource.data.keys().hasOnly([
           'userId', 'gameId', 'best', 'last', 'attempts', 'scoreDirection', 'updatedAt'
@@ -213,6 +359,44 @@ service cloud.firestore {
       allow create, update: if documentId == 'current'
         && isAdmin()
         && validDailyContent();
+      allow delete: if false;
+    }
+
+    match /tests/{testSlug} {
+      // 공개 콘텐츠와 보관 표시는 정적 기본 콘텐츠를 덮어쓰기 위해 조회할 수 있다.
+      // 초안과 전체 무제한 목록은 관리자에게만 허용한다.
+      allow get: if isAdmin() || resource.data.status in ['published', 'archived'];
+      allow list: if isAdmin() || resource.data.status in ['published', 'archived'];
+      allow create, update: if isAdmin() && validTestMetadata(testSlug);
+      allow delete: if false;
+    }
+
+    match /test_questions/{testSlug} {
+      allow get: if isAdmin()
+        || (
+          exists(/databases/$(database)/documents/tests/$(testSlug))
+          && get(/databases/$(database)/documents/tests/$(testSlug)).data.status == 'published'
+        );
+      allow list: if isAdmin();
+      allow create, update: if isAdmin() && validTestQuestions(testSlug);
+      allow delete: if false;
+    }
+
+    match /test_results/{testSlug} {
+      allow get: if isAdmin()
+        || (
+          exists(/databases/$(database)/documents/tests/$(testSlug))
+          && get(/databases/$(database)/documents/tests/$(testSlug)).data.status == 'published'
+        );
+      allow list: if isAdmin();
+      allow create, update: if isAdmin() && validTestResults(testSlug);
+      allow delete: if false;
+    }
+
+    match /balance_content/{gameSlug} {
+      allow get: if isAdmin() || resource.data.status in ['published', 'archived'];
+      allow list: if isAdmin() || resource.data.status in ['published', 'archived'];
+      allow create, update: if isAdmin() && validBalanceContent(gameSlug);
       allow delete: if false;
     }
 
