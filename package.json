@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Zero-cost daily tests and mini games MVP",
   "scripts": {
-    "dev": "node scripts/dev-server.mjs",
+    "dev": "node scripts/build.mjs && node scripts/dev-server.mjs",
     "build": "node scripts/build.mjs",
     "verify": "node scripts/verify.mjs",
     "test": "npm run build && npm run verify"
@@ -14,4 +14,3 @@
     "node": ">=22"
   }
 }
-
