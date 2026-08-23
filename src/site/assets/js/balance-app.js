@@ -1,4 +1,5 @@
 import { getFirebaseServices } from './firebase-client.js';
+import { loadPublishedBalanceGames } from './content-repository.js';
 import {
   applyVote,
   calculateVotePercentages,
@@ -6,10 +7,9 @@ import {
   selectDailyGame
 } from './balance-engine.js';
 
-const buildStep = 'REF-DAILYFUN-STEP4-VOTE-01';
+const buildStep = 'REF-DAILYFUN-STEP8-CONTENT-CRUD-01';
 const appUrl = new URL(import.meta.url);
 const siteBasePath = appUrl.pathname.replace(/\/assets\/js\/balance-app\.js$/, '');
-const balanceGamesUrl = new URL('../../data/balance-games.json', import.meta.url);
 const requestedSlug = document.body.dataset.balanceSlug || '';
 const pageType = document.body.dataset.balancePage || 'detail';
 const app = document.querySelector('#balance-app');
@@ -392,10 +392,7 @@ function renderLoadError() {
 
 async function loadBalanceGames() {
   try {
-    const response = await fetch(balanceGamesUrl, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`balance games ${response.status}`);
-    const data = await response.json();
-    state.games = (data.items || []).filter((game) => game.status === 'published');
+    state.games = await loadPublishedBalanceGames();
     state.game = requestedSlug
       ? state.games.find((game) => game.slug === requestedSlug)
       : selectDailyGame(state.games, todayKey);

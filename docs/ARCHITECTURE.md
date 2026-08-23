@@ -1,4 +1,4 @@
-# REF-DAILYFUN-STEP7-ADMIN-DAILY-01 — 0원 MVP 구조
+# REF-DAILYFUN-STEP8-CONTENT-CRUD-01 — 0원 MVP 구조
 
 ## 선택 구조
 
@@ -59,7 +59,9 @@ Firestore 규칙은 본인 UID의 프로필과 점수만 읽고 쓰도록 제한
 
 ## 심리테스트 콘텐츠 구조
 
-`src/content/tests.json` 한 파일에서 테스트·질문·선택지 점수·결과·추천 항목을 관리합니다.
+기본 콘텐츠는 `src/content/tests.json`에 두고 관리자가 저장한 변경분은
+`tests/{slug}`, `test_questions/{slug}`, `test_results/{slug}`에 분리합니다.
+공개 화면은 Firebase 변경분을 우선 적용하며 연결이 지연되면 정적 기본 콘텐츠로 복구합니다.
 
 - `capacity`: 1차 목표인 50개 등록 가능 여부를 검증합니다.
 - `slug`: `/test/{slug}/`와 `/test/{slug}/result/` 독립 주소를 생성합니다.
@@ -67,17 +69,22 @@ Firestore 규칙은 본인 UID의 프로필과 점수만 읽고 쓰도록 제한
 - `results`: 결과 제목·설명·특징·활용 팁·공유 문구를 보관합니다.
 - `recommendations`: 결과 하단에 연결할 다음 테스트를 지정합니다.
 
-빌드 시 공개 상태인 테스트마다 상세·결과 페이지를 자동 생성하므로 새 테스트 등록에 HTML 추가 작업이 필요하지 않습니다.
+GitHub Pages는 실행 중 새 경로를 만들 수 없으므로 빌드 시 `/test/test-slot-001/`부터
+`/test/test-slot-050/`까지 상세·결과 페이지를 미리 생성합니다. 관리자는 빈 슬롯을 자동 배정받아
+HTML 수정 없이 새 테스트를 공개할 수 있습니다.
 
 ## 밸런스 게임 콘텐츠·투표 구조
 
-`src/content/balance-games.json`에서 질문·두 선택지·공유 문구·SEO 문구를 관리합니다.
+기본 질문은 `src/content/balance-games.json`에 두고 관리자 변경분은
+`balance_content/{slug}`에 저장합니다. `balance_games/{slug}`는 누적 투표 수만 보관하여
+콘텐츠 수정·보관 시에도 기존 투표 통계가 유지됩니다.
 
 - `capacity`: 최소 100개 이상 등록 가능한 구조인지 검증합니다.
 - `slug`: `/vote/{slug}/` 독립 주소를 빌드 시 자동 생성합니다.
 - `status`: 공개 질문만 목록과 상세 페이지에 노출합니다.
 - `options`: `a`, `b` 두 선택지와 짧은 결과 표시 문구를 보관합니다.
 - 한국 날짜를 기준으로 `/vote/`의 오늘 질문이 매일 자동 변경됩니다.
+- `/vote/balance-slot-001/`부터 `/vote/balance-slot-120/`까지 무료 관리자 슬롯을 미리 생성합니다.
 
 투표는 Firebase 익명 사용자별 `votes/{gameId}_{uid}` 문서를 한 번만 만들고,
 `balance_games/{gameId}`의 A·B·전체 참여 수를 같은 트랜잭션에서 증가시킵니다.
@@ -93,6 +100,7 @@ tests
 test_questions
 test_results
 balance_games
+balance_content
 votes
 mini_games
 game_scores
@@ -102,7 +110,8 @@ analytics
 ```
 
 현재 보안 규칙은 밸런스 통계 공개 읽기, 익명 사용자별 1회 투표, 본인 회원 프로필과
-본인 게임 점수 읽기·쓰기, 승인된 Google 관리자 한 명의 오늘 콘텐츠 쓰기만 허용합니다.
+본인 게임 점수 읽기·쓰기, 공개/보관 콘텐츠 읽기, 승인된 Google 관리자 한 명의 통합 콘텐츠
+쓰기를 허용합니다. 초안은 관리자만 읽을 수 있고 삭제는 복구 가능한 보관 상태로 처리합니다.
 
 ## 0원 한계
 
