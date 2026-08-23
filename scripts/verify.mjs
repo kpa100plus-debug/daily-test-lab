@@ -26,6 +26,8 @@ const requiredFiles = [
   'assets/js/member-chip.js',
   'assets/js/my-app.js',
   'assets/js/daily-content-engine.js',
+  'assets/js/content-admin-engine.js',
+  'assets/js/content-repository.js',
   'assets/js/admin-app.js',
   'assets/js/firebase-client.js',
   'assets/js/firebase-config.js',
@@ -113,11 +115,24 @@ const {
   isSafeDailyRoute,
   normalizeDailyContent
 } = await import(pathToFileURL(dailyContentEnginePath).href);
+const contentAdminEnginePath = path.join(outputDirectory, 'assets/js/content-admin-engine.js');
+const {
+  createBalanceDocument,
+  createBlankTest,
+  createTestDocuments,
+  findAvailableSlot,
+  formatScoreMapping,
+  parseScoreMapping
+} = await import(pathToFileURL(contentAdminEnginePath).href);
+const contentRepositoryPath = path.join(outputDirectory, 'assets/js/content-repository.js');
+const { mergePublishedContent } = await import(pathToFileURL(contentRepositoryPath).href);
 if (
-  !testListJavaScript.includes('REF-DAILYFUN-STEP3-TEST-01') ||
-  !testAppJavaScript.includes('REF-DAILYFUN-STEP3-TEST-01')
+  !testListJavaScript.includes('REF-DAILYFUN-STEP8-CONTENT-CRUD-01') ||
+  !testAppJavaScript.includes('REF-DAILYFUN-STEP8-CONTENT-CRUD-01') ||
+  !testListJavaScript.includes('loadPublishedTests') ||
+  !testAppJavaScript.includes('loadTestBundle')
 ) {
-  throw new Error('STEP 3 test script reference is missing.');
+  throw new Error('STEP 8 Firebase test content connection is missing.');
 }
 
 for (const fileName of ['tests.json', 'balance-games.json', 'mini-games.json', 'daily-content.json']) {
@@ -242,6 +257,42 @@ for (const test of publishedTests) {
   }
 }
 
+const sampleTestDocuments = createTestDocuments(
+  publishedTests[0],
+  'published',
+  'admin-user',
+  'server-time'
+);
+const blankTest = createBlankTest(findAvailableSlot('test', testSlugs));
+const parsedScores = parseScoreMapping('type-a:2, type-b:1');
+if (
+  sampleTestDocuments.metadata.questionCount !== publishedTests[0].questions.length ||
+  sampleTestDocuments.questions.testId !== publishedTests[0].slug ||
+  sampleTestDocuments.results.items.length !== publishedTests[0].results.length ||
+  blankTest.status !== 'draft' ||
+  blankTest.slug !== 'test-slot-001' ||
+  parsedScores['type-a'] !== 2 ||
+  formatScoreMapping(parsedScores) !== 'type-a:2, type-b:1'
+) {
+  throw new Error('STEP 8 test CRUD validation engine failed.');
+}
+
+const mergedContent = mergePublishedContent(
+  [{ slug: 'static-a', status: 'published' }],
+  [{ slug: 'static-a', status: 'archived' }, { slug: 'remote-b', status: 'published' }]
+);
+if (mergedContent.length !== 1 || mergedContent[0].slug !== 'remote-b') {
+  throw new Error('Firebase/static content overlay failed.');
+}
+
+for (const relativePath of [
+  'test/test-slot-001/index.html',
+  'test/test-slot-001/result/index.html',
+  'test/test-slot-050/index.html'
+]) {
+  await access(path.join(outputDirectory, relativePath));
+}
+
 const testListHtml = await readFile(path.join(outputDirectory, 'test/index.html'), 'utf8');
 if (!testListHtml.includes('test-list.js') || !testListHtml.includes('나에게 맞는 테스트')) {
   throw new Error('Test list page is incomplete.');
@@ -251,8 +302,11 @@ const balanceAppJavaScript = await readFile(
   path.join(outputDirectory, 'assets/js/balance-app.js'),
   'utf8'
 );
-if (!balanceAppJavaScript.includes('REF-DAILYFUN-STEP4-VOTE-01')) {
-  throw new Error('STEP 4 balance game script reference is missing.');
+if (
+  !balanceAppJavaScript.includes('REF-DAILYFUN-STEP8-CONTENT-CRUD-01') ||
+  !balanceAppJavaScript.includes('loadPublishedBalanceGames')
+) {
+  throw new Error('STEP 8 Firebase balance content connection is missing.');
 }
 
 const balanceData = JSON.parse(
@@ -296,6 +350,27 @@ for (const game of publishedBalanceGames) {
   if (!detailHtml.includes(game.question) || !detailHtml.includes('balance-app.js')) {
     throw new Error(`Generated balance detail is incomplete: ${game.slug}`);
   }
+}
+
+const sampleBalanceDocument = createBalanceDocument(
+  publishedBalanceGames[0],
+  'published',
+  'admin-user',
+  'server-time'
+);
+if (
+  sampleBalanceDocument.slug !== publishedBalanceGames[0].slug ||
+  sampleBalanceDocument.options[0].id !== 'a' ||
+  findAvailableSlot('balance', balanceSlugs) !== 'balance-slot-001'
+) {
+  throw new Error('STEP 8 balance CRUD validation engine failed.');
+}
+
+for (const relativePath of [
+  'vote/balance-slot-001/index.html',
+  'vote/balance-slot-120/index.html'
+]) {
+  await access(path.join(outputDirectory, relativePath));
 }
 
 const firstVote = applyVote({}, 'a');
@@ -435,11 +510,16 @@ const adminAppJavaScript = await readFile(
 if (
   !adminPageHtml.includes('admin-app.js') ||
   !adminPageHtml.includes('㈜ISEA GROUP 소유·운영') ||
-  !adminAppJavaScript.includes('REF-DAILYFUN-STEP7-ADMIN-DAILY-01') ||
+  !adminAppJavaScript.includes('REF-DAILYFUN-STEP8-CONTENT-CRUD-01') ||
   !adminAppJavaScript.includes('kpa100plus@gmail.com') ||
-  !adminAppJavaScript.includes("'daily_contents'")
+  !adminAppJavaScript.includes("'daily_contents'") ||
+  !adminAppJavaScript.includes("'test_questions'") ||
+  !adminAppJavaScript.includes("'test_results'") ||
+  !adminAppJavaScript.includes("'balance_content'") ||
+  !adminAppJavaScript.includes("'juyoungkim'") ||
+  adminAppJavaScript.includes('김주영 관리자')
 ) {
-  throw new Error('STEP 7 administrator page is incomplete.');
+  throw new Error('STEP 8 integrated administrator CRUD is incomplete.');
 }
 
 const rules = await readFile(path.join(projectRoot, 'firestore.rules'), 'utf8');
@@ -449,12 +529,21 @@ if (
   !rules.includes('match /users/{userId}') ||
   !rules.includes('match /game_scores/{userId}/scores/{gameId}') ||
   !rules.includes('match /daily_contents/{documentId}') ||
+  !rules.includes('match /tests/{testSlug}') ||
+  !rules.includes('match /test_questions/{testSlug}') ||
+  !rules.includes('match /test_results/{testSlug}') ||
+  !rules.includes('match /balance_content/{gameSlug}') ||
   !rules.includes('function isAdmin()') ||
   !rules.includes("request.auth.token.email == 'kpa100plus@gmail.com'") ||
   !rules.includes('allow get: if signedIn()') ||
   !rules.includes('allow list: if false;')
 ) {
   throw new Error('Firestore security rules are incomplete.');
+}
+
+const buildMeta = JSON.parse(await readFile(path.join(outputDirectory, 'build-meta.json'), 'utf8'));
+if (buildMeta.build !== 'step-8-content-crud') {
+  throw new Error('STEP 8 build metadata is missing.');
 }
 
 console.log(`Verification complete: ${requiredFiles.length} required files`);
