@@ -69,7 +69,7 @@ function createTestPageHtml(test, view) {
     <meta name="robots" content="noindex,nofollow">
     <meta name="description" content="${escapeHtml(description)}">
     <title>${escapeHtml(title)}</title>
-    <link rel="stylesheet" href="/assets/css/app.css?v=step6-1">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step7-1">
   </head>
   <body class="test-detail-page" data-test-slug="${escapeHtml(test.slug)}" data-test-view="${view}">
     <header class="site-header">
@@ -134,7 +134,7 @@ function createBalancePageHtml(game) {
     <meta property="og:title" content="${escapeHtml(game.seo.title)}">
     <meta property="og:description" content="${escapeHtml(game.seo.description)}">
     <title>${escapeHtml(game.seo.title)} | DAILY TEST LAB</title>
-    <link rel="stylesheet" href="/assets/css/app.css?v=step6-1">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step7-1">
   </head>
   <body class="balance-detail-page" data-balance-page="detail" data-balance-slug="${escapeHtml(game.slug)}">
     <header class="site-header">
@@ -223,7 +223,7 @@ function createMiniGamePageHtml(game, allGames) {
     <meta property="og:title" content="${escapeHtml(game.seo.title)}">
     <meta property="og:description" content="${escapeHtml(game.seo.description)}">
     <title>${escapeHtml(game.seo.title)} | DAILY TEST LAB</title>
-    <link rel="stylesheet" href="/assets/css/app.css?v=step6-1">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step7-1">
   </head>
   <body class="mini-game-detail-page" data-game-slug="${escapeHtml(game.slug)}">
     <header class="site-header">
@@ -353,7 +353,7 @@ if (siteBasePath) {
 
 await writeFile(
   path.join(outputDirectory, 'build-meta.json'),
-  `${JSON.stringify({ service: 'DAILY TEST LAB', build: 'step-6-member-score', siteBasePath }, null, 2)}\n`,
+  `${JSON.stringify({ service: 'DAILY TEST LAB', build: 'step-7-admin-daily-content', siteBasePath }, null, 2)}\n`,
   'utf8'
 );
 

@@ -22,6 +22,47 @@ service cloud.firestore {
       return signedIn() && request.auth.uid == userId;
     }
 
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email == 'kpa100plus@gmail.com'
+        && request.auth.token.email_verified == true
+        && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+
+    function validDailyContent() {
+      return request.resource.data.keys().hasOnly([
+          'category', 'title', 'description', 'duration', 'actionLabel', 'note',
+          'icon', 'accent', 'route', 'status', 'updatedBy', 'updatedAt'
+        ])
+        && request.resource.data.category is string
+        && request.resource.data.category.size() > 0
+        && request.resource.data.category.size() <= 40
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 80
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 0
+        && request.resource.data.description.size() <= 180
+        && request.resource.data.duration is string
+        && request.resource.data.duration.size() > 0
+        && request.resource.data.duration.size() <= 30
+        && request.resource.data.actionLabel is string
+        && request.resource.data.actionLabel.size() > 0
+        && request.resource.data.actionLabel.size() <= 30
+        && request.resource.data.note is string
+        && request.resource.data.note.size() <= 80
+        && request.resource.data.icon is string
+        && request.resource.data.icon.size() > 0
+        && request.resource.data.icon.size() <= 16
+        && request.resource.data.accent in ['violet', 'coral', 'orange', 'blue', 'mint']
+        && request.resource.data.route is string
+        && request.resource.data.route.size() <= 160
+        && request.resource.data.route.matches('^/(test|vote|game)/[a-z0-9-]+/$')
+        && request.resource.data.status == 'published'
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time;
+    }
+
     function validScore(userId, gameId) {
       return request.resource.data.keys().hasOnly([
           'userId', 'gameId', 'best', 'last', 'attempts', 'scoreDirection', 'updatedAt'
@@ -163,6 +204,15 @@ service cloud.firestore {
             && request.resource.data.best >= resource.data.best)
         );
 
+      allow delete: if false;
+    }
+
+    match /daily_contents/{documentId} {
+      allow get: if documentId == 'current';
+      allow list: if false;
+      allow create, update: if documentId == 'current'
+        && isAdmin()
+        && validDailyContent();
       allow delete: if false;
     }
 

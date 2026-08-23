@@ -1,6 +1,7 @@
 import { getFirebaseServices } from './firebase-client.js';
+import { normalizeDailyContent } from './daily-content-engine.js';
 
-const buildStep = 'REF-DAILYFUN-STEP2-HOME-01';
+const buildStep = 'REF-DAILYFUN-STEP7-ADMIN-DAILY-01';
 const appUrl = new URL(import.meta.url);
 const siteBasePath = appUrl.pathname.replace(/\/assets\/js\/app\.js$/, '');
 const dailyContentUrl = new URL('../../data/daily-content.json', import.meta.url);
@@ -171,7 +172,9 @@ function renderPopularItems(items, selectedItem) {
   const grid = document.querySelector('#popular-content-grid');
   if (!grid || !Array.isArray(items) || !items.length) return;
 
-  const popularItems = items.filter((item) => item.id !== selectedItem?.id).slice(0, 3);
+  const popularItems = items
+    .filter((item) => item.id !== selectedItem?.id && item.route !== selectedItem?.route)
+    .slice(0, 3);
   if (!popularItems.length) return;
   grid.replaceChildren();
 
@@ -193,15 +196,30 @@ function renderPopularItems(items, selectedItem) {
 }
 
 async function loadDailyContent() {
+  let data;
   try {
     const response = await fetch(dailyContentUrl, { cache: 'no-store' });
     if (!response.ok) throw new Error(`daily content ${response.status}`);
-    const data = await response.json();
+    data = await response.json();
     const selectedItem = selectDailyItem(data);
     renderDailyFeature(selectedItem);
     renderPopularItems(data.items, selectedItem);
   } catch (error) {
     console.warn('오늘의 콘텐츠를 기본 화면으로 표시합니다.', error.message);
+    return;
+  }
+
+  try {
+    const services = await getFirebaseServices();
+    const { doc, getDoc } = services.firestoreSdk;
+    const snapshot = await getDoc(doc(services.db, 'daily_contents', 'current'));
+    if (!snapshot.exists() || snapshot.data().status !== 'published') return;
+    const remoteItem = normalizeDailyContent(snapshot.data());
+    renderDailyFeature(remoteItem);
+    renderPopularItems(data.items, remoteItem);
+    document.querySelector('#daily-feature')?.setAttribute('data-content-source', 'firebase');
+  } catch (error) {
+    console.warn('관리자 지정 콘텐츠 연결 지연:', error.message);
   }
 }
 
@@ -252,7 +270,3 @@ updateVisitStats();
 setupQuiz();
 setupPlayTracking();
 loadDailyContent();
-
-getFirebaseServices().catch((error) => {
-  console.warn('Firebase 초기화 지연:', error.message);
-});

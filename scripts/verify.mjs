@@ -25,6 +25,8 @@ const requiredFiles = [
   'assets/js/member-service.js',
   'assets/js/member-chip.js',
   'assets/js/my-app.js',
+  'assets/js/daily-content-engine.js',
+  'assets/js/admin-app.js',
   'assets/js/firebase-client.js',
   'assets/js/firebase-config.js',
   'test/index.html',
@@ -67,8 +69,11 @@ const appJavaScript = await readFile(
   path.join(outputDirectory, 'assets/js/app.js'),
   'utf8'
 );
-if (!appJavaScript.includes('REF-DAILYFUN-STEP2-HOME-01')) {
-  throw new Error('STEP 2 homepage script reference is missing.');
+if (
+  !appJavaScript.includes('REF-DAILYFUN-STEP7-ADMIN-DAILY-01') ||
+  !appJavaScript.includes("'daily_contents'")
+) {
+  throw new Error('STEP 7 Firebase daily content connection is missing.');
 }
 
 const testListJavaScript = await readFile(
@@ -102,6 +107,12 @@ const {
   mergeScoreRecords,
   selectBestScore
 } = await import(pathToFileURL(scoreEnginePath).href);
+const dailyContentEnginePath = path.join(outputDirectory, 'assets/js/daily-content-engine.js');
+const {
+  createDailyContentDocument,
+  isSafeDailyRoute,
+  normalizeDailyContent
+} = await import(pathToFileURL(dailyContentEnginePath).href);
 if (
   !testListJavaScript.includes('REF-DAILYFUN-STEP3-TEST-01') ||
   !testAppJavaScript.includes('REF-DAILYFUN-STEP3-TEST-01')
@@ -123,6 +134,22 @@ if (!Array.isArray(dailyContent.items) || dailyContent.items.length < 5) {
 const dailyContentIds = dailyContent.items.map((item) => item.id);
 if (new Set(dailyContentIds).size !== dailyContentIds.length) {
   throw new Error('Daily content item IDs must be unique.');
+}
+
+const normalizedDailyContent = normalizeDailyContent(dailyContent.items[0]);
+const dailyDocument = createDailyContentDocument(
+  dailyContent.items[0],
+  'admin-user',
+  'server-time'
+);
+if (
+  normalizedDailyContent.status !== 'published' ||
+  dailyDocument.updatedBy !== 'admin-user' ||
+  dailyDocument.updatedAt !== 'server-time' ||
+  !isSafeDailyRoute('/game/reaction-speed/') ||
+  isSafeDailyRoute('https://example.com/')
+) {
+  throw new Error('Daily content validation engine failed.');
 }
 
 const testsData = JSON.parse(
@@ -400,16 +427,34 @@ if (
   throw new Error('Member dashboard or privacy disclosure is incomplete.');
 }
 
+const adminPageHtml = await readFile(path.join(outputDirectory, 'admin/index.html'), 'utf8');
+const adminAppJavaScript = await readFile(
+  path.join(outputDirectory, 'assets/js/admin-app.js'),
+  'utf8'
+);
+if (
+  !adminPageHtml.includes('admin-app.js') ||
+  !adminPageHtml.includes('㈜ISEA GROUP 소유·운영') ||
+  !adminAppJavaScript.includes('REF-DAILYFUN-STEP7-ADMIN-DAILY-01') ||
+  !adminAppJavaScript.includes('kpa100plus@gmail.com') ||
+  !adminAppJavaScript.includes("'daily_contents'")
+) {
+  throw new Error('STEP 7 administrator page is incomplete.');
+}
+
 const rules = await readFile(path.join(projectRoot, 'firestore.rules'), 'utf8');
 if (
   !rules.includes('match /balance_games/{gameId}') ||
   !rules.includes('match /votes/{voteId}') ||
   !rules.includes('match /users/{userId}') ||
   !rules.includes('match /game_scores/{userId}/scores/{gameId}') ||
+  !rules.includes('match /daily_contents/{documentId}') ||
+  !rules.includes('function isAdmin()') ||
+  !rules.includes("request.auth.token.email == 'kpa100plus@gmail.com'") ||
   !rules.includes('allow get: if signedIn()') ||
   !rules.includes('allow list: if false;')
 ) {
-  throw new Error('Balance vote Firestore security rules are missing.');
+  throw new Error('Firestore security rules are incomplete.');
 }
 
 console.log(`Verification complete: ${requiredFiles.length} required files`);
