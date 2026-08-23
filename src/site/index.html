@@ -7,7 +7,7 @@
     <meta name="robots" content="noindex,nofollow">
     <meta name="description" content="심리테스트, 밸런스 게임, 10초 미니게임을 매일 무료로 즐기는 DAILY TEST LAB">
     <title>DAILY TEST LAB | 매일 즐기는 테스트·게임</title>
-    <link rel="stylesheet" href="/assets/css/app.css?v=step5-1">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step6-1">
   </head>
   <body>
     <header class="site-header">
@@ -15,7 +15,7 @@
         <span class="brand-mark" aria-hidden="true">D</span>
         <span>DAILY TEST LAB</span>
       </a>
-      <a class="header-action" href="#today-me">내 기록</a>
+      <a class="header-action" href="/my/" data-member-link>내 기록</a>
     </header>
 
     <main class="page-shell">
@@ -135,7 +135,7 @@
         <div class="today-me-copy">
           <p class="section-kicker">TODAY'S ME</p>
           <h2 id="today-me-title">오늘의 나</h2>
-          <p>이 기기에서 쌓인 가벼운 방문 기록이에요. 로그인 기능이 완성되면 어느 기기에서나 이어볼 수 있어요.</p>
+          <p>방문 기록은 이 브라우저에, 미니게임 최고 기록은 Firebase에 저장됩니다. Google 로그인하면 다른 기기에서도 이어볼 수 있어요.</p>
         </div>
         <div class="stats-grid">
           <div class="stat-card"><strong id="visit-streak">1</strong><span>연속 방문</span></div>
@@ -153,16 +153,17 @@
         <div>
           <span class="save-icon" aria-hidden="true">🔐</span>
           <h2 id="save-title">내 결과를 계속 모아보세요</h2>
-          <p>회원 저장 기능은 다음 제작 단계에서 연결됩니다.</p>
+          <p>Google 로그인으로 미니게임 최고 기록을 어느 기기에서나 이어보세요.</p>
         </div>
-        <a href="/admin/">준비 상태 보기</a>
+        <a href="/my/">내 기록 열기</a>
       </section>
     </main>
 
     <footer class="site-footer">
       <div class="footer-brand">
         <strong>DAILY TEST LAB</strong>
-        <span>매일 가볍게, 나를 발견하는 시간</span>
+        <span>㈜ISEA GROUP 운영</span>
+        <span>© 2026 ISEA GROUP. All Rights Reserved.</span>
       </div>
       <nav aria-label="운영 정책">
         <a href="/legal/privacy/">개인정보처리방침</a>
@@ -177,9 +178,10 @@
       <a href="/test/"><span>🧠</span>테스트</a>
       <a href="/vote/"><span>⚖️</span>밸런스</a>
       <a href="/game/"><span>⚡</span>게임</a>
-      <a href="#today-me"><span>●</span>MY</a>
+      <a href="/my/"><span>●</span>MY</a>
     </nav>
 
-    <script type="module" src="/assets/js/app.js?v=step5-1"></script>
+    <script type="module" src="/assets/js/app.js?v=step6-1"></script>
+    <script type="module" src="/assets/js/member-chip.js?v=step6-1"></script>
   </body>
 </html>

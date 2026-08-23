@@ -18,6 +18,26 @@ service cloud.firestore {
       return /databases/$(database)/documents/balance_games/$(gameId);
     }
 
+    function owns(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function validScore(userId, gameId) {
+      return request.resource.data.keys().hasOnly([
+          'userId', 'gameId', 'best', 'last', 'attempts', 'scoreDirection', 'updatedAt'
+        ])
+        && request.resource.data.userId == userId
+        && request.resource.data.gameId == gameId
+        && request.resource.data.best is number
+        && request.resource.data.last is number
+        && request.resource.data.best >= 0
+        && request.resource.data.last >= 0
+        && request.resource.data.attempts is int
+        && request.resource.data.attempts >= 1
+        && request.resource.data.scoreDirection in ['lower', 'higher']
+        && request.resource.data.updatedAt == request.time;
+    }
+
     match /balance_games/{gameId} {
       allow read: if true;
 
@@ -95,6 +115,55 @@ service cloud.firestore {
         );
 
       allow update, delete: if false;
+    }
+
+    match /users/{userId} {
+      allow get: if owns(userId);
+      allow list: if false;
+
+      allow create: if owns(userId)
+        && request.resource.data.keys().hasOnly([
+          'displayName', 'email', 'provider', 'createdAt', 'lastLoginAt'
+        ])
+        && request.resource.data.displayName is string
+        && request.resource.data.email is string
+        && request.resource.data.provider == 'google.com'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.lastLoginAt == request.time;
+
+      allow update: if owns(userId)
+        && request.resource.data.keys().hasOnly([
+          'displayName', 'email', 'provider', 'createdAt', 'lastLoginAt'
+        ])
+        && request.resource.data.displayName is string
+        && request.resource.data.email is string
+        && request.resource.data.provider == 'google.com'
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.lastLoginAt == request.time;
+
+      allow delete: if false;
+    }
+
+    match /game_scores/{userId}/scores/{gameId} {
+      allow read: if owns(userId);
+
+      allow create: if owns(userId) && validScore(userId, gameId);
+
+      allow update: if owns(userId)
+        && validScore(userId, gameId)
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.gameId == resource.data.gameId
+        && request.resource.data.scoreDirection == resource.data.scoreDirection
+        && request.resource.data.attempts >= resource.data.attempts
+        && (
+          (request.resource.data.scoreDirection == 'lower'
+            && request.resource.data.best <= resource.data.best)
+          ||
+          (request.resource.data.scoreDirection == 'higher'
+            && request.resource.data.best >= resource.data.best)
+        );
+
+      allow delete: if false;
     }
 
     // 공개된 기능 외의 컬렉션은 계속 차단한다.

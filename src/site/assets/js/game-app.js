@@ -6,8 +6,13 @@ import {
   getGameRating,
   isBetterScore
 } from './mini-game-engine.js';
+import {
+  hasRecordSession,
+  saveGameAttempt,
+  synchronizeLocalGameRecords
+} from './member-service.js';
 
-const buildStep = 'REF-DAILYFUN-STEP5-MINIGAME-01';
+const buildStep = 'REF-DAILYFUN-STEP6-MEMBER-SCORE-01';
 const appUrl = new URL(import.meta.url);
 const siteBasePath = appUrl.pathname.replace(/\/assets\/js\/game-app\.js$/, '');
 const gamesUrl = new URL('../../data/mini-games.json', import.meta.url);
@@ -180,14 +185,16 @@ function renderResult(score, extraMessage = '') {
   const detail = createElement('div', 'mini-game-result-detail');
   const stats = createElement('div', 'mini-game-result-stats');
   const bestCard = createElement('div', 'mini-game-result-stat');
+  const bestValue = createElement('strong', '', formatGameScore(game.slug, record.best));
   bestCard.append(
     createElement('span', '', game.recordLabel),
-    createElement('strong', '', formatGameScore(game.slug, record.best))
+    bestValue
   );
   const attemptsCard = createElement('div', 'mini-game-result-stat');
+  const attemptsValue = createElement('strong', '', `${record.attempts}회`);
   attemptsCard.append(
     createElement('span', '', '누적 도전'),
-    createElement('strong', '', `${record.attempts}회`)
+    attemptsValue
   );
   stats.append(bestCard, attemptsCard);
 
@@ -199,6 +206,8 @@ function renderResult(score, extraMessage = '') {
   share.type = 'button';
   const shareStatus = createElement('p', 'share-status');
   shareStatus.setAttribute('aria-live', 'polite');
+  const syncStatus = createElement('p', 'mini-game-sync-status', 'Firebase에 기록을 저장하는 중…');
+  syncStatus.setAttribute('aria-live', 'polite');
   share.addEventListener('click', () => shareResult(score, shareStatus));
   const next = createElement('a', 'mini-game-next-button', `${nextGame.shortTitle} 도전 →`);
   next.href = toSiteUrl(`/game/${nextGame.slug}/`);
@@ -206,10 +215,23 @@ function renderResult(score, extraMessage = '') {
 
   detail.append(stats);
   if (extraMessage) detail.append(createElement('p', 'mini-game-extra-message', extraMessage));
-  detail.append(actions, shareStatus);
+  detail.append(syncStatus, actions, shareStatus);
   screen.append(hero, detail);
   app?.replaceChildren(screen);
   focusApp();
+
+  saveGameAttempt(game, record)
+    .then(({ user, record: savedRecord }) => {
+      bestValue.textContent = formatGameScore(game.slug, savedRecord.best);
+      attemptsValue.textContent = `${savedRecord.attempts}회`;
+      syncStatus.classList.add('is-saved');
+      syncStatus.textContent = user.isAnonymous
+        ? '● Firebase 게스트 기록에 저장됨 · 로그인하면 다른 기기에서도 이어집니다.'
+        : '● 회원 기록에 안전하게 저장됐어요.';
+    })
+    .catch(() => {
+      syncStatus.textContent = '이 기기에 기록했어요. Firebase 연결 시 자동으로 동기화됩니다.';
+    });
 }
 
 function renderFalseStart() {
@@ -450,6 +472,13 @@ async function initialize() {
     game = games.find((item) => item.slug === requestedSlug);
     if (!game) throw new Error('게임을 찾을 수 없습니다.');
     renderIntro();
+    if (hasRecordSession()) {
+      synchronizeLocalGameRecords(games)
+        .then(() => {
+          if (app?.querySelector('[data-screen="intro"]')) renderIntro();
+        })
+        .catch(() => {});
+    }
   } catch (error) {
     renderError();
   }

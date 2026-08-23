@@ -1,6 +1,11 @@
 import { formatGameScore } from './mini-game-engine.js';
+import {
+  hasRecordSession,
+  readLocalGameRecords,
+  synchronizeLocalGameRecords
+} from './member-service.js';
 
-const buildStep = 'REF-DAILYFUN-STEP5-MINIGAME-01';
+const buildStep = 'REF-DAILYFUN-STEP6-MEMBER-SCORE-01';
 const appUrl = new URL(import.meta.url);
 const siteBasePath = appUrl.pathname.replace(/\/assets\/js\/game-list\.js$/, '');
 const gamesUrl = new URL('../../data/mini-games.json', import.meta.url);
@@ -9,18 +14,7 @@ const totalAttempts = document.querySelector('#game-total-attempts');
 
 document.documentElement.dataset.buildStep = buildStep;
 
-const safeStorage = {
-  get(key, fallback) {
-    try {
-      const value = localStorage.getItem(key);
-      return value ? JSON.parse(value) : fallback;
-    } catch {
-      return fallback;
-    }
-  }
-};
-
-const records = safeStorage.get('daily-test-lab.game-records.v1', {});
+let records = readLocalGameRecords();
 const toSiteUrl = (route) => `${siteBasePath}${route.startsWith('/') ? route : `/${route}`}`;
 
 function createElement(tagName, className, text) {
@@ -73,6 +67,17 @@ async function initialize() {
       0
     );
     if (totalAttempts) totalAttempts.textContent = attempts.toLocaleString('ko-KR');
+    if (hasRecordSession()) synchronizeLocalGameRecords(games)
+      .then((result) => {
+        records = result.records;
+        catalog?.replaceChildren(...games.map(createGameCard));
+        const synchronizedAttempts = Object.values(records).reduce(
+          (sum, record) => sum + (Number(record?.attempts) || 0),
+          0
+        );
+        if (totalAttempts) totalAttempts.textContent = synchronizedAttempts.toLocaleString('ko-KR');
+      })
+      .catch(() => {});
   } catch (error) {
     const message = createElement('div', 'mini-game-list-error');
     message.append(

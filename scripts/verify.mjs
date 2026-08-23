@@ -21,11 +21,16 @@ const requiredFiles = [
   'assets/js/game-list.js',
   'assets/js/game-app.js',
   'assets/js/mini-game-engine.js',
+  'assets/js/score-engine.js',
+  'assets/js/member-service.js',
+  'assets/js/member-chip.js',
+  'assets/js/my-app.js',
   'assets/js/firebase-client.js',
   'assets/js/firebase-config.js',
   'test/index.html',
   'vote/index.html',
   'game/index.html',
+  'my/index.html',
   'admin/index.html',
   'legal/privacy/index.html',
   'legal/terms/index.html',
@@ -91,6 +96,12 @@ const {
   getGameRating,
   isBetterScore
 } = await import(pathToFileURL(miniGameEnginePath).href);
+const scoreEnginePath = path.join(outputDirectory, 'assets/js/score-engine.js');
+const {
+  mergeScoreCollections,
+  mergeScoreRecords,
+  selectBestScore
+} = await import(pathToFileURL(scoreEnginePath).href);
 if (
   !testListJavaScript.includes('REF-DAILYFUN-STEP3-TEST-01') ||
   !testAppJavaScript.includes('REF-DAILYFUN-STEP3-TEST-01')
@@ -315,6 +326,23 @@ if (!gameListHtml.includes('game-list.js') || !gameListHtml.includes('오늘의 
   throw new Error('Mini game list page is incomplete.');
 }
 
+const gameAppJavaScript = await readFile(
+  path.join(outputDirectory, 'assets/js/game-app.js'),
+  'utf8'
+);
+const memberServiceJavaScript = await readFile(
+  path.join(outputDirectory, 'assets/js/member-service.js'),
+  'utf8'
+);
+if (
+  !gameAppJavaScript.includes('REF-DAILYFUN-STEP6-MEMBER-SCORE-01') ||
+  !gameAppJavaScript.includes('saveGameAttempt') ||
+  !memberServiceJavaScript.includes('signInWithGoogle') ||
+  !memberServiceJavaScript.includes("'game_scores'")
+) {
+  throw new Error('STEP 6 member score connection is incomplete.');
+}
+
 const numberBoard = createNumberBoard(12, () => 0.25);
 const memorySequence = extendMemorySequence([0, 1], 6, () => 0.5);
 if (
@@ -331,10 +359,53 @@ if (
   throw new Error('Mini game calculation engine failed.');
 }
 
+const lowerMerged = mergeScoreRecords(
+  'lower',
+  { best: 240, last: 260, attempts: 3, updatedAt: '2026-08-23T08:00:00Z' },
+  { best: 220, last: 220, attempts: 5, updatedAt: '2026-08-23T07:00:00Z' }
+);
+const mergedCollections = mergeScoreCollections(
+  publishedMiniGames,
+  { memory: { best: 4, last: 4, attempts: 2 } },
+  { memory: { best: 6, last: 6, attempts: 4 } }
+);
+const remoteOnly = mergeScoreRecords(
+  'higher',
+  {},
+  { best: 5, last: 4, attempts: 3, updatedAt: { seconds: 1787472000, nanoseconds: 0 } }
+);
+if (
+  lowerMerged.best !== 220 ||
+  lowerMerged.last !== 260 ||
+  lowerMerged.attempts !== 5 ||
+  mergedCollections.memory.best !== 6 ||
+  mergedCollections.memory.attempts !== 4 ||
+  remoteOnly.best !== 5 ||
+  remoteOnly.last !== 4 ||
+  remoteOnly.attempts !== 3 ||
+  selectBestScore('higher', 4, 7) !== 7
+) {
+  throw new Error('Member score merge engine failed.');
+}
+
+const myPageHtml = await readFile(path.join(outputDirectory, 'my/index.html'), 'utf8');
+const myAppJavaScript = await readFile(path.join(outputDirectory, 'assets/js/my-app.js'), 'utf8');
+const privacyHtml = await readFile(path.join(outputDirectory, 'legal/privacy/index.html'), 'utf8');
+if (
+  !myPageHtml.includes('my-app.js') ||
+  !myAppJavaScript.includes('Google로 기록 보관') ||
+  !privacyHtml.includes('㈜ISEA GROUP') ||
+  !privacyHtml.includes('Firebase 사용자 식별값')
+) {
+  throw new Error('Member dashboard or privacy disclosure is incomplete.');
+}
+
 const rules = await readFile(path.join(projectRoot, 'firestore.rules'), 'utf8');
 if (
   !rules.includes('match /balance_games/{gameId}') ||
   !rules.includes('match /votes/{voteId}') ||
+  !rules.includes('match /users/{userId}') ||
+  !rules.includes('match /game_scores/{userId}/scores/{gameId}') ||
   !rules.includes('allow get: if signedIn()') ||
   !rules.includes('allow list: if false;')
 ) {

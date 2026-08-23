@@ -69,7 +69,7 @@ function createTestPageHtml(test, view) {
     <meta name="robots" content="noindex,nofollow">
     <meta name="description" content="${escapeHtml(description)}">
     <title>${escapeHtml(title)}</title>
-    <link rel="stylesheet" href="/assets/css/app.css?v=step3-1">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step6-1">
   </head>
   <body class="test-detail-page" data-test-slug="${escapeHtml(test.slug)}" data-test-view="${view}">
     <header class="site-header">
@@ -103,14 +103,14 @@ function createTestPageHtml(test, view) {
     </main>
 
     <footer class="site-footer">
-      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>매일 가볍게, 나를 발견하는 시간</span></div>
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
       <nav aria-label="운영 정책">
         <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
       </nav>
     </footer>
 
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
-      <a href="/"><span>⌂</span>홈</a><a href="/test/" aria-current="page"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/"><span>●</span>MY</a>
+      <a href="/"><span>⌂</span>홈</a><a href="/test/" aria-current="page"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/my/"><span>●</span>MY</a>
     </nav>
     <script type="module" src="/assets/js/test-app.js?v=step3-1"></script>
   </body>
@@ -134,7 +134,7 @@ function createBalancePageHtml(game) {
     <meta property="og:title" content="${escapeHtml(game.seo.title)}">
     <meta property="og:description" content="${escapeHtml(game.seo.description)}">
     <title>${escapeHtml(game.seo.title)} | DAILY TEST LAB</title>
-    <link rel="stylesheet" href="/assets/css/app.css?v=step4-1">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step6-1">
   </head>
   <body class="balance-detail-page" data-balance-page="detail" data-balance-slug="${escapeHtml(game.slug)}">
     <header class="site-header">
@@ -184,14 +184,14 @@ function createBalancePageHtml(game) {
     </main>
 
     <footer class="site-footer">
-      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>매일 가볍게, 나를 발견하는 시간</span></div>
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
       <nav aria-label="운영 정책">
         <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
       </nav>
     </footer>
 
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
-      <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/" aria-current="page"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/"><span>●</span>MY</a>
+      <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/" aria-current="page"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/my/"><span>●</span>MY</a>
     </nav>
     <script type="module" src="/assets/js/balance-app.js?v=step4-1"></script>
   </body>
@@ -223,7 +223,7 @@ function createMiniGamePageHtml(game, allGames) {
     <meta property="og:title" content="${escapeHtml(game.seo.title)}">
     <meta property="og:description" content="${escapeHtml(game.seo.description)}">
     <title>${escapeHtml(game.seo.title)} | DAILY TEST LAB</title>
-    <link rel="stylesheet" href="/assets/css/app.css?v=step5-1">
+    <link rel="stylesheet" href="/assets/css/app.css?v=step6-1">
   </head>
   <body class="mini-game-detail-page" data-game-slug="${escapeHtml(game.slug)}">
     <header class="site-header">
@@ -266,16 +266,16 @@ function createMiniGamePageHtml(game, allGames) {
     </main>
 
     <footer class="site-footer">
-      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>매일 가볍게, 나를 발견하는 시간</span></div>
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
       <nav aria-label="운영 정책">
         <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
       </nav>
     </footer>
 
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
-      <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/" aria-current="page"><span>⚡</span>게임</a><a href="/#today-me"><span>●</span>MY</a>
+      <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/" aria-current="page"><span>⚡</span>게임</a><a href="/my/"><span>●</span>MY</a>
     </nav>
-    <script type="module" src="/assets/js/game-app.js?v=step5-1"></script>
+    <script type="module" src="/assets/js/game-app.js?v=step6-1"></script>
   </body>
 </html>
 `;
@@ -353,7 +353,7 @@ if (siteBasePath) {
 
 await writeFile(
   path.join(outputDirectory, 'build-meta.json'),
-  `${JSON.stringify({ service: 'DAILY TEST LAB', build: 'step-5-mini-games', siteBasePath }, null, 2)}\n`,
+  `${JSON.stringify({ service: 'DAILY TEST LAB', build: 'step-6-member-score', siteBasePath }, null, 2)}\n`,
   'utf8'
 );
 

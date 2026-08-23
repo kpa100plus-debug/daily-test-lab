@@ -4,11 +4,12 @@
 
 ## 현재 단계
 
-- 참조코드: `REF-DAILYFUN-STEP5-MINIGAME-01`
-- 완료 범위: STEP 1 무료 개발환경, STEP 2 모바일 메인, STEP 3 심리테스트 3종, STEP 4 밸런스 게임 20종, STEP 5 미니게임 3종
+- 참조코드: `REF-DAILYFUN-STEP6-MEMBER-SCORE-01`
+- 완료 범위: STEP 1 무료 개발환경, STEP 2 모바일 메인, STEP 3 심리테스트 3종, STEP 4 밸런스 게임 20종, STEP 5 미니게임 3종, STEP 6 회원 로그인·게임 기록 저장
 - STEP 4 기능: 오늘의 질문·질문별 독립 URL·1회 투표·결과 비율·참여자 수·공유·120개 확장 구조·Firebase 익명 전체 집계와 안전한 로컬 대체 저장
 - STEP 5 기능: 반응속도·기억력·숫자 순서 미니게임, 독립 URL, 최고 기록·누적 도전 저장, 다시 도전·공유
-- 다음 범위: STEP 6 회원 로그인·게임 점수 Firebase 저장
+- STEP 6 기능: 즉시 플레이 가능한 Firebase 익명 기록, 선택형 Google 로그인, 기존 게스트 기록 승계, MY 기록 화면, 사용자별 Firestore 보안 규칙
+- 다음 범위: STEP 7 오늘의 콘텐츠·관리자 기능
 
 ## 운영 주소
 

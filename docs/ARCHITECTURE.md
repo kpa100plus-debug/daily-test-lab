@@ -1,4 +1,4 @@
-# REF-DAILYFUN-STEP1-ARCH-01 — 0원 MVP 구조
+# REF-DAILYFUN-STEP6-MEMBER-SCORE-01 — 0원 MVP 구조
 
 ## 선택 구조
 
@@ -6,8 +6,8 @@
 |---|---|---|
 | 화면 | 순수 HTML/CSS/JavaScript | 빠른 로딩, 프레임워크 종속성 제거 |
 | 빌드 | Node.js 내장 모듈 | npm 유료/외부 빌드 도구 없이 재현 가능 |
-| 저장소 | GitHub 비공개 저장소 | 코드 백업과 Cloudflare 자동 배포 |
-| 호스팅 | Cloudflare Pages Free | 정적 파일 전송 비용 0원 범위 활용 |
+| 저장소 | GitHub 저장소 | 코드 백업과 Actions 자동 빌드 |
+| 호스팅 | GitHub Pages | 정적 사이트를 무료 범위에서 배포 |
 | DB | Cloud Firestore Standard/Spark | 테스트·투표·점수·오늘의 콘텐츠 저장 |
 | 로그인 | Firebase Authentication | 이메일/Google/익명 로그인 사용, 전화 인증 미사용 |
 | 이미지 | Git 저장소의 정적 이미지 | Firebase Storage의 유료 플랜 요구 회피 |
@@ -25,6 +25,7 @@
 /game/reaction-speed/
 /game/memory/
 /game/number-order/
+/my/
 /admin/
 /legal/privacy/
 /legal/terms/
@@ -32,10 +33,16 @@
 /contact/
 ```
 
-미니게임 기록은 로그인 전에는 브라우저 저장소의 `daily-test-lab.game-records.v1`에
-게임별 최고 기록·마지막 기록·누적 도전 횟수를 저장합니다. 회원 저장 단계에서는
-같은 구조를 `game_scores` 컬렉션과 동기화할 수 있도록 점수 방향(`lower`/`higher`)을
-콘텐츠 데이터에 명시합니다.
+미니게임 기록은 브라우저 저장소의 `daily-test-lab.game-records.v1`과 Firebase의
+`game_scores/{uid}/scores/{gameId}`에 게임별 최고 기록·마지막 기록·누적 도전 횟수를
+저장합니다. 첫 기록 저장 시 익명 Firebase 계정을 만들기 때문에 로그인 절차 없이 바로
+플레이할 수 있습니다. 사용자가 Google 로그인을 선택하면 기존 게스트 기록을 회원 계정으로
+합쳐 다른 기기에서도 이어볼 수 있습니다. 점수 방향(`lower`/`higher`)은 콘텐츠 데이터에
+명시해 낮은 기록과 높은 기록 게임을 올바르게 병합합니다.
+
+회원 프로필은 `users/{uid}`에 이름·이메일·로그인 제공자·생성/최근 로그인 시각만 저장합니다.
+Firestore 규칙은 본인 UID의 프로필과 점수만 읽고 쓰도록 제한하고, 최고 기록이 나빠지거나
+누적 도전 횟수가 줄어드는 갱신은 거부합니다.
 
 콘텐츠별 `{slug}/index.html`을 빌드 시 생성하여 독립 URL과 검색 노출에 대응합니다.
 
@@ -83,7 +90,9 @@ shares
 analytics
 ```
 
-현재 보안 규칙은 밸런스 통계 공개 읽기와 익명 사용자별 1회 투표만 허용합니다. 게임 점수·회원 기록·관리자 쓰기는 해당 기능을 연결할 때 컬렉션별 최소 범위로 추가합니다.
+현재 보안 규칙은 밸런스 통계 공개 읽기, 익명 사용자별 1회 투표, 본인 회원 프로필과
+본인 게임 점수 읽기·쓰기만 허용합니다. 관리자 쓰기는 관리자 기능을 연결할 때 별도 권한으로
+추가합니다.
 
 ## 0원 한계
 
