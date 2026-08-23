@@ -11,18 +11,20 @@ export function getFirebaseServices() {
   servicesPromise ??= Promise.all([
     import(`https://www.gstatic.com/firebasejs/${sdkVersion}/firebase-app.js`),
     import(`https://www.gstatic.com/firebasejs/${sdkVersion}/firebase-auth.js`),
-    import(`https://www.gstatic.com/firebasejs/${sdkVersion}/firebase-firestore.js`)
-  ]).then(([appSdk, authSdk, firestoreSdk]) => {
+    import(`https://www.gstatic.com/firebasejs/${sdkVersion}/firebase-firestore.js`),
+    import(`https://www.gstatic.com/firebasejs/${sdkVersion}/firebase-analytics.js`)
+  ]).then(([appSdk, authSdk, firestoreSdk, analyticsSdk]) => {
     const app = appSdk.initializeApp(firebaseConfig);
     return {
       app,
       auth: authSdk.getAuth(app),
       db: firestoreSdk.getFirestore(app),
+      analytics: analyticsSdk.getAnalytics(app),
       authSdk,
-      firestoreSdk
+      firestoreSdk,
+      analyticsSdk
     };
   });
 
   return servicesPromise;
 }
-
