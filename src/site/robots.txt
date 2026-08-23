@@ -1,5 +1,4 @@
 User-agent: *
-Disallow: /
+Allow: /daily-test-lab/
 
-# STEP 9 SEO 공개 시 Allow 및 sitemap 주소로 교체합니다.
-
+Sitemap: https://kpa100plus-debug.github.io/daily-test-lab/sitemap.xml

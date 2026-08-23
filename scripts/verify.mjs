@@ -10,6 +10,7 @@ const requiredFiles = [
   'index.html',
   '404.html',
   'robots.txt',
+  'sitemap.xml',
   '_headers',
   'assets/css/app.css',
   'assets/js/app.js',
@@ -547,6 +548,109 @@ if (
   throw new Error('STEP 8 unpublished content slot fallback is incomplete.');
 }
 
+const publicSiteUrl = 'https://kpa100plus-debug.github.io/daily-test-lab';
+const staticIndexableRoutes = [
+  '/',
+  '/test/',
+  '/vote/',
+  '/game/',
+  '/legal/privacy/',
+  '/legal/terms/',
+  '/legal/ads/',
+  '/contact/'
+];
+const expectedIndexableRoutes = [
+  ...staticIndexableRoutes,
+  ...publishedTests.map((test) => `/test/${test.slug}/`),
+  ...publishedBalanceGames.map((game) => `/vote/${game.slug}/`),
+  ...publishedMiniGames.map((game) => `/game/${game.slug}/`)
+];
+
+function routeToHtmlPath(route) {
+  return route === '/' ? 'index.html' : `${route.replace(/^\//, '')}index.html`;
+}
+
+for (const route of expectedIndexableRoutes) {
+  const html = await readFile(path.join(outputDirectory, routeToHtmlPath(route)), 'utf8');
+  const canonical = `${publicSiteUrl}${route}`;
+  if (
+    !/<meta name="robots" content="index,follow,[^"]+">/.test(html) ||
+    !html.includes(`<link rel="canonical" href="${canonical}">`) ||
+    !html.includes(`<meta property="og:url" content="${canonical}">`) ||
+    !html.includes('<meta property="og:site_name" content="DAILY TEST LAB">') ||
+    !html.includes('<meta name="twitter:card" content="summary">')
+  ) {
+    throw new Error(`Indexable SEO metadata is incomplete: ${route}`);
+  }
+
+  const structuredDataMatches = [...html.matchAll(
+    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g
+  )];
+  if (structuredDataMatches.length !== 1) {
+    throw new Error(`Exactly one JSON-LD graph is required: ${route}`);
+  }
+  const structuredData = JSON.parse(structuredDataMatches[0][1]);
+  const graphTypes = new Set((structuredData['@graph'] || []).map((item) => item['@type']));
+  if (!graphTypes.has('Organization') || !graphTypes.has('WebSite')) {
+    throw new Error(`Publisher JSON-LD is missing: ${route}`);
+  }
+  if (route !== '/' && !graphTypes.has('BreadcrumbList')) {
+    throw new Error(`Breadcrumb JSON-LD is missing: ${route}`);
+  }
+}
+
+for (const relativePath of [
+  'admin/index.html',
+  'my/index.html',
+  '404.html',
+  'test/hidden-energy/result/index.html',
+  'test/test-slot-001/index.html',
+  'test/test-slot-001/result/index.html',
+  'vote/balance-slot-001/index.html'
+]) {
+  const html = await readFile(path.join(outputDirectory, relativePath), 'utf8');
+  if (!/<meta name="robots" content="noindex(?:,nofollow)?">/.test(html)) {
+    throw new Error(`Private or unpublished page must remain noindex: ${relativePath}`);
+  }
+}
+
+const sitemapXml = await readFile(path.join(outputDirectory, 'sitemap.xml'), 'utf8');
+const sitemapUrls = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+const expectedSitemapUrls = expectedIndexableRoutes.map((route) => `${publicSiteUrl}${route}`);
+if (
+  sitemapUrls.length !== expectedSitemapUrls.length ||
+  new Set(sitemapUrls).size !== sitemapUrls.length ||
+  expectedSitemapUrls.some((url) => !sitemapUrls.includes(url)) ||
+  sitemapUrls.some((url) => /\/admin\/|\/my\/|\/result\/|test-slot-|balance-slot-/.test(url))
+) {
+  throw new Error('sitemap.xml must contain only the current published canonical URLs.');
+}
+
+const robotsText = await readFile(path.join(outputDirectory, 'robots.txt'), 'utf8');
+if (
+  !robotsText.includes('Allow: /daily-test-lab/') ||
+  !robotsText.includes(`Sitemap: ${publicSiteUrl}/sitemap.xml`) ||
+  robotsText.includes('Disallow: /')
+) {
+  throw new Error('robots.txt public crawl configuration is incomplete.');
+}
+
+if (
+  !testListHtml.includes(`/test/${publishedTests[0].slug}/`) ||
+  !balanceListHtml.includes(`/vote/${publishedBalanceGames[0].slug}/`) ||
+  !gameListHtml.includes(`/game/${publishedMiniGames[0].slug}/`)
+) {
+  throw new Error('Static crawlable catalog links are missing.');
+}
+
+if (
+  !privacyHtml.includes('운영자가 측정 ID 또는 광고 게시자 ID를 설정한 경우에만') ||
+  !privacyHtml.includes('쿠키·로컬 저장소와 광고') ||
+  !termsHtml.includes('광고 클릭 유도나 클릭 보상은 제공하지 않습니다.')
+) {
+  throw new Error('AdSense privacy and advertising disclosures are incomplete.');
+}
+
 const rules = await readFile(path.join(projectRoot, 'firestore.rules'), 'utf8');
 if (
   !rules.includes('match /balance_games/{gameId}') ||
@@ -569,8 +673,12 @@ if (
 }
 
 const buildMeta = JSON.parse(await readFile(path.join(outputDirectory, 'build-meta.json'), 'utf8'));
-if (buildMeta.build !== 'step-8-content-crud') {
-  throw new Error('STEP 8 build metadata is missing.');
+if (
+  buildMeta.build !== 'step-9-seo-adsense' ||
+  buildMeta.publicSiteUrl !== publicSiteUrl ||
+  buildMeta.indexableUrlCount !== expectedIndexableRoutes.length
+) {
+  throw new Error('STEP 9 build metadata is missing.');
 }
 
 console.log(`Verification complete: ${requiredFiles.length} required files`);
