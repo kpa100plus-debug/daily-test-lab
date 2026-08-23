@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /
+
+# STEP 9 SEO 공개 시 Allow 및 sitemap 주소로 교체합니다.
+
