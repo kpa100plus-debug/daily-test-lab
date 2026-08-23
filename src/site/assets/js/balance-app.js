@@ -390,13 +390,29 @@ function renderLoadError() {
   app?.replaceChildren(screen);
 }
 
+function renderUnpublishedBalanceGame() {
+  const screen = createElement('div', 'test-empty-state');
+  screen.append(
+    createElement('span', 'test-loading-icon', '⚖️'),
+    createElement('h1', '', '새 밸런스게임을 준비 중이에요'),
+    createElement('p', '', '아직 공개되지 않은 슬롯입니다. 지금 참여 가능한 질문을 먼저 골라보세요.')
+  );
+  const listLink = createElement('a', 'test-start-button', '공개 밸런스게임 보기');
+  listLink.href = toSiteUrl('/vote/');
+  screen.append(listLink);
+  app?.replaceChildren(screen);
+}
+
 async function loadBalanceGames() {
   try {
     state.games = await loadPublishedBalanceGames();
     state.game = requestedSlug
       ? state.games.find((game) => game.slug === requestedSlug)
       : selectDailyGame(state.games, todayKey);
-    if (!state.game) throw new Error('balance game not found');
+    if (!state.game) {
+      renderUnpublishedBalanceGame();
+      return;
+    }
 
     document.querySelector('#published-balance-count')?.replaceChildren(String(state.games.length));
     renderCatalog();

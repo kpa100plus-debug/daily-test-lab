@@ -529,6 +529,13 @@ if (
   throw new Error('STEP 8 integrated administrator CRUD is incomplete.');
 }
 
+if (
+  !testAppJavaScript.includes('새 테스트를 준비 중이에요') ||
+  !balanceAppJavaScript.includes('새 밸런스게임을 준비 중이에요')
+) {
+  throw new Error('STEP 8 unpublished content slot fallback is incomplete.');
+}
+
 const rules = await readFile(path.join(projectRoot, 'firestore.rules'), 'utf8');
 if (
   !rules.includes('match /balance_games/{gameId}') ||
