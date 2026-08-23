@@ -373,6 +373,17 @@ for (const relativePath of [
   await access(path.join(outputDirectory, relativePath));
 }
 
+const blankBalanceHtml = await readFile(
+  path.join(outputDirectory, 'vote/balance-slot-001/index.html'),
+  'utf8'
+);
+if (
+  !blankBalanceHtml.includes('<title>새 밸런스 게임 | DAILY TEST LAB</title>') ||
+  blankBalanceHtml.includes('| DAILY TEST LAB | DAILY TEST LAB')
+) {
+  throw new Error('Blank balance slot title must contain a single service-name suffix.');
+}
+
 const firstVote = applyVote({}, 'a');
 const secondVote = applyVote(firstVote, 'b');
 const percentages = calculateVotePercentages({ a: 3, b: 1 });

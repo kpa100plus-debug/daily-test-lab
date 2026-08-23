@@ -127,6 +127,9 @@ function createTestPageHtml(test, view) {
 function createBalancePageHtml(game) {
   const firstOption = game.options[0];
   const secondOption = game.options[1];
+  const pageTitle = /\|\s*DAILY TEST LAB$/i.test(game.seo.title)
+    ? game.seo.title
+    : `${game.seo.title} | DAILY TEST LAB`;
 
   return `<!doctype html>
 <html lang="ko">
@@ -139,7 +142,7 @@ function createBalancePageHtml(game) {
     <meta property="og:type" content="website">
     <meta property="og:title" content="${escapeHtml(game.seo.title)}">
     <meta property="og:description" content="${escapeHtml(game.seo.description)}">
-    <title>${escapeHtml(game.seo.title)} | DAILY TEST LAB</title>
+    <title>${escapeHtml(pageTitle)}</title>
     <link rel="stylesheet" href="/assets/css/app.css?v=step8-1">
   </head>
   <body class="balance-detail-page" data-balance-page="detail" data-balance-slug="${escapeHtml(game.slug)}">
