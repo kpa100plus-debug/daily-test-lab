@@ -2,7 +2,13 @@
   "schemaVersion": 2,
   "capacity": 120,
   "defaultLocale": "ko-KR",
-  "categories": ["음식", "일상", "관계", "직장·돈", "상상"],
+  "categories": [
+    "음식",
+    "일상",
+    "관계",
+    "직장·돈",
+    "상상"
+  ],
   "items": [
     {
       "id": "balance-001",
@@ -14,8 +20,18 @@
       "question": "딱 하나만 평생 무료라면 무엇을 고를까요?",
       "description": "매일 마시는 한 잔과 기분 좋은 한 입 중 하나만 선택하세요.",
       "options": [
-        { "id": "a", "label": "평생 커피 무료", "shortLabel": "커피", "emoji": "☕" },
-        { "id": "b", "label": "평생 디저트 무료", "shortLabel": "디저트", "emoji": "🍰" }
+        {
+          "id": "a",
+          "label": "평생 커피 무료",
+          "shortLabel": "커피",
+          "emoji": "☕"
+        },
+        {
+          "id": "b",
+          "label": "평생 디저트 무료",
+          "shortLabel": "디저트",
+          "emoji": "🍰"
+        }
       ],
       "shareText": "평생 커피 무료 vs 평생 디저트 무료, 당신의 선택은?",
       "seo": {
@@ -33,8 +49,18 @@
       "question": "오늘 밤 딱 하나만 먹을 수 있다면?",
       "description": "뜨끈한 국물과 바삭한 한 조각, 야식 최강자를 골라보세요.",
       "options": [
-        { "id": "a", "label": "꼬들꼬들 라면", "shortLabel": "라면", "emoji": "🍜" },
-        { "id": "b", "label": "바삭바삭 치킨", "shortLabel": "치킨", "emoji": "🍗" }
+        {
+          "id": "a",
+          "label": "꼬들꼬들 라면",
+          "shortLabel": "라면",
+          "emoji": "🍜"
+        },
+        {
+          "id": "b",
+          "label": "바삭바삭 치킨",
+          "shortLabel": "치킨",
+          "emoji": "🍗"
+        }
       ],
       "shareText": "오늘 야식은 라면 vs 치킨, 하나만 고른다면?",
       "seo": {
@@ -52,8 +78,18 @@
       "question": "한 계절 속에서만 살아야 한다면?",
       "description": "뜨거운 햇살과 포근한 눈 내리는 날 중 더 견딜 만한 쪽은 무엇인가요?",
       "options": [
-        { "id": "a", "label": "평생 여름", "shortLabel": "여름", "emoji": "🌞" },
-        { "id": "b", "label": "평생 겨울", "shortLabel": "겨울", "emoji": "❄️" }
+        {
+          "id": "a",
+          "label": "평생 여름",
+          "shortLabel": "여름",
+          "emoji": "🌞"
+        },
+        {
+          "id": "b",
+          "label": "평생 겨울",
+          "shortLabel": "겨울",
+          "emoji": "❄️"
+        }
       ],
       "shareText": "평생 여름 vs 평생 겨울, 어디에서 살 수 있나요?",
       "seo": {
@@ -71,8 +107,18 @@
       "question": "앞으로 모든 약속에 같은 시간 차이가 생긴다면?",
       "description": "기다림과 미안함 중 평생 감수할 한 가지를 선택하세요.",
       "options": [
-        { "id": "a", "label": "항상 10분 일찍", "shortLabel": "10분 일찍", "emoji": "🕘" },
-        { "id": "b", "label": "항상 10분 늦게", "shortLabel": "10분 늦게", "emoji": "🏃" }
+        {
+          "id": "a",
+          "label": "항상 10분 일찍",
+          "shortLabel": "10분 일찍",
+          "emoji": "🕘"
+        },
+        {
+          "id": "b",
+          "label": "항상 10분 늦게",
+          "shortLabel": "10분 늦게",
+          "emoji": "🏃"
+        }
       ],
       "shareText": "모든 약속에 10분 일찍 vs 10분 늦게, 어느 쪽?",
       "seo": {
@@ -90,8 +136,18 @@
       "question": "친한 사람에게 한 가지 소통 능력만 받을 수 있다면?",
       "description": "빠른 메시지 답장과 언제든 편한 통화 중 더 필요한 것을 고르세요.",
       "options": [
-        { "id": "a", "label": "메시지 답장 항상 즉시", "shortLabel": "즉시 답장", "emoji": "💬" },
-        { "id": "b", "label": "전화하면 언제든 연결", "shortLabel": "언제든 통화", "emoji": "📞" }
+        {
+          "id": "a",
+          "label": "메시지 답장 항상 즉시",
+          "shortLabel": "즉시 답장",
+          "emoji": "💬"
+        },
+        {
+          "id": "b",
+          "label": "전화하면 언제든 연결",
+          "shortLabel": "언제든 통화",
+          "emoji": "📞"
+        }
       ],
       "shareText": "즉시 답장 vs 언제든 통화, 관계에서 더 중요한 것은?",
       "seo": {
@@ -109,8 +165,18 @@
       "question": "평생 유지할 인간관계를 하나만 고른다면?",
       "description": "넓고 활기찬 관계와 작지만 깊은 관계 중 마음이 가는 쪽은 어디인가요?",
       "options": [
-        { "id": "a", "label": "두루 친한 친구 100명", "shortLabel": "친구 100명", "emoji": "🙌" },
-        { "id": "b", "label": "속 깊은 절친 3명", "shortLabel": "절친 3명", "emoji": "🫶" }
+        {
+          "id": "a",
+          "label": "두루 친한 친구 100명",
+          "shortLabel": "친구 100명",
+          "emoji": "🙌"
+        },
+        {
+          "id": "b",
+          "label": "속 깊은 절친 3명",
+          "shortLabel": "절친 3명",
+          "emoji": "🫶"
+        }
       ],
       "shareText": "친구 100명 vs 절친 3명, 당신의 인간관계 선택은?",
       "seo": {
@@ -128,8 +194,18 @@
       "question": "내일 바로 떠나야 한다면 어떤 방식이 더 좋은가요?",
       "description": "분 단위 일정표와 발길 닿는 대로 떠나는 여행 중 하나를 고르세요.",
       "options": [
-        { "id": "a", "label": "일정 꽉 찬 계획 여행", "shortLabel": "계획 여행", "emoji": "🗓️" },
-        { "id": "b", "label": "발길대로 즉흥 여행", "shortLabel": "즉흥 여행", "emoji": "🎒" }
+        {
+          "id": "a",
+          "label": "일정 꽉 찬 계획 여행",
+          "shortLabel": "계획 여행",
+          "emoji": "🗓️"
+        },
+        {
+          "id": "b",
+          "label": "발길대로 즉흥 여행",
+          "shortLabel": "즉흥 여행",
+          "emoji": "🎒"
+        }
       ],
       "shareText": "계획 여행 vs 즉흥 여행, 같이 떠날 사람을 찾아보세요!",
       "seo": {
@@ -147,8 +223,18 @@
       "question": "원하는 생활 리듬을 평생 유지할 수 있다면?",
       "description": "해 뜰 때 가장 선명한 하루와 모두 잠든 밤의 집중력 중 골라보세요.",
       "options": [
-        { "id": "a", "label": "새벽부터 개운한 아침형", "shortLabel": "아침형", "emoji": "🌅" },
-        { "id": "b", "label": "밤에 집중되는 저녁형", "shortLabel": "저녁형", "emoji": "🌙" }
+        {
+          "id": "a",
+          "label": "새벽부터 개운한 아침형",
+          "shortLabel": "아침형",
+          "emoji": "🌅"
+        },
+        {
+          "id": "b",
+          "label": "밤에 집중되는 저녁형",
+          "shortLabel": "저녁형",
+          "emoji": "🌙"
+        }
       ],
       "shareText": "완벽한 아침형 vs 저녁형, 어떤 리듬을 원하나요?",
       "seo": {
@@ -166,8 +252,18 @@
       "question": "급여가 같다면 어떤 근무 방식을 선택할까요?",
       "description": "하루는 길지만 주말이 긴 근무와 매일 여유 있는 근무 중 선택하세요.",
       "options": [
-        { "id": "a", "label": "하루 10시간 주 4일", "shortLabel": "주 4일 몰입", "emoji": "🔥" },
-        { "id": "b", "label": "하루 7시간 주 5일", "shortLabel": "주 5일 여유", "emoji": "🌿" }
+        {
+          "id": "a",
+          "label": "하루 10시간 주 4일",
+          "shortLabel": "주 4일 몰입",
+          "emoji": "🔥"
+        },
+        {
+          "id": "b",
+          "label": "하루 7시간 주 5일",
+          "shortLabel": "주 5일 여유",
+          "emoji": "🌿"
+        }
       ],
       "shareText": "같은 급여라면 주 4일 몰입 vs 주 5일 여유?",
       "seo": {
@@ -185,8 +281,18 @@
       "question": "세금 없이 둘 중 하나를 받을 수 있다면?",
       "description": "당장의 자유와 더 큰 미래 가치 사이에서 한 번만 선택할 수 있어요.",
       "options": [
-        { "id": "a", "label": "지금 바로 10억", "shortLabel": "지금 10억", "emoji": "💵" },
-        { "id": "b", "label": "10년 후 30억", "shortLabel": "10년 후 30억", "emoji": "🏦" }
+        {
+          "id": "a",
+          "label": "지금 바로 10억",
+          "shortLabel": "지금 10억",
+          "emoji": "💵"
+        },
+        {
+          "id": "b",
+          "label": "10년 후 30억",
+          "shortLabel": "10년 후 30억",
+          "emoji": "🏦"
+        }
       ],
       "shareText": "지금 10억 vs 10년 후 30억, 당신의 선택은?",
       "seo": {
@@ -204,8 +310,18 @@
       "question": "둘 중 하나의 삶을 바로 살 수 있다면?",
       "description": "모두의 관심을 받는 영향력과 아무도 모르는 경제적 자유 중 선택하세요.",
       "options": [
-        { "id": "a", "label": "모두가 아는 유명인", "shortLabel": "유명인", "emoji": "🌟" },
-        { "id": "b", "label": "아무도 모르는 부자", "shortLabel": "익명의 부자", "emoji": "🕶️" }
+        {
+          "id": "a",
+          "label": "모두가 아는 유명인",
+          "shortLabel": "유명인",
+          "emoji": "🌟"
+        },
+        {
+          "id": "b",
+          "label": "아무도 모르는 부자",
+          "shortLabel": "익명의 부자",
+          "emoji": "🕶️"
+        }
       ],
       "shareText": "모두가 아는 유명인 vs 아무도 모르는 부자, 어느 삶?",
       "seo": {
@@ -223,8 +339,18 @@
       "question": "내 인생의 중요한 사실 하나를 선택해야 한다면?",
       "description": "조금 아프더라도 정확히 아는 것과 끝까지 행복하게 믿는 것 중 골라보세요.",
       "options": [
-        { "id": "a", "label": "모든 것을 정확히 알기", "shortLabel": "불편한 진실", "emoji": "🔍" },
-        { "id": "b", "label": "행복한 믿음 지키기", "shortLabel": "행복한 착각", "emoji": "🌈" }
+        {
+          "id": "a",
+          "label": "모든 것을 정확히 알기",
+          "shortLabel": "불편한 진실",
+          "emoji": "🔍"
+        },
+        {
+          "id": "b",
+          "label": "행복한 믿음 지키기",
+          "shortLabel": "행복한 착각",
+          "emoji": "🌈"
+        }
       ],
       "shareText": "불편한 진실 vs 행복한 착각, 당신은 무엇을 택하나요?",
       "seo": {
@@ -242,8 +368,18 @@
       "question": "기억을 그대로 가진 채 한 방향으로만 이동할 수 있다면?",
       "description": "다시 선택할 기회와 미래를 먼저 만나는 기회 중 하나뿐입니다.",
       "options": [
-        { "id": "a", "label": "기억을 갖고 10년 전", "shortLabel": "10년 전", "emoji": "⏪" },
-        { "id": "b", "label": "지금 모습으로 10년 후", "shortLabel": "10년 후", "emoji": "⏩" }
+        {
+          "id": "a",
+          "label": "기억을 갖고 10년 전",
+          "shortLabel": "10년 전",
+          "emoji": "⏪"
+        },
+        {
+          "id": "b",
+          "label": "지금 모습으로 10년 후",
+          "shortLabel": "10년 후",
+          "emoji": "⏩"
+        }
       ],
       "shareText": "기억을 갖고 10년 전 vs 지금 모습으로 10년 후?",
       "seo": {
@@ -261,8 +397,18 @@
       "question": "하루에 한 번 초능력을 쓸 수 있다면?",
       "description": "상대의 속마음과 가까운 미래 중 어떤 정보가 더 강력할까요?",
       "options": [
-        { "id": "a", "label": "상대 마음 1분 읽기", "shortLabel": "마음 읽기", "emoji": "🧠" },
-        { "id": "b", "label": "10분 뒤 미래 보기", "shortLabel": "미래 보기", "emoji": "🔮" }
+        {
+          "id": "a",
+          "label": "상대 마음 1분 읽기",
+          "shortLabel": "마음 읽기",
+          "emoji": "🧠"
+        },
+        {
+          "id": "b",
+          "label": "10분 뒤 미래 보기",
+          "shortLabel": "미래 보기",
+          "emoji": "🔮"
+        }
       ],
       "shareText": "마음 읽기 vs 10분 뒤 미래 보기, 원하는 초능력은?",
       "seo": {
@@ -280,8 +426,18 @@
       "question": "눈을 뜨는 순간 한 가지 능력을 완벽히 갖게 된다면?",
       "description": "전 세계 누구와도 대화하는 능력과 원하는 한 분야의 압도적 실력 중 선택하세요.",
       "options": [
-        { "id": "a", "label": "모든 언어 완벽 구사", "shortLabel": "모든 언어", "emoji": "🌍" },
-        { "id": "b", "label": "한 분야 세계 최고", "shortLabel": "한 분야 천재", "emoji": "🏆" }
+        {
+          "id": "a",
+          "label": "모든 언어 완벽 구사",
+          "shortLabel": "모든 언어",
+          "emoji": "🌍"
+        },
+        {
+          "id": "b",
+          "label": "한 분야 세계 최고",
+          "shortLabel": "한 분야 천재",
+          "emoji": "🏆"
+        }
       ],
       "shareText": "모든 언어 완벽 구사 vs 한 분야 세계 최고, 무엇을 고를까요?",
       "seo": {
@@ -299,8 +455,18 @@
       "question": "본인 비용만 평생 0원이 된다면?",
       "description": "항공·숙박이 무료인 여행과 모든 식당이 무료인 일상 중 골라보세요.",
       "options": [
-        { "id": "a", "label": "항공·숙박 평생 무료", "shortLabel": "여행 무료", "emoji": "✈️" },
-        { "id": "b", "label": "모든 식당 평생 무료", "shortLabel": "외식 무료", "emoji": "🍽️" }
+        {
+          "id": "a",
+          "label": "항공·숙박 평생 무료",
+          "shortLabel": "여행 무료",
+          "emoji": "✈️"
+        },
+        {
+          "id": "b",
+          "label": "모든 식당 평생 무료",
+          "shortLabel": "외식 무료",
+          "emoji": "🍽️"
+        }
       ],
       "shareText": "평생 여행 무료 vs 모든 식당 무료, 단 하나의 혜택은?",
       "seo": {
@@ -318,8 +484,18 @@
       "question": "내일부터 30일 동안 하나를 완전히 끊어야 한다면?",
       "description": "연락과 콘텐츠 없는 생활, 커피와 에너지음료 없는 생활 중 선택하세요.",
       "options": [
-        { "id": "a", "label": "스마트폰 30일 금지", "shortLabel": "스마트폰 금지", "emoji": "📵" },
-        { "id": "b", "label": "카페인 30일 금지", "shortLabel": "카페인 금지", "emoji": "🚫" }
+        {
+          "id": "a",
+          "label": "스마트폰 30일 금지",
+          "shortLabel": "스마트폰 금지",
+          "emoji": "📵"
+        },
+        {
+          "id": "b",
+          "label": "카페인 30일 금지",
+          "shortLabel": "카페인 금지",
+          "emoji": "🚫"
+        }
       ],
       "shareText": "스마트폰 한 달 금지 vs 카페인 한 달 금지, 버틸 수 있는 것은?",
       "seo": {
@@ -337,8 +513,18 @@
       "question": "집값과 크기가 완전히 같다면 어디에서 살까요?",
       "description": "매일 보는 수평선과 모든 것이 가까운 편리함 중 선택하세요.",
       "options": [
-        { "id": "a", "label": "파도 보이는 바다 앞", "shortLabel": "바다 앞", "emoji": "🌊" },
-        { "id": "b", "label": "편리한 도심 한복판", "shortLabel": "도심", "emoji": "🏙️" }
+        {
+          "id": "a",
+          "label": "파도 보이는 바다 앞",
+          "shortLabel": "바다 앞",
+          "emoji": "🌊"
+        },
+        {
+          "id": "b",
+          "label": "편리한 도심 한복판",
+          "shortLabel": "도심",
+          "emoji": "🏙️"
+        }
       ],
       "shareText": "같은 집값이면 바다 앞 vs 도심 한복판, 어디에서 살까요?",
       "seo": {
@@ -356,8 +542,18 @@
       "question": "가장 행복한 생일을 원하는 방식으로 보낸다면?",
       "description": "많은 사람의 축하와 나만을 위한 편안한 시간 중 선택하세요.",
       "options": [
-        { "id": "a", "label": "모두 모이는 큰 파티", "shortLabel": "큰 파티", "emoji": "🎉" },
-        { "id": "b", "label": "좋아하는 사람과 조용히", "shortLabel": "조용한 하루", "emoji": "🕯️" }
+        {
+          "id": "a",
+          "label": "모두 모이는 큰 파티",
+          "shortLabel": "큰 파티",
+          "emoji": "🎉"
+        },
+        {
+          "id": "b",
+          "label": "좋아하는 사람과 조용히",
+          "shortLabel": "조용한 하루",
+          "emoji": "🕯️"
+        }
       ],
       "shareText": "생일은 큰 파티 vs 조용한 하루, 당신의 방식은?",
       "seo": {
@@ -375,8 +571,18 @@
       "question": "급여와 업무가 같고 한 가지 방식만 가능하다면?",
       "description": "출퇴근 없는 자유와 동료를 직접 만나는 리듬 중 선택하세요.",
       "options": [
-        { "id": "a", "label": "평생 완전 재택근무", "shortLabel": "완전 재택", "emoji": "🏠" },
-        { "id": "b", "label": "평생 사무실 출근", "shortLabel": "완전 출근", "emoji": "🏢" }
+        {
+          "id": "a",
+          "label": "평생 완전 재택근무",
+          "shortLabel": "완전 재택",
+          "emoji": "🏠"
+        },
+        {
+          "id": "b",
+          "label": "평생 사무실 출근",
+          "shortLabel": "완전 출근",
+          "emoji": "🏢"
+        }
       ],
       "shareText": "같은 급여라면 완전 재택 vs 완전 출근, 어느 쪽?",
       "seo": {
@@ -394,8 +600,18 @@
       "question": "매일 같은 종류의 아침을 먹어야 한다면?",
       "description": "든든한 한식 아침과 간편하고 향긋한 빵 아침 중 하나를 선택하세요.",
       "options": [
-        { "id": "a", "label": "따뜻한 밥과 국", "shortLabel": "밥 아침", "emoji": "🍚" },
-        { "id": "b", "label": "갓 구운 빵과 음료", "shortLabel": "빵 아침", "emoji": "🥐" }
+        {
+          "id": "a",
+          "label": "따뜻한 밥과 국",
+          "shortLabel": "밥 아침",
+          "emoji": "🍚"
+        },
+        {
+          "id": "b",
+          "label": "갓 구운 빵과 음료",
+          "shortLabel": "빵 아침",
+          "emoji": "🥐"
+        }
       ],
       "shareText": "매일 아침 밥 vs 빵, 평생 하나만 고른다면?",
       "seo": {
@@ -413,8 +629,18 @@
       "question": "스트레스 받은 날 딱 하나로 기분을 푼다면?",
       "description": "화끈하게 땀나는 매운맛과 달콤하게 위로하는 단맛 중 골라보세요.",
       "options": [
-        { "id": "a", "label": "입안이 얼얼한 매운맛", "shortLabel": "매운맛", "emoji": "🌶️" },
-        { "id": "b", "label": "기분 좋아지는 단맛", "shortLabel": "단맛", "emoji": "🍫" }
+        {
+          "id": "a",
+          "label": "입안이 얼얼한 매운맛",
+          "shortLabel": "매운맛",
+          "emoji": "🌶️"
+        },
+        {
+          "id": "b",
+          "label": "기분 좋아지는 단맛",
+          "shortLabel": "단맛",
+          "emoji": "🍫"
+        }
       ],
       "shareText": "스트레스 해소는 매운맛 vs 단맛, 당신의 선택은?",
       "seo": {
@@ -432,8 +658,18 @@
       "question": "집중해야 하는 하루의 배경을 하나만 고른다면?",
       "description": "좋아하는 음악이 계속 흐르는 하루와 어떤 소리도 없는 고요한 하루 중 선택하세요.",
       "options": [
-        { "id": "a", "label": "하루 종일 음악 듣기", "shortLabel": "음악", "emoji": "🎧" },
-        { "id": "b", "label": "하루 종일 완전한 조용함", "shortLabel": "조용함", "emoji": "🤫" }
+        {
+          "id": "a",
+          "label": "하루 종일 음악 듣기",
+          "shortLabel": "음악",
+          "emoji": "🎧"
+        },
+        {
+          "id": "b",
+          "label": "하루 종일 완전한 조용함",
+          "shortLabel": "조용함",
+          "emoji": "🤫"
+        }
       ],
       "shareText": "집중할 때 음악 vs 완전한 조용함, 어느 쪽인가요?",
       "seo": {
@@ -451,8 +687,18 @@
       "question": "내 방의 상태를 한 가지로만 유지해야 한다면?",
       "description": "모든 물건이 제자리에 있는 공간과 필요한 것이 손 닿는 곳에 있는 공간 중 고르세요.",
       "options": [
-        { "id": "a", "label": "항상 완벽하게 정돈된 방", "shortLabel": "완벽 정리", "emoji": "✨" },
-        { "id": "b", "label": "편하지만 조금 어질러진 방", "shortLabel": "편안한 어질러짐", "emoji": "🛋️" }
+        {
+          "id": "a",
+          "label": "항상 완벽하게 정돈된 방",
+          "shortLabel": "완벽 정리",
+          "emoji": "✨"
+        },
+        {
+          "id": "b",
+          "label": "편하지만 조금 어질러진 방",
+          "shortLabel": "편안한 어질러짐",
+          "emoji": "🛋️"
+        }
       ],
       "shareText": "완벽하게 정돈된 방 vs 편하게 어질러진 방, 어디가 더 좋은가요?",
       "seo": {
@@ -470,8 +716,18 @@
       "question": "특별한 날 한 가지 선물만 받을 수 있다면?",
       "description": "상대가 고른 예상 밖의 선물과 내가 정확히 원했던 선물 중 마음이 가는 쪽을 고르세요.",
       "options": [
-        { "id": "a", "label": "마음이 담긴 깜짝 선물", "shortLabel": "깜짝 선물", "emoji": "🎉" },
-        { "id": "b", "label": "내가 꼭 갖고 싶던 선물", "shortLabel": "원하던 선물", "emoji": "🎁" }
+        {
+          "id": "a",
+          "label": "마음이 담긴 깜짝 선물",
+          "shortLabel": "깜짝 선물",
+          "emoji": "🎉"
+        },
+        {
+          "id": "b",
+          "label": "내가 꼭 갖고 싶던 선물",
+          "shortLabel": "원하던 선물",
+          "emoji": "🎁"
+        }
       ],
       "shareText": "깜짝 선물 vs 갖고 싶던 선물, 더 기쁜 것은?",
       "seo": {
@@ -489,8 +745,18 @@
       "question": "좋아하는 사람과 관계를 유지하는 방식 하나만 가능하다면?",
       "description": "일상 속 짧은 만남과 오래 기다린 깊은 대화 중 더 중요한 방식을 선택하세요.",
       "options": [
-        { "id": "a", "label": "매주 짧게 자주 만나기", "shortLabel": "자주 만나기", "emoji": "☕" },
-        { "id": "b", "label": "한 달에 한 번 오래 만나기", "shortLabel": "깊게 만나기", "emoji": "🫶" }
+        {
+          "id": "a",
+          "label": "매주 짧게 자주 만나기",
+          "shortLabel": "자주 만나기",
+          "emoji": "☕"
+        },
+        {
+          "id": "b",
+          "label": "한 달에 한 번 오래 만나기",
+          "shortLabel": "깊게 만나기",
+          "emoji": "🫶"
+        }
       ],
       "shareText": "자주 짧게 만나기 vs 가끔 깊게 만나기, 더 좋은 관계 방식은?",
       "seo": {
@@ -508,8 +774,18 @@
       "question": "업무 만족도와 복지가 완전히 같다면 어디에서 일할까요?",
       "description": "더 많은 급여와 매일 확보되는 시간 사이에서 현실적인 선택을 해보세요.",
       "options": [
-        { "id": "a", "label": "연봉 30% 높고 왕복 3시간", "shortLabel": "고연봉 장거리", "emoji": "💰" },
-        { "id": "b", "label": "연봉 30% 낮고 도보 10분", "shortLabel": "저연봉 근거리", "emoji": "🚶" }
+        {
+          "id": "a",
+          "label": "연봉 30% 높고 왕복 3시간",
+          "shortLabel": "고연봉 장거리",
+          "emoji": "💰"
+        },
+        {
+          "id": "b",
+          "label": "연봉 30% 낮고 도보 10분",
+          "shortLabel": "저연봉 근거리",
+          "emoji": "🚶"
+        }
       ],
       "shareText": "연봉 30% 높고 왕복 3시간 vs 연봉 낮고 도보 10분, 당신의 선택은?",
       "seo": {
@@ -527,8 +803,18 @@
       "question": "수입 차이가 크고 한 번만 선택할 수 있다면?",
       "description": "예측 가능한 안정과 오랫동안 원했던 도전 중 어느 삶을 선택할지 골라보세요.",
       "options": [
-        { "id": "a", "label": "수입이 안정적인 익숙한 직업", "shortLabel": "안정적인 직업", "emoji": "🛡️" },
-        { "id": "b", "label": "수입은 불안정한 꿈의 직업", "shortLabel": "꿈꾸던 직업", "emoji": "🎯" }
+        {
+          "id": "a",
+          "label": "수입이 안정적인 익숙한 직업",
+          "shortLabel": "안정적인 직업",
+          "emoji": "🛡️"
+        },
+        {
+          "id": "b",
+          "label": "수입은 불안정한 꿈의 직업",
+          "shortLabel": "꿈꾸던 직업",
+          "emoji": "🎯"
+        }
       ],
       "shareText": "안정적인 직업 vs 꿈꾸던 직업, 한 번뿐인 선택이라면?",
       "seo": {
@@ -546,8 +832,18 @@
       "question": "하루에 딱 세 번 사용할 수 있는 능력을 고른다면?",
       "description": "어디든 즉시 가는 자유와 세상을 잠시 멈추는 여유 중 하나를 선택하세요.",
       "options": [
-        { "id": "a", "label": "원하는 곳으로 순간이동", "shortLabel": "순간이동", "emoji": "🌀" },
-        { "id": "b", "label": "10분 동안 시간 멈추기", "shortLabel": "시간 멈추기", "emoji": "⏸️" }
+        {
+          "id": "a",
+          "label": "원하는 곳으로 순간이동",
+          "shortLabel": "순간이동",
+          "emoji": "🌀"
+        },
+        {
+          "id": "b",
+          "label": "10분 동안 시간 멈추기",
+          "shortLabel": "시간 멈추기",
+          "emoji": "⏸️"
+        }
       ],
       "shareText": "순간이동 vs 시간 멈추기, 하루 세 번 쓸 능력은?",
       "seo": {
@@ -565,13 +861,603 @@
       "question": "한 달에 한 번만 시간을 조절할 수 있다면?",
       "description": "좋았던 순간을 다시 누리는 능력과 어려운 시간을 통째로 넘기는 능력 중 선택하세요.",
       "options": [
-        { "id": "a", "label": "행복했던 하루 다시 살기", "shortLabel": "행복 재생", "emoji": "😊" },
-        { "id": "b", "label": "가장 힘든 하루 건너뛰기", "shortLabel": "힘든 날 건너뛰기", "emoji": "⏭️" }
+        {
+          "id": "a",
+          "label": "행복했던 하루 다시 살기",
+          "shortLabel": "행복 재생",
+          "emoji": "😊"
+        },
+        {
+          "id": "b",
+          "label": "가장 힘든 하루 건너뛰기",
+          "shortLabel": "힘든 날 건너뛰기",
+          "emoji": "⏭️"
+        }
       ],
       "shareText": "행복한 하루 다시 살기 vs 힘든 하루 건너뛰기, 무엇을 고를까요?",
       "seo": {
         "title": "행복한 하루 다시 살기 vs 힘든 하루 건너뛰기 밸런스 게임",
         "description": "한 달에 한 번 행복한 하루를 다시 살거나 힘든 하루를 건너뛸 수 있다면 선택은?"
+      }
+    },
+    {
+      "id": "balance-031",
+      "slug": "jjajang-vs-jjamppong",
+      "status": "published",
+      "category": "음식",
+      "icon": "🍜",
+      "title": "짜장면 vs 짬뽕",
+      "question": "중식당에서 평생 하나만 주문해야 한다면?",
+      "description": "달콤하고 고소한 짜장과 얼큰하고 시원한 짬뽕 중 영원한 한 그릇을 고르세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "윤기 나는 짜장면",
+          "shortLabel": "짜장면",
+          "emoji": "🍝"
+        },
+        {
+          "id": "b",
+          "label": "얼큰한 국물 짬뽕",
+          "shortLabel": "짬뽕",
+          "emoji": "🍜"
+        }
+      ],
+      "shareText": "짜장면 vs 짬뽕, 평생 하나만 먹는다면?",
+      "seo": {
+        "title": "짜장면 vs 짬뽕 국민 중식 밸런스 게임",
+        "description": "평생 중식 메뉴 하나만 고른다면 짜장면과 짬뽕 중 무엇을 선택할지 투표하세요."
+      }
+    },
+    {
+      "id": "balance-032",
+      "slug": "tteokbokki-vs-fried-snacks",
+      "status": "published",
+      "category": "음식",
+      "icon": "🍢",
+      "title": "떡볶이 vs 튀김",
+      "question": "분식집에서 딱 하나만 배부르게 먹는다면?",
+      "description": "매콤달콤한 떡볶이와 바삭한 모둠튀김 중 오늘의 최애 분식을 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "쫄깃한 떡볶이",
+          "shortLabel": "떡볶이",
+          "emoji": "🍢"
+        },
+        {
+          "id": "b",
+          "label": "바삭한 모둠튀김",
+          "shortLabel": "튀김",
+          "emoji": "🍤"
+        }
+      ],
+      "shareText": "분식 최강자는 떡볶이 vs 튀김, 당신의 선택은?",
+      "seo": {
+        "title": "떡볶이 vs 튀김 분식 밸런스 게임",
+        "description": "분식집에서 하나만 배부르게 먹는다면 떡볶이와 튀김 중 무엇을 선택할까요?"
+      }
+    },
+    {
+      "id": "balance-033",
+      "slug": "home-cooked-vs-delivery-food",
+      "status": "published",
+      "category": "음식",
+      "icon": "🏠",
+      "title": "매일 집밥 vs 매일 배달음식",
+      "question": "가격과 건강 조건이 완전히 같다면?",
+      "description": "익숙하고 따뜻한 집밥과 매일 메뉴가 바뀌는 배달음식 중 하나를 고르세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "정성 가득한 집밥",
+          "shortLabel": "집밥",
+          "emoji": "🍚"
+        },
+        {
+          "id": "b",
+          "label": "매일 다른 배달음식",
+          "shortLabel": "배달음식",
+          "emoji": "🛵"
+        }
+      ],
+      "shareText": "매일 집밥 vs 매일 배달음식, 평생 한쪽이라면?",
+      "seo": {
+        "title": "매일 집밥 vs 배달음식 밸런스 게임",
+        "description": "가격과 건강이 같을 때 매일 집밥과 매일 배달음식 중 원하는 식사를 선택하세요."
+      }
+    },
+    {
+      "id": "balance-034",
+      "slug": "hot-coffee-vs-iced-coffee",
+      "status": "published",
+      "category": "음식",
+      "icon": "☕",
+      "title": "뜨거운 커피 vs 아이스커피",
+      "question": "계절과 상관없이 한 온도로만 마셔야 한다면?",
+      "description": "향이 진한 따뜻한 한 잔과 시원하고 깔끔한 한 잔 중 평생의 온도를 고르세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "사계절 뜨거운 커피",
+          "shortLabel": "뜨거운 커피",
+          "emoji": "☕"
+        },
+        {
+          "id": "b",
+          "label": "한겨울에도 아이스커피",
+          "shortLabel": "아이스커피",
+          "emoji": "🧊"
+        }
+      ],
+      "shareText": "뜨거운 커피 vs 아이스커피, 사계절 한 잔만 고른다면?",
+      "seo": {
+        "title": "뜨거운 커피 vs 아이스커피 밸런스 게임",
+        "description": "사계절 같은 온도로 마셔야 한다면 뜨거운 커피와 아이스커피 중 무엇을 고를까요?"
+      }
+    },
+    {
+      "id": "balance-035",
+      "slug": "morning-shower-vs-night-shower",
+      "status": "published",
+      "category": "일상",
+      "icon": "🚿",
+      "title": "아침 샤워 vs 밤 샤워",
+      "question": "앞으로 하루 한 번 같은 시간에만 씻는다면?",
+      "description": "잠을 깨우는 상쾌한 아침과 하루를 씻어내는 편안한 밤 중 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "상쾌하게 아침 샤워",
+          "shortLabel": "아침 샤워",
+          "emoji": "🌅"
+        },
+        {
+          "id": "b",
+          "label": "개운하게 밤 샤워",
+          "shortLabel": "밤 샤워",
+          "emoji": "🌙"
+        }
+      ],
+      "shareText": "아침 샤워 vs 밤 샤워, 더 개운한 시간은?",
+      "seo": {
+        "title": "아침 샤워 vs 밤 샤워 생활습관 밸런스 게임",
+        "description": "하루 한 번 같은 시간에 씻어야 한다면 아침 샤워와 밤 샤워 중 무엇을 선택할까요?"
+      }
+    },
+    {
+      "id": "balance-036",
+      "slug": "original-book-vs-movie",
+      "status": "published",
+      "category": "일상",
+      "icon": "📚",
+      "title": "원작 책 vs 영화",
+      "question": "같은 이야기를 한 가지 방식으로만 볼 수 있다면?",
+      "description": "상상하며 천천히 읽는 원작과 장면과 음악으로 빠르게 만나는 영화 중 고르세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "세밀한 원작 책",
+          "shortLabel": "원작 책",
+          "emoji": "📚"
+        },
+        {
+          "id": "b",
+          "label": "생생한 영화",
+          "shortLabel": "영화",
+          "emoji": "🎬"
+        }
+      ],
+      "shareText": "같은 이야기라면 원작 책 vs 영화, 무엇을 먼저 선택하나요?",
+      "seo": {
+        "title": "원작 책 vs 영화 콘텐츠 취향 밸런스 게임",
+        "description": "같은 이야기를 책과 영화 중 한 방식으로만 본다면 무엇을 선택할지 투표하세요."
+      }
+    },
+    {
+      "id": "balance-037",
+      "slug": "window-seat-vs-aisle-seat",
+      "status": "published",
+      "category": "일상",
+      "icon": "✈️",
+      "title": "창가 좌석 vs 통로 좌석",
+      "question": "장거리 비행에서 한 자리만 선택해야 한다면?",
+      "description": "멋진 풍경과 기대기 좋은 창가, 자유롭게 움직이는 통로 중 편한 자리를 고르세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "풍경 보이는 창가",
+          "shortLabel": "창가",
+          "emoji": "🪟"
+        },
+        {
+          "id": "b",
+          "label": "이동 편한 통로",
+          "shortLabel": "통로",
+          "emoji": "🚶"
+        }
+      ],
+      "shareText": "장거리 비행은 창가 vs 통로, 당신의 고정 좌석은?",
+      "seo": {
+        "title": "비행기 창가 좌석 vs 통로 좌석 밸런스 게임",
+        "description": "장거리 비행에서 풍경 좋은 창가와 이동이 편한 통로 중 원하는 좌석을 선택하세요."
+      }
+    },
+    {
+      "id": "balance-038",
+      "slug": "one-long-vacation-vs-many-short-vacations",
+      "status": "published",
+      "category": "일상",
+      "icon": "🏖️",
+      "title": "긴 휴가 한 번 vs 짧은 휴가 여러 번",
+      "question": "1년 휴가 일수가 완전히 같다면?",
+      "description": "한 번에 멀리 떠나는 긴 여행과 자주 숨을 돌리는 짧은 여행 중 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "2주 연속 긴 휴가",
+          "shortLabel": "긴 휴가 한 번",
+          "emoji": "🏖️"
+        },
+        {
+          "id": "b",
+          "label": "3일 휴가 여러 번",
+          "shortLabel": "짧은 휴가 여러 번",
+          "emoji": "🗓️"
+        }
+      ],
+      "shareText": "긴 휴가 한 번 vs 짧은 휴가 여러 번, 더 좋은 방식은?",
+      "seo": {
+        "title": "긴 휴가 한 번 vs 짧은 휴가 여러 번 밸런스 게임",
+        "description": "연간 휴가 일수가 같을 때 2주 연속 휴가와 짧은 휴가 여러 번 중 무엇을 고를까요?"
+      }
+    },
+    {
+      "id": "balance-039",
+      "slug": "remember-dates-vs-contact-often",
+      "status": "published",
+      "category": "관계",
+      "icon": "📅",
+      "title": "기념일 완벽 기억 vs 평소 자주 연락",
+      "question": "가까운 사람이 한 가지 장점만 가질 수 있다면?",
+      "description": "중요한 날을 정확히 챙기는 마음과 평범한 날 자주 안부를 묻는 마음 중 고르세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "모든 기념일 완벽 기억",
+          "shortLabel": "기념일 기억",
+          "emoji": "🎂"
+        },
+        {
+          "id": "b",
+          "label": "평소 매일 자주 연락",
+          "shortLabel": "자주 연락",
+          "emoji": "💬"
+        }
+      ],
+      "shareText": "기념일 완벽 기억 vs 평소 자주 연락, 더 감동적인 것은?",
+      "seo": {
+        "title": "기념일 기억 vs 평소 자주 연락 밸런스 게임",
+        "description": "중요한 기념일을 챙기는 것과 평소 자주 연락하는 것 중 관계에서 더 원하는 행동은?"
+      }
+    },
+    {
+      "id": "balance-040",
+      "slug": "honest-advice-vs-comfort-first",
+      "status": "published",
+      "category": "관계",
+      "icon": "🗣️",
+      "title": "솔직한 조언 vs 먼저 위로",
+      "question": "내가 힘들 때 친구에게 한 가지만 받을 수 있다면?",
+      "description": "조금 아파도 정확한 현실 조언과 해결 전 마음을 안아주는 위로 중 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "현실적인 솔직한 조언",
+          "shortLabel": "솔직한 조언",
+          "emoji": "🎯"
+        },
+        {
+          "id": "b",
+          "label": "판단 없는 따뜻한 위로",
+          "shortLabel": "먼저 위로",
+          "emoji": "🫂"
+        }
+      ],
+      "shareText": "힘들 때 솔직한 조언 vs 먼저 위로, 더 필요한 것은?",
+      "seo": {
+        "title": "솔직한 조언 vs 따뜻한 위로 밸런스 게임",
+        "description": "힘든 순간 현실적인 조언과 판단 없는 위로 중 친구에게 더 받고 싶은 반응을 선택하세요."
+      }
+    },
+    {
+      "id": "balance-041",
+      "slug": "similar-partner-vs-opposite-partner",
+      "status": "published",
+      "category": "관계",
+      "icon": "🧲",
+      "title": "나와 비슷한 사람 vs 정반대인 사람",
+      "question": "오래 함께할 사람의 성향을 고른다면?",
+      "description": "말하지 않아도 통하는 편안함과 서로 없는 점을 채우는 새로움 중 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "나와 아주 비슷한 사람",
+          "shortLabel": "비슷한 사람",
+          "emoji": "🪞"
+        },
+        {
+          "id": "b",
+          "label": "나와 완전히 반대인 사람",
+          "shortLabel": "정반대인 사람",
+          "emoji": "🧲"
+        }
+      ],
+      "shareText": "나와 비슷한 사람 vs 정반대인 사람, 더 잘 맞는 관계는?",
+      "seo": {
+        "title": "비슷한 사람 vs 정반대인 사람 관계 밸런스 게임",
+        "description": "오래 함께한다면 나와 성향이 비슷한 사람과 정반대인 사람 중 누구를 선택할까요?"
+      }
+    },
+    {
+      "id": "balance-042",
+      "slug": "group-gathering-vs-one-on-one",
+      "status": "published",
+      "category": "관계",
+      "icon": "👥",
+      "title": "여럿이 모임 vs 단둘이 만남",
+      "question": "친구를 만나는 방식 하나만 가능하다면?",
+      "description": "다양한 이야기가 오가는 활기찬 모임과 한 사람에게 집중하는 깊은 만남 중 고르세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "여럿이 활기찬 모임",
+          "shortLabel": "여럿이 모임",
+          "emoji": "👥"
+        },
+        {
+          "id": "b",
+          "label": "단둘이 깊은 대화",
+          "shortLabel": "단둘이 만남",
+          "emoji": "☕"
+        }
+      ],
+      "shareText": "친구 만남은 여럿이 모임 vs 단둘이 깊게, 어느 쪽?",
+      "seo": {
+        "title": "여럿이 모임 vs 단둘이 만남 밸런스 게임",
+        "description": "친구를 만날 때 활기찬 단체 모임과 깊은 일대일 만남 중 원하는 방식을 선택하세요."
+      }
+    },
+    {
+      "id": "balance-043",
+      "slug": "fixed-salary-vs-performance-pay",
+      "status": "published",
+      "category": "직장·돈",
+      "icon": "💵",
+      "title": "고정급 안정형 vs 성과급 도전형",
+      "question": "평균 연봉이 같고 지급 방식만 다르다면?",
+      "description": "매달 같은 금액을 받는 안정과 성과에 따라 크게 달라지는 기회 중 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "매달 같은 안정적 고정급",
+          "shortLabel": "고정급",
+          "emoji": "🛡️"
+        },
+        {
+          "id": "b",
+          "label": "성과에 따라 달라지는 급여",
+          "shortLabel": "성과급",
+          "emoji": "📈"
+        }
+      ],
+      "shareText": "평균 연봉이 같다면 고정급 vs 성과급, 어느 쪽?",
+      "seo": {
+        "title": "고정급 vs 성과급 직장 밸런스 게임",
+        "description": "평균 연봉이 같을 때 안정적인 고정급과 성과에 따라 달라지는 급여 중 무엇을 선택할까요?"
+      }
+    },
+    {
+      "id": "balance-044",
+      "slug": "more-money-vs-more-free-time",
+      "status": "published",
+      "category": "직장·돈",
+      "icon": "⏳",
+      "title": "월급 20% 증가 vs 자유시간 주 1일",
+      "question": "업무 만족도와 복지가 같다면 무엇을 받을까요?",
+      "description": "매달 더 많은 수입과 매주 온전히 내 것이 되는 하루 중 하나를 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "월급 20% 더 받기",
+          "shortLabel": "월급 증가",
+          "emoji": "💰"
+        },
+        {
+          "id": "b",
+          "label": "매주 자유시간 하루",
+          "shortLabel": "자유시간",
+          "emoji": "⏳"
+        }
+      ],
+      "shareText": "월급 20% 증가 vs 자유시간 주 1일, 무엇이 더 필요한가요?",
+      "seo": {
+        "title": "월급 증가 vs 자유시간 증가 밸런스 게임",
+        "description": "월급을 20% 더 받거나 매주 자유시간 하루를 얻는다면 무엇을 선택할지 투표하세요."
+      }
+    },
+    {
+      "id": "balance-045",
+      "slug": "team-leader-vs-top-expert",
+      "status": "published",
+      "category": "직장·돈",
+      "icon": "🏆",
+      "title": "팀을 이끄는 리더 vs 최고 전문가",
+      "question": "급여와 인정이 완전히 같다면 어떤 역할을 맡을까요?",
+      "description": "사람과 방향을 책임지는 리더와 한 분야에서 깊이를 만드는 전문가 중 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "사람을 이끄는 팀 리더",
+          "shortLabel": "팀 리더",
+          "emoji": "👑"
+        },
+        {
+          "id": "b",
+          "label": "한 분야의 최고 전문가",
+          "shortLabel": "최고 전문가",
+          "emoji": "🏆"
+        }
+      ],
+      "shareText": "팀을 이끄는 리더 vs 최고 전문가, 원하는 역할은?",
+      "seo": {
+        "title": "팀 리더 vs 최고 전문가 직업 밸런스 게임",
+        "description": "급여와 인정이 같을 때 팀을 이끄는 리더와 한 분야 최고 전문가 중 어떤 역할을 고를까요?"
+      }
+    },
+    {
+      "id": "balance-046",
+      "slug": "one-big-reward-vs-many-small-rewards",
+      "status": "published",
+      "category": "직장·돈",
+      "icon": "🎁",
+      "title": "큰 보상 한 번 vs 작은 행복 열 번",
+      "question": "같은 금액을 나를 위해 쓴다면?",
+      "description": "오래 바라던 큰 물건 하나와 일상에서 자주 누리는 작은 즐거움 중 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "오래 원한 큰 보상 한 번",
+          "shortLabel": "큰 보상 한 번",
+          "emoji": "💎"
+        },
+        {
+          "id": "b",
+          "label": "작은 행복 열 번",
+          "shortLabel": "작은 행복 열 번",
+          "emoji": "🎈"
+        }
+      ],
+      "shareText": "같은 돈이면 큰 보상 한 번 vs 작은 행복 열 번, 당신은?",
+      "seo": {
+        "title": "큰 보상 한 번 vs 작은 행복 여러 번 밸런스 게임",
+        "description": "같은 금액으로 큰 물건 하나를 사거나 작은 즐거움을 여러 번 누린다면 무엇을 선택할까요?"
+      }
+    },
+    {
+      "id": "balance-047",
+      "slug": "flying-vs-invisibility",
+      "status": "published",
+      "category": "상상",
+      "icon": "🦸",
+      "title": "하늘 날기 vs 투명인간",
+      "question": "하루에 한 시간 사용할 초능력을 고른다면?",
+      "description": "교통 없이 자유롭게 나는 능력과 아무에게도 보이지 않는 능력 중 하나를 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "하늘을 자유롭게 날기",
+          "shortLabel": "하늘 날기",
+          "emoji": "🪽"
+        },
+        {
+          "id": "b",
+          "label": "원할 때 투명인간 되기",
+          "shortLabel": "투명인간",
+          "emoji": "🫥"
+        }
+      ],
+      "shareText": "하늘 날기 vs 투명인간, 하루 한 시간 쓸 초능력은?",
+      "seo": {
+        "title": "하늘 날기 vs 투명인간 초능력 밸런스 게임",
+        "description": "하루 한 시간 하늘을 날거나 투명인간이 될 수 있다면 어떤 초능력을 고를까요?"
+      }
+    },
+    {
+      "id": "balance-048",
+      "slug": "four-hour-sleep-vs-eat-without-weight-gain",
+      "status": "published",
+      "category": "상상",
+      "icon": "😴",
+      "title": "4시간 수면 완전회복 vs 먹어도 살 안 찌기",
+      "question": "평생 유지되는 능력 하나를 받을 수 있다면?",
+      "description": "매일 시간을 더 얻는 완벽 수면과 좋아하는 음식을 마음껏 즐기는 능력 중 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "4시간만 자도 완전회복",
+          "shortLabel": "4시간 완전수면",
+          "emoji": "😴"
+        },
+        {
+          "id": "b",
+          "label": "무엇을 먹어도 체중 유지",
+          "shortLabel": "먹어도 체중 유지",
+          "emoji": "🍕"
+        }
+      ],
+      "shareText": "4시간 수면 완전회복 vs 먹어도 살 안 찌기, 원하는 능력은?",
+      "seo": {
+        "title": "4시간 완전수면 vs 먹어도 살 안 찌기 밸런스 게임",
+        "description": "평생 4시간 수면으로 완전히 회복하거나 먹어도 체중이 늘지 않는다면 무엇을 선택할까요?"
+      }
+    },
+    {
+      "id": "balance-049",
+      "slug": "perfect-memory-vs-erase-bad-memory",
+      "status": "published",
+      "category": "상상",
+      "icon": "🧠",
+      "title": "완벽한 기억력 vs 싫은 기억 삭제",
+      "question": "기억을 다루는 능력 하나만 가질 수 있다면?",
+      "description": "한 번 본 것을 절대 잊지 않는 능력과 원하지 않는 기억을 지우는 능력 중 고르세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "모든 것을 완벽히 기억",
+          "shortLabel": "완벽한 기억력",
+          "emoji": "🧠"
+        },
+        {
+          "id": "b",
+          "label": "원하는 기억 하나씩 삭제",
+          "shortLabel": "싫은 기억 삭제",
+          "emoji": "🧹"
+        }
+      ],
+      "shareText": "완벽한 기억력 vs 싫은 기억 삭제, 어떤 능력을 원하나요?",
+      "seo": {
+        "title": "완벽한 기억력 vs 싫은 기억 삭제 밸런스 게임",
+        "description": "모든 것을 완벽히 기억하거나 원하지 않는 기억을 지울 수 있다면 어떤 능력을 선택할까요?"
+      }
+    },
+    {
+      "id": "balance-050",
+      "slug": "ordinary-200-years-vs-healthy-80-years",
+      "status": "published",
+      "category": "상상",
+      "icon": "⏳",
+      "title": "평범하게 200년 vs 완벽히 건강한 80년",
+      "question": "삶의 길이와 건강 중 하나를 정해야 한다면?",
+      "description": "아주 긴 시간의 다양한 경험과 마지막까지 건강한 삶의 밀도 중 선택하세요.",
+      "options": [
+        {
+          "id": "a",
+          "label": "평범한 몸으로 200년 살기",
+          "shortLabel": "평범한 200년",
+          "emoji": "🕰️"
+        },
+        {
+          "id": "b",
+          "label": "완벽히 건강하게 80년 살기",
+          "shortLabel": "건강한 80년",
+          "emoji": "🌿"
+        }
+      ],
+      "shareText": "평범하게 200년 vs 완벽히 건강한 80년, 어떤 삶을 고를까요?",
+      "seo": {
+        "title": "200년 장수 vs 건강한 80년 밸런스 게임",
+        "description": "평범한 건강으로 200년 살거나 완벽히 건강하게 80년 산다면 어떤 삶을 선택할까요?"
       }
     }
   ]
