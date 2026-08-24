@@ -383,6 +383,196 @@
         "title": "완전 재택 vs 완전 출근 밸런스 게임",
         "description": "급여와 업무가 같을 때 완전 재택근무와 사무실 출근 중 원하는 방식을 골라보세요."
       }
+    },
+    {
+      "id": "balance-021",
+      "slug": "rice-breakfast-vs-bread-breakfast",
+      "status": "published",
+      "category": "음식",
+      "icon": "🍚",
+      "title": "아침밥은 밥 vs 빵",
+      "question": "매일 같은 종류의 아침을 먹어야 한다면?",
+      "description": "든든한 한식 아침과 간편하고 향긋한 빵 아침 중 하나를 선택하세요.",
+      "options": [
+        { "id": "a", "label": "따뜻한 밥과 국", "shortLabel": "밥 아침", "emoji": "🍚" },
+        { "id": "b", "label": "갓 구운 빵과 음료", "shortLabel": "빵 아침", "emoji": "🥐" }
+      ],
+      "shareText": "매일 아침 밥 vs 빵, 평생 하나만 고른다면?",
+      "seo": {
+        "title": "아침밥은 밥 vs 빵 밸런스 게임",
+        "description": "매일 같은 아침을 먹는다면 따뜻한 밥과 갓 구운 빵 중 무엇을 선택할지 투표하세요."
+      }
+    },
+    {
+      "id": "balance-022",
+      "slug": "spicy-vs-sweet",
+      "status": "published",
+      "category": "음식",
+      "icon": "🌶️",
+      "title": "매운맛 vs 단맛",
+      "question": "스트레스 받은 날 딱 하나로 기분을 푼다면?",
+      "description": "화끈하게 땀나는 매운맛과 달콤하게 위로하는 단맛 중 골라보세요.",
+      "options": [
+        { "id": "a", "label": "입안이 얼얼한 매운맛", "shortLabel": "매운맛", "emoji": "🌶️" },
+        { "id": "b", "label": "기분 좋아지는 단맛", "shortLabel": "단맛", "emoji": "🍫" }
+      ],
+      "shareText": "스트레스 해소는 매운맛 vs 단맛, 당신의 선택은?",
+      "seo": {
+        "title": "매운맛 vs 단맛 스트레스 음식 밸런스 게임",
+        "description": "스트레스 받은 날 매운 음식과 달콤한 디저트 중 더 찾게 되는 맛을 선택하세요."
+      }
+    },
+    {
+      "id": "balance-023",
+      "slug": "music-all-day-vs-silence-all-day",
+      "status": "published",
+      "category": "일상",
+      "icon": "🎧",
+      "title": "하루 종일 음악 vs 완전한 조용함",
+      "question": "집중해야 하는 하루의 배경을 하나만 고른다면?",
+      "description": "좋아하는 음악이 계속 흐르는 하루와 어떤 소리도 없는 고요한 하루 중 선택하세요.",
+      "options": [
+        { "id": "a", "label": "하루 종일 음악 듣기", "shortLabel": "음악", "emoji": "🎧" },
+        { "id": "b", "label": "하루 종일 완전한 조용함", "shortLabel": "조용함", "emoji": "🤫" }
+      ],
+      "shareText": "집중할 때 음악 vs 완전한 조용함, 어느 쪽인가요?",
+      "seo": {
+        "title": "음악 들으며 집중 vs 조용하게 집중 밸런스 게임",
+        "description": "하루 종일 음악을 듣거나 완전한 조용함 속에 있어야 한다면 무엇을 선택할까요?"
+      }
+    },
+    {
+      "id": "balance-024",
+      "slug": "perfectly-tidy-vs-comfortably-messy",
+      "status": "published",
+      "category": "일상",
+      "icon": "🧹",
+      "title": "완벽한 정리 vs 편안한 어질러짐",
+      "question": "내 방의 상태를 한 가지로만 유지해야 한다면?",
+      "description": "모든 물건이 제자리에 있는 공간과 필요한 것이 손 닿는 곳에 있는 공간 중 고르세요.",
+      "options": [
+        { "id": "a", "label": "항상 완벽하게 정돈된 방", "shortLabel": "완벽 정리", "emoji": "✨" },
+        { "id": "b", "label": "편하지만 조금 어질러진 방", "shortLabel": "편안한 어질러짐", "emoji": "🛋️" }
+      ],
+      "shareText": "완벽하게 정돈된 방 vs 편하게 어질러진 방, 어디가 더 좋은가요?",
+      "seo": {
+        "title": "완벽한 정리 vs 편안한 어질러짐 밸런스 게임",
+        "description": "항상 정돈된 방과 편하지만 조금 어질러진 방 중 더 살고 싶은 공간을 선택하세요."
+      }
+    },
+    {
+      "id": "balance-025",
+      "slug": "surprise-gift-vs-wanted-gift",
+      "status": "published",
+      "category": "관계",
+      "icon": "🎁",
+      "title": "깜짝 선물 vs 갖고 싶던 선물",
+      "question": "특별한 날 한 가지 선물만 받을 수 있다면?",
+      "description": "상대가 고른 예상 밖의 선물과 내가 정확히 원했던 선물 중 마음이 가는 쪽을 고르세요.",
+      "options": [
+        { "id": "a", "label": "마음이 담긴 깜짝 선물", "shortLabel": "깜짝 선물", "emoji": "🎉" },
+        { "id": "b", "label": "내가 꼭 갖고 싶던 선물", "shortLabel": "원하던 선물", "emoji": "🎁" }
+      ],
+      "shareText": "깜짝 선물 vs 갖고 싶던 선물, 더 기쁜 것은?",
+      "seo": {
+        "title": "깜짝 선물 vs 갖고 싶던 선물 밸런스 게임",
+        "description": "상대가 고른 깜짝 선물과 내가 정확히 원했던 선물 중 더 받고 싶은 것을 선택하세요."
+      }
+    },
+    {
+      "id": "balance-026",
+      "slug": "meet-often-vs-talk-deeply",
+      "status": "published",
+      "category": "관계",
+      "icon": "🫶",
+      "title": "자주 짧게 만나기 vs 가끔 깊게 만나기",
+      "question": "좋아하는 사람과 관계를 유지하는 방식 하나만 가능하다면?",
+      "description": "일상 속 짧은 만남과 오래 기다린 깊은 대화 중 더 중요한 방식을 선택하세요.",
+      "options": [
+        { "id": "a", "label": "매주 짧게 자주 만나기", "shortLabel": "자주 만나기", "emoji": "☕" },
+        { "id": "b", "label": "한 달에 한 번 오래 만나기", "shortLabel": "깊게 만나기", "emoji": "🫶" }
+      ],
+      "shareText": "자주 짧게 만나기 vs 가끔 깊게 만나기, 더 좋은 관계 방식은?",
+      "seo": {
+        "title": "자주 만나기 vs 가끔 깊게 만나기 밸런스 게임",
+        "description": "매주 짧게 자주 만나는 관계와 한 달에 한 번 깊게 만나는 관계 중 원하는 방식을 고르세요."
+      }
+    },
+    {
+      "id": "balance-027",
+      "slug": "high-pay-long-commute-vs-lower-pay-short-commute",
+      "status": "published",
+      "category": "직장·돈",
+      "icon": "🚇",
+      "title": "연봉 높고 왕복 3시간 vs 연봉 낮고 도보 10분",
+      "question": "업무 만족도와 복지가 완전히 같다면 어디에서 일할까요?",
+      "description": "더 많은 급여와 매일 확보되는 시간 사이에서 현실적인 선택을 해보세요.",
+      "options": [
+        { "id": "a", "label": "연봉 30% 높고 왕복 3시간", "shortLabel": "고연봉 장거리", "emoji": "💰" },
+        { "id": "b", "label": "연봉 30% 낮고 도보 10분", "shortLabel": "저연봉 근거리", "emoji": "🚶" }
+      ],
+      "shareText": "연봉 30% 높고 왕복 3시간 vs 연봉 낮고 도보 10분, 당신의 선택은?",
+      "seo": {
+        "title": "고연봉 장거리 출퇴근 vs 저연봉 가까운 직장 밸런스 게임",
+        "description": "연봉이 높은 장거리 직장과 연봉은 낮지만 걸어서 10분인 직장 중 원하는 조건을 선택하세요."
+      }
+    },
+    {
+      "id": "balance-028",
+      "slug": "stable-job-vs-dream-job",
+      "status": "published",
+      "category": "직장·돈",
+      "icon": "🎯",
+      "title": "안정적인 직업 vs 꿈꾸던 직업",
+      "question": "수입 차이가 크고 한 번만 선택할 수 있다면?",
+      "description": "예측 가능한 안정과 오랫동안 원했던 도전 중 어느 삶을 선택할지 골라보세요.",
+      "options": [
+        { "id": "a", "label": "수입이 안정적인 익숙한 직업", "shortLabel": "안정적인 직업", "emoji": "🛡️" },
+        { "id": "b", "label": "수입은 불안정한 꿈의 직업", "shortLabel": "꿈꾸던 직업", "emoji": "🎯" }
+      ],
+      "shareText": "안정적인 직업 vs 꿈꾸던 직업, 한 번뿐인 선택이라면?",
+      "seo": {
+        "title": "안정적인 직업 vs 꿈꾸던 직업 밸런스 게임",
+        "description": "안정적인 수입의 직업과 불확실하지만 꿈꾸던 직업 중 하나만 선택해 보세요."
+      }
+    },
+    {
+      "id": "balance-029",
+      "slug": "teleport-vs-stop-time",
+      "status": "published",
+      "category": "상상",
+      "icon": "🌀",
+      "title": "순간이동 vs 시간 멈추기",
+      "question": "하루에 딱 세 번 사용할 수 있는 능력을 고른다면?",
+      "description": "어디든 즉시 가는 자유와 세상을 잠시 멈추는 여유 중 하나를 선택하세요.",
+      "options": [
+        { "id": "a", "label": "원하는 곳으로 순간이동", "shortLabel": "순간이동", "emoji": "🌀" },
+        { "id": "b", "label": "10분 동안 시간 멈추기", "shortLabel": "시간 멈추기", "emoji": "⏸️" }
+      ],
+      "shareText": "순간이동 vs 시간 멈추기, 하루 세 번 쓸 능력은?",
+      "seo": {
+        "title": "순간이동 vs 시간 멈추기 초능력 밸런스 게임",
+        "description": "하루 세 번 순간이동하거나 10분간 시간을 멈출 수 있다면 어떤 초능력을 고를까요?"
+      }
+    },
+    {
+      "id": "balance-030",
+      "slug": "relive-happy-day-vs-skip-hard-day",
+      "status": "published",
+      "category": "상상",
+      "icon": "📅",
+      "title": "행복한 하루 다시 살기 vs 힘든 하루 건너뛰기",
+      "question": "한 달에 한 번만 시간을 조절할 수 있다면?",
+      "description": "좋았던 순간을 다시 누리는 능력과 어려운 시간을 통째로 넘기는 능력 중 선택하세요.",
+      "options": [
+        { "id": "a", "label": "행복했던 하루 다시 살기", "shortLabel": "행복 재생", "emoji": "😊" },
+        { "id": "b", "label": "가장 힘든 하루 건너뛰기", "shortLabel": "힘든 날 건너뛰기", "emoji": "⏭️" }
+      ],
+      "shareText": "행복한 하루 다시 살기 vs 힘든 하루 건너뛰기, 무엇을 고를까요?",
+      "seo": {
+        "title": "행복한 하루 다시 살기 vs 힘든 하루 건너뛰기 밸런스 게임",
+        "description": "한 달에 한 번 행복한 하루를 다시 살거나 힘든 하루를 건너뛸 수 있다면 선택은?"
+      }
     }
   ]
 }
