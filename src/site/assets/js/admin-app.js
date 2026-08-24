@@ -17,7 +17,6 @@ import {
 } from './content-admin-engine.js';
 
 const buildStep = 'REF-DAILYFUN-STEP8-CONTENT-CRUD-01';
-const approvedAdminEmail = 'kpa100plus@gmail.com';
 const administratorName = 'juyoungkim';
 const appUrl = new URL(import.meta.url);
 const siteBasePath = appUrl.pathname.replace(/\/assets\/js\/admin-app\.js$/, '');
@@ -49,14 +48,33 @@ function element(tag, className, text) {
   return node;
 }
 
-function isApprovedAdmin(user) {
+function isEligibleAdminIdentity(user) {
   return Boolean(
     user &&
     !user.isAnonymous &&
-    user.email === approvedAdminEmail &&
     user.emailVerified &&
     user.providerData?.some((provider) => provider.providerId === 'google.com')
   );
+}
+
+async function hasFirestoreAdminAccess() {
+  if (!isEligibleAdminIdentity(currentUser)) return false;
+  try {
+    const { collection, getDocs, limit, query, where } = firebaseServices.firestoreSdk;
+    // 공개 사용자는 실행할 수 없는 초안 조회로 서버 규칙의 관리자 판정을 확인합니다.
+    // 이메일 주소를 브라우저 코드나 화면에 넣지 않습니다.
+    await getDocs(query(
+      collection(firebaseServices.db, 'tests'),
+      where('status', '==', 'draft'),
+      limit(1)
+    ));
+    return true;
+  } catch (error) {
+    if (error?.code !== 'permission-denied') {
+      console.warn('관리자 권한 확인 지연:', error?.message || error);
+    }
+    return false;
+  }
 }
 
 function readForm(form) {
@@ -120,7 +138,9 @@ function createLoginGate(message = '') {
     status.textContent = 'Google 계정 선택 창을 여는 중…';
     try {
       const user = await signInWithGoogle([]);
-      if (!isApprovedAdmin(user)) {
+      currentUser = user;
+      firebaseServices = await getFirebaseServices();
+      if (!await hasFirestoreAdminAccess()) {
         await signOutMember();
         login.disabled = false;
         status.textContent = '이 계정에는 관리자 권한이 없습니다.';
@@ -134,7 +154,7 @@ function createLoginGate(message = '') {
         : '관리자 로그인을 다시 시도해 주세요.';
     }
   });
-  gate.append(login, status, element('small', '', `승인 계정: ${approvedAdminEmail}`));
+  gate.append(login, status, element('small', '', '관리자 권한은 Firebase 보안 규칙에서 확인합니다.'));
   return gate;
 }
 
@@ -794,7 +814,7 @@ async function createAdminDashboard(remoteDailyContent) {
   const shell = element('div', 'admin-dashboard');
   const toolbar = element('section', 'admin-toolbar');
   const identity = element('div', 'admin-identity');
-  identity.append(element('span', '', '● 관리자 인증 완료'), element('strong', '', administratorName), element('small', '', currentUser.email || ''));
+  identity.append(element('span', '', '● 관리자 인증 완료'), element('strong', '', administratorName));
   const logout = element('button', 'admin-logout', '로그아웃');
   logout.type = 'button';
   logout.addEventListener('click', async () => { logout.disabled = true; await signOutMember(); await initialize(); });
@@ -832,7 +852,7 @@ async function initialize() {
     firebaseServices = await getFirebaseServices();
     if (typeof firebaseServices.auth.authStateReady === 'function') await firebaseServices.auth.authStateReady();
     currentUser = firebaseServices.auth.currentUser;
-    if (!isApprovedAdmin(currentUser)) {
+    if (!isEligibleAdminIdentity(currentUser)) {
       const message = currentUser && !currentUser.isAnonymous ? '현재 계정에는 관리자 권한이 없습니다. 승인된 계정으로 다시 로그인해 주세요.' : '';
       root?.replaceChildren(createLoginGate(message));
       return;
@@ -841,7 +861,7 @@ async function initialize() {
     await currentUser.reload();
     await currentUser.getIdToken(true);
     currentUser = firebaseServices.auth.currentUser;
-    if (!isApprovedAdmin(currentUser)) {
+    if (!isEligibleAdminIdentity(currentUser) || !await hasFirestoreAdminAccess()) {
       root?.replaceChildren(createLoginGate('관리자 인증을 갱신하지 못했습니다. Google 계정으로 다시 로그인해 주세요.'));
       return;
     }

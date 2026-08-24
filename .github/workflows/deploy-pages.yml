@@ -24,13 +24,14 @@ jobs:
       ADSENSE_CONTENT_SLOT_ID: ${{ vars.ADSENSE_CONTENT_SLOT_ID }}
       ADSENSE_RESULT_SLOT_ID: ${{ vars.ADSENSE_RESULT_SLOT_ID }}
       ADSENSE_FOOTER_SLOT_ID: ${{ vars.ADSENSE_FOOTER_SLOT_ID }}
+      FIREBASE_APP_CHECK_SITE_KEY: ${{ vars.FIREBASE_APP_CHECK_SITE_KEY }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Build static site
         run: node scripts/build.mjs
@@ -39,13 +40,13 @@ jobs:
         run: node scripts/verify.mjs
 
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: dist
 
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

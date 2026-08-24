@@ -8,9 +8,20 @@
     "dev": "node scripts/build.mjs && node scripts/dev-server.mjs",
     "build": "node scripts/build.mjs",
     "verify": "node scripts/verify.mjs",
-    "test": "npm run build && npm run verify"
+    "test": "npm run build && npm run verify && npm run test:backup",
+    "test:rules": "npm run test:rules:normal && npm run test:rules:lockdown",
+    "test:rules:normal": "firebase emulators:exec --only firestore --project daily-test-lab-rules-test \"node --test tests/firestore.rules.test.mjs\"",
+    "test:rules:lockdown": "firebase emulators:exec --only firestore --project daily-test-lab-rules-test --config firebase.lockdown.json \"node --test tests/firestore.lockdown.rules.test.mjs\"",
+    "test:backup": "node --test tests/backup-crypto.test.mjs",
+    "scan:secrets": "node scripts/scan-secrets.mjs"
   },
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "5.0.2",
+    "firebase": "12.18.0",
+    "firebase-admin": "14.3.0",
+    "firebase-tools": "15.28.1"
   }
 }

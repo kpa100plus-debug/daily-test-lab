@@ -15,6 +15,7 @@
 - STEP 10 기능: GitHub Pages 자동 빌드·검증·배포
 - STEP 11 기능: 심리테스트 10종·밸런스게임 50종으로 공개 콘텐츠 확장
 - STEP 12 기능: 서비스 소개·콘텐츠 운영 원칙, 승인 전 빈 광고 제거, 실제 ID가 있을 때만 광고·ads.txt를 생성하는 AdSense 안전장치
+- 보안 강화: App Check 모니터링 준비, Firestore 정상·비상 규칙 Emulator 테스트, 읽기 전용 사고 대응, 암호화 백업 구조, CodeQL·SHA 고정 Actions
 
 ## 운영 주소
 
@@ -36,6 +37,8 @@ npm run dev
 
 ```bash
 npm test
+npm run test:rules
+npm run scan:secrets
 ```
 
 ## 배포 설정
@@ -48,3 +51,5 @@ npm test
 현재 GitHub Pages 프로젝트 URL에는 경로가 포함되어 AdSense 신청 주소로 사용할 수 없습니다. 비용 0원을 유지하는 수익화 경로는 Google 호스트 파트너인 Blogger 연계이며, 자세한 내용은 [`docs/STEP9_SEO_ADSENSE.md`](docs/STEP9_SEO_ADSENSE.md)를 확인합니다.
 
 상세 연결 순서는 [`docs/STEP1_CONNECT.md`](docs/STEP1_CONNECT.md)를 확인합니다.
+
+보안 사고 대응과 복구는 [`docs/SECURITY_RUNBOOK.md`](docs/SECURITY_RUNBOOK.md), App Check는 [`docs/APP_CHECK_MONITORING.md`](docs/APP_CHECK_MONITORING.md), 암호화 백업은 [`docs/BACKUP_RECOVERY.md`](docs/BACKUP_RECOVERY.md)를 확인합니다.

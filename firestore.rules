@@ -28,6 +28,12 @@ service cloud.firestore {
         && request.auth.token.email_verified == true;
     }
 
+    function hasVerifiedEmail() {
+      return signedIn()
+        && request.auth.token.email is string
+        && request.auth.token.email_verified == true;
+    }
+
     function validDailyContent() {
       return request.resource.data.keys().hasOnly([
           'category', 'title', 'description', 'duration', 'actionLabel', 'note',
@@ -218,8 +224,11 @@ service cloud.firestore {
         && request.resource.data.last is number
         && request.resource.data.best >= 0
         && request.resource.data.last >= 0
+        && request.resource.data.best <= 1000000000
+        && request.resource.data.last <= 1000000000
         && request.resource.data.attempts is int
         && request.resource.data.attempts >= 1
+        && request.resource.data.attempts <= 1000000
         && request.resource.data.scoreDirection in ['lower', 'higher']
         && request.resource.data.updatedAt == request.time;
     }
@@ -308,21 +317,25 @@ service cloud.firestore {
       allow list: if false;
 
       allow create: if owns(userId)
+        && hasVerifiedEmail()
         && request.resource.data.keys().hasOnly([
           'displayName', 'email', 'provider', 'createdAt', 'lastLoginAt'
         ])
         && request.resource.data.displayName is string
         && request.resource.data.email is string
+        && request.resource.data.email == request.auth.token.email
         && request.resource.data.provider == 'google.com'
         && request.resource.data.createdAt == request.time
         && request.resource.data.lastLoginAt == request.time;
 
       allow update: if owns(userId)
+        && hasVerifiedEmail()
         && request.resource.data.keys().hasOnly([
           'displayName', 'email', 'provider', 'createdAt', 'lastLoginAt'
         ])
         && request.resource.data.displayName is string
         && request.resource.data.email is string
+        && request.resource.data.email == request.auth.token.email
         && request.resource.data.provider == 'google.com'
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.lastLoginAt == request.time;

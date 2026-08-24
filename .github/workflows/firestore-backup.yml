@@ -1,0 +1,63 @@
+name: Encrypted Firestore backup
+
+on:
+  schedule:
+    - cron: "17 18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  backup:
+    if: ${{ vars.FIRESTORE_BACKUP_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FIREBASE_PROJECT_ID: daily-test-lab
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Authenticate without a stored service-account key
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_BACKUP_SERVICE_ACCOUNT }}
+          project_id: daily-test-lab
+
+      - name: Export, validate and encrypt
+        shell: bash
+        env:
+          BACKUP_ENCRYPTION_KEY: ${{ secrets.BACKUP_ENCRYPTION_KEY }}
+        run: |
+          set -euo pipefail
+          plain="$RUNNER_TEMP/firestore-backup.json"
+          encrypted="$RUNNER_TEMP/firestore-backup-${GITHUB_RUN_ID}.dtlb"
+          verified="$RUNNER_TEMP/firestore-backup-verified.json"
+          node scripts/backup-firestore.mjs --output "$plain"
+          node scripts/validate-backup.mjs "$plain"
+          node scripts/backup-crypto.mjs encrypt "$plain" "$encrypted"
+          rm -f "$plain"
+          node scripts/backup-crypto.mjs decrypt "$encrypted" "$verified"
+          node scripts/validate-backup.mjs "$verified"
+          rm -f "$verified"
+
+      - name: Upload encrypted backup only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: firestore-backup-${{ github.run_id }}
+          path: ${{ runner.temp }}/firestore-backup-${{ github.run_id }}.dtlb
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0

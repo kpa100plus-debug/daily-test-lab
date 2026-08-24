@@ -10,6 +10,14 @@ export const firebaseConfig = Object.freeze({
   measurementId: 'G-XPC0DQYN83'
 });
 
+// Firebase Console에서 App Check 웹 앱 등록을 끝낸 뒤 공개 사이트 키만 입력합니다.
+// 빈 값인 동안에는 App Check가 초기화되지 않으며 강제 적용도 하지 않습니다.
+export const appCheckConfig = Object.freeze({
+  provider: 'recaptcha-enterprise',
+  siteKey: '',
+  enforcement: 'monitoring'
+});
+
 export function isFirebaseConfigured() {
   return Boolean(
     firebaseConfig.apiKey &&
@@ -17,4 +25,9 @@ export function isFirebaseConfigured() {
     firebaseConfig.projectId &&
     firebaseConfig.appId
   );
+}
+
+export function isAppCheckConfigured() {
+  return appCheckConfig.provider === 'recaptcha-enterprise'
+    && /^[A-Za-z0-9_-]{20,}$/.test(appCheckConfig.siteKey);
 }

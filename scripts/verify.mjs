@@ -1,4 +1,4 @@
-import { access, readFile } from 'node:fs/promises';
+import { access, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -48,6 +48,20 @@ const requiredFiles = [
   'data/daily-content.json'
 ];
 
+for (const sourceFile of [
+  'firestore.lockdown.rules',
+  'firebase.lockdown.json',
+  'scripts/backup-crypto.mjs',
+  'scripts/backup-firestore.mjs',
+  'scripts/restore-firestore.mjs',
+  'scripts/scan-secrets.mjs',
+  'tests/firestore.rules.test.mjs',
+  'tests/firestore.lockdown.rules.test.mjs',
+  'tests/backup-crypto.test.mjs'
+]) {
+  await access(path.join(projectRoot, sourceFile));
+}
+
 for (const relativePath of requiredFiles) {
   await access(path.join(outputDirectory, relativePath));
 }
@@ -55,6 +69,27 @@ for (const relativePath of requiredFiles) {
 const indexHtml = await readFile(path.join(outputDirectory, 'index.html'), 'utf8');
 if (!indexHtml.includes('DAILY TEST LAB')) {
   throw new Error('index.html brand text is missing.');
+}
+
+const headersText = await readFile(path.join(outputDirectory, '_headers'), 'utf8');
+if (
+  !headersText.includes("Content-Security-Policy: upgrade-insecure-requests; object-src 'none'") ||
+  !headersText.includes('Strict-Transport-Security: max-age=31536000') ||
+  !headersText.includes('/admin/*') ||
+  !headersText.includes('Cache-Control: no-store') ||
+  !headersText.includes('X-Robots-Tag: noindex, nofollow')
+) {
+  throw new Error('Static-host security headers are incomplete.');
+}
+
+const workflowDirectory = path.join(projectRoot, '.github', 'workflows');
+for (const workflowFile of (await readdir(workflowDirectory)).filter((name) => name.endsWith('.yml'))) {
+  const workflow = await readFile(path.join(workflowDirectory, workflowFile), 'utf8');
+  for (const match of workflow.matchAll(/^\s*uses:\s*[^@\s]+@([^\s#]+)/gm)) {
+    if (!/^[0-9a-f]{40}$/.test(match[1])) {
+      throw new Error(`GitHub Action must be pinned to a full commit SHA: ${workflowFile}`);
+    }
+  }
 }
 
 if (!indexHtml.includes('https://dailytestlabkr.blogspot.com/')) {
@@ -522,9 +557,12 @@ if (
   !privacyHtml.includes('책임자는 juyoungkim') ||
   !termsHtml.includes('관리 책임자는 juyoungkim') ||
   !contactHtml.includes('관리책임자: juyoungkim') ||
+  !contactHtml.includes('daily-test-lab/issues/new') ||
   !aboutHtml.includes('관리자 juyoungkim') ||
   !adsPolicyHtml.includes('서비스 관리자: juyoungkim') ||
-  [privacyHtml, termsHtml, contactHtml, aboutHtml, adsPolicyHtml].some((html) => html.includes('김주영'))
+  [privacyHtml, termsHtml, contactHtml, aboutHtml, adsPolicyHtml].some((html) =>
+    html.includes('김주영') || html.includes('kpa100plus@gmail.com')
+  )
 ) {
   throw new Error('Member dashboard or privacy disclosure is incomplete.');
 }
@@ -538,7 +576,10 @@ if (
   !adminPageHtml.includes('admin-app.js') ||
   !adminPageHtml.includes('㈜ISEA GROUP 소유·운영') ||
   !adminAppJavaScript.includes('REF-DAILYFUN-STEP8-CONTENT-CRUD-01') ||
-  !adminAppJavaScript.includes('kpa100plus@gmail.com') ||
+  adminAppJavaScript.includes('kpa100plus@gmail.com') ||
+  adminAppJavaScript.includes('승인 계정:') ||
+  !adminAppJavaScript.includes('hasFirestoreAdminAccess') ||
+  !adminAppJavaScript.includes("where('status', '==', 'draft')") ||
   !adminAppJavaScript.includes("'daily_contents'") ||
   !adminAppJavaScript.includes("'test_questions'") ||
   !adminAppJavaScript.includes("'test_results'") ||
@@ -549,6 +590,25 @@ if (
   adminAppJavaScript.includes('김주영 관리자')
 ) {
   throw new Error('STEP 8 integrated administrator CRUD is incomplete.');
+}
+
+const firebaseConfigJavaScript = await readFile(
+  path.join(outputDirectory, 'assets/js/firebase-config.js'),
+  'utf8'
+);
+const firebaseClientJavaScript = await readFile(
+  path.join(outputDirectory, 'assets/js/firebase-client.js'),
+  'utf8'
+);
+if (
+  !firebaseConfigJavaScript.includes("provider: 'recaptcha-enterprise'") ||
+  !firebaseConfigJavaScript.includes("enforcement: 'monitoring'") ||
+  !/siteKey: '(?:[A-Za-z0-9_-]{20,})?'/.test(firebaseConfigJavaScript) ||
+  !firebaseClientJavaScript.includes('firebase-app-check.js') ||
+  !firebaseClientJavaScript.includes('ReCaptchaEnterpriseProvider') ||
+  !firebaseClientJavaScript.includes('isTokenAutoRefreshEnabled: true')
+) {
+  throw new Error('App Check monitoring preparation is incomplete.');
 }
 
 if (
@@ -598,6 +658,12 @@ for (const route of expectedIndexableRoutes) {
   ) {
     throw new Error(`Indexable SEO metadata is incomplete: ${route}`);
   }
+  if (
+    !html.includes('<meta name="referrer" content="strict-origin-when-cross-origin">') ||
+    !html.includes('<meta http-equiv="Content-Security-Policy"')
+  ) {
+    throw new Error(`Security metadata is incomplete: ${route}`);
+  }
 
   const structuredDataMatches = [...html.matchAll(
     /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g
@@ -627,6 +693,12 @@ for (const relativePath of [
   const html = await readFile(path.join(outputDirectory, relativePath), 'utf8');
   if (!/<meta name="robots" content="noindex(?:,nofollow)?">/.test(html)) {
     throw new Error(`Private or unpublished page must remain noindex: ${relativePath}`);
+  }
+  if (
+    !html.includes('<meta name="referrer" content="strict-origin-when-cross-origin">') ||
+    !html.includes('<meta http-equiv="Content-Security-Policy"')
+  ) {
+    throw new Error(`Private page security metadata is incomplete: ${relativePath}`);
   }
 }
 
@@ -672,6 +744,7 @@ if (
 }
 
 const rules = await readFile(path.join(projectRoot, 'firestore.rules'), 'utf8');
+const lockdownRules = await readFile(path.join(projectRoot, 'firestore.lockdown.rules'), 'utf8');
 if (
   !rules.includes('match /balance_games/{gameId}') ||
   !rules.includes('match /votes/{voteId}') ||
@@ -691,12 +764,23 @@ if (
 ) {
   throw new Error('Firestore security rules are incomplete.');
 }
+if (
+  !rules.includes('function hasVerifiedEmail()') ||
+  !rules.includes('request.resource.data.email == request.auth.token.email') ||
+  !rules.includes('request.resource.data.attempts <= 1000000') ||
+  !lockdownRules.includes('사고 대응용 읽기 전용 규칙') ||
+  !lockdownRules.includes('allow write: if false;')
+) {
+  throw new Error('Firestore hardening or lockdown rules are incomplete.');
+}
 
 const buildMeta = JSON.parse(await readFile(path.join(outputDirectory, 'build-meta.json'), 'utf8'));
+const expectedAppCheck = /siteKey: '[A-Za-z0-9_-]{20,}'/.test(firebaseConfigJavaScript);
 if (
   buildMeta.build !== 'step-12-adsense-readiness' ||
   buildMeta.publicSiteUrl !== publicSiteUrl ||
   buildMeta.indexableUrlCount !== expectedIndexableRoutes.length ||
+  buildMeta.integrations.firebaseAppCheck !== expectedAppCheck ||
   buildMeta.adsenseReadiness.applicationUrlHasPath !== (new URL(publicSiteUrl).pathname !== '/') ||
   buildMeta.adsenseReadiness.hostRootAssetsAvailable !== (new URL(publicSiteUrl).pathname === '/')
 ) {

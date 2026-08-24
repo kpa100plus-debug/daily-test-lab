@@ -21,6 +21,11 @@ const cloudflarePagesUrl = process.env.CF_PAGES === '1'
 const publicSiteUrl = (process.env.PUBLIC_SITE_URL || cloudflarePagesUrl || defaultPublicSiteUrl)
   .replace(/\/$/, '');
 const releaseDate = '2026-08-24';
+const firebaseAppCheckSiteKey = /^[A-Za-z0-9_-]{20,}$/.test(
+  process.env.FIREBASE_APP_CHECK_SITE_KEY ?? ''
+)
+  ? process.env.FIREBASE_APP_CHECK_SITE_KEY
+  : '';
 
 const googleSiteVerification = /^[A-Za-z0-9_-]{8,}$/.test(process.env.GOOGLE_SITE_VERIFICATION ?? '')
   ? process.env.GOOGLE_SITE_VERIFICATION
@@ -157,6 +162,8 @@ function createSeoHead({ route, title, description, indexable = true, integratio
     ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
     : 'noindex,nofollow';
   const tags = [
+    '<meta name="referrer" content="strict-origin-when-cross-origin">',
+    '<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; object-src \'none\'; base-uri \'self\'; form-action \'self\'">',
     `<meta name="robots" content="${robots}">`,
     `<meta name="description" content="${escapeHtml(description)}">`,
     `<title>${escapeHtml(title)}</title>`
@@ -190,6 +197,8 @@ function createSeoHead({ route, title, description, indexable = true, integratio
 
 function replaceSeoHead(html, configuration) {
   const cleaned = html
+    .replace(/\s*<meta\s+name="referrer"[^>]*>/gi, '')
+    .replace(/\s*<meta\s+http-equiv="Content-Security-Policy"[^>]*>/gi, '')
     .replace(/\s*<meta\s+name="robots"[^>]*>/gi, '')
     .replace(/\s*<meta\s+name="description"[^>]*>/gi, '')
     .replace(/\s*<link\s+rel="canonical"[^>]*>/gi, '')
@@ -198,6 +207,17 @@ function replaceSeoHead(html, configuration) {
     .replace(/\s*<script\s+type="application\/ld\+json">[\s\S]*?<\/script>/gi, '')
     .replace(/\s*<title>[\s\S]*?<\/title>/i, '');
   return cleaned.replace('</head>', `    ${createSeoHead(configuration)}\n  </head>`);
+}
+
+function ensureSecurityMeta(html) {
+  const securityTags = [
+    '<meta name="referrer" content="strict-origin-when-cross-origin">',
+    '<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; object-src \'none\'; base-uri \'self\'; form-action \'self\'">'
+  ].join('\n    ');
+  const cleaned = html
+    .replace(/\s*<meta\s+name="referrer"[^>]*>/gi, '')
+    .replace(/\s*<meta\s+http-equiv="Content-Security-Policy"[^>]*>/gi, '');
+  return cleaned.replace('</head>', `    ${securityTags}\n  </head>`);
 }
 
 function createTestPageHtml(test, view) {
@@ -498,6 +518,19 @@ await mkdir(outputDirectory, { recursive: true });
 await cp(sourceDirectory, outputDirectory, { recursive: true });
 await mkdir(path.join(outputDirectory, 'data'), { recursive: true });
 
+if (firebaseAppCheckSiteKey) {
+  const firebaseConfigPath = path.join(outputDirectory, 'assets', 'js', 'firebase-config.js');
+  const firebaseConfigSource = await readFile(firebaseConfigPath, 'utf8');
+  if (!firebaseConfigSource.includes("siteKey: ''")) {
+    throw new Error('Firebase App Check site-key placeholder is missing.');
+  }
+  await writeFile(
+    firebaseConfigPath,
+    firebaseConfigSource.replace("siteKey: ''", `siteKey: '${firebaseAppCheckSiteKey}'`),
+    'utf8'
+  );
+}
+
 for (const fileName of contentFiles) {
   await cp(
     path.join(contentDirectory, fileName),
@@ -673,8 +706,8 @@ for (const entry of htmlEntries) {
   if (!entry.isFile() || !entry.name.endsWith('.html')) continue;
   const htmlPath = path.join(entry.parentPath, entry.name);
   const html = await readFile(htmlPath, 'utf8');
-  const adReadyHtml = injectAdPlacements(html);
-  if (adReadyHtml !== html) await writeFile(htmlPath, adReadyHtml, 'utf8');
+  const securedHtml = ensureSecurityMeta(injectAdPlacements(html));
+  if (securedHtml !== html) await writeFile(htmlPath, securedHtml, 'utf8');
 }
 
 const indexableRoutes = [
@@ -739,6 +772,7 @@ await writeFile(
       googleAnalytics: Boolean(googleAnalyticsId),
       adsense: Boolean(adsenseClientId),
       adsTxt: Boolean(adsensePublisherId),
+      firebaseAppCheck: Boolean(firebaseAppCheckSiteKey),
       adSlots: {
         content: Boolean(adsenseClientId && adsenseSlots.content),
         result: Boolean(adsenseClientId && adsenseSlots.result),
