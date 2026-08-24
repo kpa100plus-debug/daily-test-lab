@@ -16,6 +16,14 @@ concurrency:
 
 jobs:
   deploy:
+    env:
+      PUBLIC_SITE_URL: https://kpa100plus-debug.github.io/daily-test-lab
+      SITE_BASE_PATH: /daily-test-lab
+      ADSENSE_CLIENT_ID: ${{ vars.ADSENSE_CLIENT_ID }}
+      ADSENSE_PUBLISHER_ID: ${{ vars.ADSENSE_PUBLISHER_ID }}
+      ADSENSE_CONTENT_SLOT_ID: ${{ vars.ADSENSE_CONTENT_SLOT_ID }}
+      ADSENSE_RESULT_SLOT_ID: ${{ vars.ADSENSE_RESULT_SLOT_ID }}
+      ADSENSE_FOOTER_SLOT_ID: ${{ vars.ADSENSE_FOOTER_SLOT_ID }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -25,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build static site
-        run: SITE_BASE_PATH=/daily-test-lab node scripts/build.mjs
+        run: node scripts/build.mjs
 
       - name: Verify build
         run: node scripts/verify.mjs

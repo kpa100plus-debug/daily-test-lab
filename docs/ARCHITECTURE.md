@@ -117,5 +117,5 @@ analytics
 
 - Firebase Spark 한도를 넘으면 자동 과금되지 않고 기능이 제한됩니다.
 - Firebase Cloud Storage와 전화번호 인증은 사용하지 않습니다.
-- Cloudflare Pages의 `pages.dev` 주소는 개발·공개 테스트용입니다.
-- Google AdSense는 일반 무료 하위도메인을 신규 사이트로 받지 않으므로 수익화 단계에서 자체 도메인 또는 Blogger 호스트 연계를 별도로 결정해야 합니다.
+- GitHub Pages 프로젝트 주소는 개발·공개 서비스와 검색 유입에는 사용할 수 있지만 경로가 포함되어 AdSense 신청 URL로는 사용할 수 없습니다.
+- 비용 0원 조건에서 AdSense를 시작하려면 Google 호스트 파트너인 Blogger 연계를 사용하고, 현재 앱 주소는 테스트·게임 실행 주소로 유지합니다. 자체 도메인 연결은 비용 조건이 바뀐 뒤 선택합니다.

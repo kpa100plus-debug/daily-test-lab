@@ -20,7 +20,7 @@ const cloudflarePagesUrl = process.env.CF_PAGES === '1'
   : '';
 const publicSiteUrl = (process.env.PUBLIC_SITE_URL || cloudflarePagesUrl || defaultPublicSiteUrl)
   .replace(/\/$/, '');
-const releaseDate = '2026-08-23';
+const releaseDate = '2026-08-24';
 
 const googleSiteVerification = /^[A-Za-z0-9_-]{8,}$/.test(process.env.GOOGLE_SITE_VERIFICATION ?? '')
   ? process.env.GOOGLE_SITE_VERIFICATION
@@ -34,6 +34,14 @@ const adsenseClientId = /^ca-pub-[0-9]+$/.test(process.env.ADSENSE_CLIENT_ID ?? 
 const adsensePublisherId = /^pub-[0-9]+$/.test(process.env.ADSENSE_PUBLISHER_ID ?? '')
   ? process.env.ADSENSE_PUBLISHER_ID
   : adsenseClientId.replace(/^ca-/, '');
+const readAdSlotId = (name) => /^[0-9]+$/.test(process.env[name] ?? '')
+  ? process.env[name]
+  : '';
+const adsenseSlots = {
+  content: readAdSlotId('ADSENSE_CONTENT_SLOT_ID'),
+  result: readAdSlotId('ADSENSE_RESULT_SLOT_ID'),
+  footer: readAdSlotId('ADSENSE_FOOTER_SLOT_ID')
+};
 
 const contentFiles = [
   'tests.json',
@@ -114,12 +122,36 @@ function createIntegrationTags() {
     tags.push(`<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${escapeHtml(googleAnalyticsId)}',{'anonymize_ip':true});</script>`);
   }
   if (adsenseClientId) {
+    tags.push(`<meta name="google-adsense-account" content="${escapeHtml(adsenseClientId)}">`);
     tags.push(`<script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${escapeHtml(adsenseClientId)}"></script>`);
   }
   return tags.join('\n    ');
 }
 
-function createSeoHead({ route, title, description, indexable = true, schemas = [] }) {
+function createAdPlacement(position) {
+  const slotId = adsenseSlots[position];
+  if (!adsenseClientId || !slotId) return '';
+
+  return `<aside class="adsense-placement adsense-${position}" aria-label="광고">
+        <span class="adsense-label">광고</span>
+        <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="${escapeHtml(adsenseClientId)}"
+          data-ad-slot="${escapeHtml(slotId)}"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+        <script>(window.adsbygoogle=window.adsbygoogle||[]).push({});</script>
+      </aside>`;
+}
+
+function injectAdPlacements(html) {
+  return html.replace(
+    /<!--\s*ADSENSE_SLOT:(content|result|footer)\s*-->/g,
+    (_, position) => createAdPlacement(position)
+  );
+}
+
+function createSeoHead({ route, title, description, indexable = true, integrations = indexable, schemas = [] }) {
   const canonicalUrl = toPublicUrl(route);
   const robots = indexable
     ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
@@ -143,11 +175,14 @@ function createSeoHead({ route, title, description, indexable = true, schemas = 
       `<meta name="twitter:title" content="${escapeHtml(title)}">`,
       `<meta name="twitter:description" content="${escapeHtml(description)}">`
     );
-    const integrationTags = createIntegrationTags();
-    if (integrationTags) tags.push(integrationTags);
     if (schemas.length) {
       tags.push(`<script type="application/ld+json">${safeJson({ '@context': 'https://schema.org', '@graph': schemas })}</script>`);
     }
+  }
+
+  if (integrations) {
+    const integrationTags = createIntegrationTags();
+    if (integrationTags) tags.push(integrationTags);
   }
 
   return tags.join('\n    ');
@@ -213,7 +248,7 @@ function createTestPageHtml(test, view) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#6d4aff">
-    ${createSeoHead({ route, title, description, indexable, schemas })}
+    ${createSeoHead({ route, title, description, indexable, integrations: test.status === 'published', schemas })}
     <link rel="stylesheet" href="/assets/css/app.css?v=step8-1">
   </head>
   <body class="test-detail-page" data-test-slug="${escapeHtml(test.slug)}" data-test-view="${view}">
@@ -239,9 +274,7 @@ function createTestPageHtml(test, view) {
         <div><h2 id="test-guide-${escapeHtml(test.slug)}">${escapeHtml(test.shortTitle)} 테스트 안내</h2><p>${escapeHtml(test.description)} 총 ${test.questionCount}개 질문에 답하면 나와 가까운 유형과 생활 속 활용 팁을 확인할 수 있습니다. 결과는 재미와 자기이해를 위한 참고 콘텐츠입니다.</p></div>
       </section>` : ''}
 
-      <aside class="ad-placeholder test-ad" aria-label="광고 게재 예정 영역">
-        <span>AD</span><p>결과 확인을 방해하지 않는 광고 영역</p>
-      </aside>
+      ${test.status === 'published' ? (isResultPage ? '<!-- ADSENSE_SLOT:result -->' : '<!-- ADSENSE_SLOT:content -->') : ''}
 
       <section class="recommend-section" aria-labelledby="recommend-title">
         <div class="section-heading">
@@ -252,10 +285,11 @@ function createTestPageHtml(test, view) {
       </section>
     </main>
 
+    ${test.status === 'published' ? '<!-- ADSENSE_SLOT:footer -->' : ''}
     <footer class="site-footer">
       <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
       <nav aria-label="운영 정책">
-        <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+        <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
       </nav>
     </footer>
 
@@ -335,9 +369,7 @@ function createBalancePageHtml(game) {
         <div><h2 id="balance-guide-${escapeHtml(game.slug)}">정답 없는 오늘의 선택</h2><p>${escapeHtml(game.description)} ${escapeHtml(firstOption.shortLabel)}와 ${escapeHtml(secondOption.shortLabel)} 중 마음이 가는 쪽을 고르면 참여 비율을 바로 확인할 수 있습니다.</p></div>
       </section>` : ''}
 
-      <aside class="ad-placeholder balance-ad" aria-label="광고 게재 예정 영역">
-        <span>AD</span><p>선택 결과를 방해하지 않는 광고 영역</p>
-      </aside>
+      ${indexable ? '<!-- ADSENSE_SLOT:result -->' : ''}
 
       <section class="balance-recommend-section" aria-labelledby="balance-recommend-title">
         <div class="section-heading">
@@ -348,10 +380,11 @@ function createBalancePageHtml(game) {
       </section>
     </main>
 
+    ${indexable ? '<!-- ADSENSE_SLOT:footer -->' : ''}
     <footer class="site-footer">
       <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
       <nav aria-label="운영 정책">
-        <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+        <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
       </nav>
     </footer>
 
@@ -432,9 +465,7 @@ function createMiniGamePageHtml(game, allGames) {
         <div><h2 id="game-guide-${escapeHtml(game.slug)}">${escapeHtml(game.shortTitle)} 기록 도전 방법</h2><p>${escapeHtml(game.instruction)} 설치 없이 무료로 플레이할 수 있고, 최고 기록은 현재 브라우저와 로그인 계정에 이어서 저장할 수 있습니다.</p></div>
       </section>
 
-      <aside class="ad-placeholder mini-game-ad" aria-label="광고 게재 예정 영역">
-        <span>AD</span><p>게임 진행을 방해하지 않는 결과 하단 광고 영역</p>
-      </aside>
+      <!-- ADSENSE_SLOT:result -->
 
       <section class="mini-game-related-section" aria-labelledby="related-game-title">
         <div class="section-heading">
@@ -445,10 +476,11 @@ function createMiniGamePageHtml(game, allGames) {
       </section>
     </main>
 
+    <!-- ADSENSE_SLOT:footer -->
     <footer class="site-footer">
       <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
       <nav aria-label="운영 정책">
-        <a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+        <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
       </nav>
     </footer>
 
@@ -517,19 +549,24 @@ const staticSeoPages = [
   {
     path: 'index.html', route: '/', title: 'DAILY TEST LAB | 매일 즐기는 무료 테스트·게임',
     description: '심리테스트, 밸런스게임, 반응속도·기억력 미니게임을 설치 없이 매일 무료로 즐기고 결과와 기록을 공유하세요.',
+    monetizable: true,
     schemas: [publisherSchema, websiteSchema, createPageSchema({ route: '/', title: 'DAILY TEST LAB | 매일 즐기는 무료 테스트·게임', description: '심리테스트, 밸런스게임, 반응속도·기억력 미니게임을 설치 없이 매일 무료로 즐기고 결과와 기록을 공유하세요.' })]
   },
   {
     path: 'test/index.html', route: '/test/', title: '무료 심리테스트 모음 | DAILY TEST LAB',
-    description: '성격, 관계, 업무 성향을 재미있게 알아보는 무료 심리테스트를 골라 바로 결과를 확인하세요.', type: 'CollectionPage', breadcrumbName: '심리테스트'
+    description: `성격, 관계, 업무 성향을 재미있게 알아보는 무료 심리테스트 ${publishedTests.length}개를 골라 바로 결과를 확인하세요.`, type: 'CollectionPage', breadcrumbName: '심리테스트', monetizable: true
   },
   {
     path: 'vote/index.html', route: '/vote/', title: '무료 밸런스게임 모음 | DAILY TEST LAB',
-    description: '둘 중 하나를 고르고 다른 사람들의 선택 비율을 확인하는 무료 밸런스게임 20개를 즐겨보세요.', type: 'CollectionPage', breadcrumbName: '밸런스게임'
+    description: `둘 중 하나를 고르고 다른 사람들의 선택 비율을 확인하는 무료 밸런스게임 ${publishedBalanceGames.length}개를 즐겨보세요.`, type: 'CollectionPage', breadcrumbName: '밸런스게임', monetizable: true
   },
   {
     path: 'game/index.html', route: '/game/', title: '무료 미니게임 3종 | DAILY TEST LAB',
-    description: '반응속도, 기억력, 숫자 순서 게임을 설치 없이 무료로 플레이하고 오늘의 최고 기록에 도전하세요.', type: 'CollectionPage', breadcrumbName: '10초 게임'
+    description: '반응속도, 기억력, 숫자 순서 게임을 설치 없이 무료로 플레이하고 오늘의 최고 기록에 도전하세요.', type: 'CollectionPage', breadcrumbName: '10초 게임', monetizable: true
+  },
+  {
+    path: 'about/index.html', route: '/about/', title: '서비스 소개·콘텐츠 운영 원칙 | DAILY TEST LAB',
+    description: 'DAILY TEST LAB의 무료 테스트·게임 서비스 소개, 자체 콘텐츠 운영 원칙, 결과 산정 방식과 운영 정보를 안내합니다.', breadcrumbName: '서비스 소개'
   },
   {
     path: 'legal/privacy/index.html', route: '/legal/privacy/', title: '개인정보처리방침 | DAILY TEST LAB',
@@ -566,7 +603,11 @@ for (const configuration of staticSeoPages) {
     ])
   ];
   const html = await readFile(filePath, 'utf8');
-  await writeFile(filePath, replaceSeoHead(html, { ...configuration, schemas }), 'utf8');
+  await writeFile(filePath, replaceSeoHead(html, {
+    ...configuration,
+    integrations: configuration.monetizable === true,
+    schemas
+  }), 'utf8');
 }
 
 for (const test of tests.filter((item) => item.status === 'published')) {
@@ -623,6 +664,19 @@ for (const game of miniGames.filter((item) => item.status === 'published')) {
   );
 }
 
+const htmlEntries = await readdir(outputDirectory, {
+  recursive: true,
+  withFileTypes: true
+});
+
+for (const entry of htmlEntries) {
+  if (!entry.isFile() || !entry.name.endsWith('.html')) continue;
+  const htmlPath = path.join(entry.parentPath, entry.name);
+  const html = await readFile(htmlPath, 'utf8');
+  const adReadyHtml = injectAdPlacements(html);
+  if (adReadyHtml !== html) await writeFile(htmlPath, adReadyHtml, 'utf8');
+}
+
 const indexableRoutes = [
   ...staticSeoPages.map((page) => page.route),
   ...publishedTests.map((test) => `/test/${test.slug}/`),
@@ -676,7 +730,7 @@ await writeFile(
   path.join(outputDirectory, 'build-meta.json'),
   `${JSON.stringify({
     service: 'DAILY TEST LAB',
-    build: 'step-10-cloudflare-pages',
+    build: 'step-12-adsense-readiness',
     siteBasePath,
     publicSiteUrl,
     indexableUrlCount: indexableRoutes.length,
@@ -684,7 +738,16 @@ await writeFile(
       googleSiteVerification: Boolean(googleSiteVerification),
       googleAnalytics: Boolean(googleAnalyticsId),
       adsense: Boolean(adsenseClientId),
-      adsTxt: Boolean(adsensePublisherId)
+      adsTxt: Boolean(adsensePublisherId),
+      adSlots: {
+        content: Boolean(adsenseClientId && adsenseSlots.content),
+        result: Boolean(adsenseClientId && adsenseSlots.result),
+        footer: Boolean(adsenseClientId && adsenseSlots.footer)
+      }
+    },
+    adsenseReadiness: {
+      applicationUrlHasPath: new URL(publicSiteUrl).pathname !== '/',
+      hostRootAssetsAvailable: new URL(publicSiteUrl).pathname === '/'
     }
   }, null, 2)}\n`,
   'utf8'

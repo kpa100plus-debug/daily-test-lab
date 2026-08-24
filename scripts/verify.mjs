@@ -37,6 +37,7 @@ const requiredFiles = [
   'game/index.html',
   'my/index.html',
   'admin/index.html',
+  'about/index.html',
   'legal/privacy/index.html',
   'legal/terms/index.html',
   'legal/ads/index.html',
@@ -507,14 +508,19 @@ const myAppJavaScript = await readFile(path.join(outputDirectory, 'assets/js/my-
 const privacyHtml = await readFile(path.join(outputDirectory, 'legal/privacy/index.html'), 'utf8');
 const termsHtml = await readFile(path.join(outputDirectory, 'legal/terms/index.html'), 'utf8');
 const contactHtml = await readFile(path.join(outputDirectory, 'contact/index.html'), 'utf8');
+const aboutHtml = await readFile(path.join(outputDirectory, 'about/index.html'), 'utf8');
+const adsPolicyHtml = await readFile(path.join(outputDirectory, 'legal/ads/index.html'), 'utf8');
 if (
   !myPageHtml.includes('my-app.js') ||
   !myAppJavaScript.includes('Google로 기록 보관') ||
   !privacyHtml.includes('㈜ISEA GROUP') ||
   !privacyHtml.includes('Firebase 사용자 식별값') ||
-  !privacyHtml.includes('대표자 김주영') ||
-  !termsHtml.includes('총괄책임자는 김주영') ||
-  !contactHtml.includes('대표자 및 개인정보 관리책임자: 김주영')
+  !privacyHtml.includes('책임자는 juyoungkim') ||
+  !termsHtml.includes('관리 책임자는 juyoungkim') ||
+  !contactHtml.includes('관리책임자: juyoungkim') ||
+  !aboutHtml.includes('관리자 juyoungkim') ||
+  !adsPolicyHtml.includes('서비스 관리자: juyoungkim') ||
+  [privacyHtml, termsHtml, contactHtml, aboutHtml, adsPolicyHtml].some((html) => html.includes('김주영'))
 ) {
   throw new Error('Member dashboard or privacy disclosure is incomplete.');
 }
@@ -559,6 +565,7 @@ const staticIndexableRoutes = [
   '/test/',
   '/vote/',
   '/game/',
+  '/about/',
   '/legal/privacy/',
   '/legal/terms/',
   '/legal/ads/',
@@ -653,7 +660,9 @@ if (
 if (
   !privacyHtml.includes('운영자가 측정 ID 또는 광고 게시자 ID를 설정한 경우에만') ||
   !privacyHtml.includes('쿠키·로컬 저장소와 광고') ||
-  !termsHtml.includes('광고 클릭 유도나 클릭 보상은 제공하지 않습니다.')
+  !termsHtml.includes('광고 클릭 유도나 클릭 보상은 제공하지 않습니다.') ||
+  !adsPolicyHtml.includes('승인 전에는 빈 광고 상자나 클릭 대상을 노출하지 않습니다.') ||
+  !aboutHtml.includes('자체 질문·결과 문구')
 ) {
   throw new Error('AdSense privacy and advertising disclosures are incomplete.');
 }
@@ -681,11 +690,75 @@ if (
 
 const buildMeta = JSON.parse(await readFile(path.join(outputDirectory, 'build-meta.json'), 'utf8'));
 if (
-  buildMeta.build !== 'step-10-cloudflare-pages' ||
+  buildMeta.build !== 'step-12-adsense-readiness' ||
   buildMeta.publicSiteUrl !== publicSiteUrl ||
-  buildMeta.indexableUrlCount !== expectedIndexableRoutes.length
+  buildMeta.indexableUrlCount !== expectedIndexableRoutes.length ||
+  buildMeta.adsenseReadiness.applicationUrlHasPath !== (new URL(publicSiteUrl).pathname !== '/') ||
+  buildMeta.adsenseReadiness.hostRootAssetsAvailable !== (new URL(publicSiteUrl).pathname === '/')
 ) {
-  throw new Error('STEP 9 build metadata is missing.');
+  throw new Error('STEP 12 build metadata is missing.');
+}
+
+const hasAdsTxt = await access(path.join(outputDirectory, 'ads.txt')).then(
+  () => true,
+  () => false
+);
+const monetizableRoutes = [
+  '/',
+  '/test/',
+  '/vote/',
+  '/game/',
+  ...publishedTests.map((test) => `/test/${test.slug}/`),
+  ...publishedTests.map((test) => `/test/${test.slug}/result/`),
+  ...publishedBalanceGames.map((game) => `/vote/${game.slug}/`),
+  ...publishedMiniGames.map((game) => `/game/${game.slug}/`)
+];
+const nonMonetizableRoutes = ['/about/', '/legal/privacy/', '/legal/terms/', '/legal/ads/', '/contact/'];
+
+for (const route of [...monetizableRoutes, ...nonMonetizableRoutes]) {
+  const html = await readFile(path.join(outputDirectory, routeToHtmlPath(route)), 'utf8');
+  if (
+    html.includes('ad-placeholder') ||
+    html.includes('광고 게재 예정 영역') ||
+    html.includes('ADSENSE_SLOT:')
+  ) {
+    throw new Error(`Unfinished advertising placeholder remains: ${route}`);
+  }
+
+  if (!buildMeta.integrations.adsense && (
+    html.includes('pagead2.googlesyndication.com') ||
+    html.includes('google-adsense-account') ||
+    html.includes('class="adsbygoogle"')
+  )) {
+    throw new Error(`AdSense must remain disabled without a real client ID: ${route}`);
+  }
+}
+
+if (!buildMeta.integrations.adsense && hasAdsTxt) {
+  throw new Error('ads.txt must not be generated without a real publisher ID.');
+}
+
+if (buildMeta.integrations.adsense) {
+  for (const route of monetizableRoutes) {
+    const html = await readFile(path.join(outputDirectory, routeToHtmlPath(route)), 'utf8');
+    if (
+      !html.includes('meta name="google-adsense-account"') ||
+      !html.includes('pagead2.googlesyndication.com/pagead/js/adsbygoogle.js')
+    ) {
+      throw new Error(`AdSense verification code is missing: ${route}`);
+    }
+  }
+
+  for (const route of nonMonetizableRoutes) {
+    const html = await readFile(path.join(outputDirectory, routeToHtmlPath(route)), 'utf8');
+    if (html.includes('pagead2.googlesyndication.com') || html.includes('class="adsbygoogle"')) {
+      throw new Error(`Policy or contact page must remain ad-free: ${route}`);
+    }
+  }
+
+  if (buildMeta.integrations.adsTxt !== hasAdsTxt) {
+    throw new Error('ads.txt build state does not match the publisher configuration.');
+  }
 }
 
 console.log(`Verification complete: ${requiredFiles.length} required files`);
