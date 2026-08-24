@@ -24,7 +24,7 @@ jobs:
       ADSENSE_CONTENT_SLOT_ID: ${{ vars.ADSENSE_CONTENT_SLOT_ID }}
       ADSENSE_RESULT_SLOT_ID: ${{ vars.ADSENSE_RESULT_SLOT_ID }}
       ADSENSE_FOOTER_SLOT_ID: ${{ vars.ADSENSE_FOOTER_SLOT_ID }}
-      FIREBASE_APP_CHECK_SITE_KEY: ${{ vars.FIREBASE_APP_CHECK_SITE_KEY }}
+      FIREBASE_APP_CHECK_SITE_KEY: ${{ vars.FIREBASE_APP_CHECK_SITE_KEY || '6LfRh5YtAAAAAP6TcW_mwy4ekJQXM4q7mRGWL3Iu' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
