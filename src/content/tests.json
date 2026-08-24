@@ -385,6 +385,262 @@
         }
       ],
       "recommendations": ["hidden-energy", "friend-view"]
+    },
+    {
+      "id": "test-decision-style",
+      "slug": "decision-style",
+      "status": "published",
+      "category": "성격·선택",
+      "icon": "🧩",
+      "accent": "violet",
+      "title": "결정할 때 드러나는 나의 스타일",
+      "shortTitle": "나의 결정 스타일",
+      "description": "빠른 직감, 꼼꼼한 분석, 주변과의 조화, 새로운 가능성 중 내가 결정을 내릴 때 가장 중요하게 보는 기준을 알아보세요.",
+      "duration": "약 2분",
+      "questionCount": 6,
+      "participantLabel": "선택 성향 테스트",
+      "disclaimer": "이 테스트는 재미와 자기이해를 위한 콘텐츠이며 중요한 의사결정을 대신하지 않습니다.",
+      "seo": {
+        "title": "직감형 vs 분석형 나의 결정 스타일 테스트 | DAILY TEST LAB",
+        "description": "6가지 상황 질문으로 알아보는 나의 결정 방식. 직감형, 분석형, 조화형, 탐색형 중 결과를 확인하고 공유하세요."
+      },
+      "questions": [
+        {
+          "id": "decision-q1",
+          "text": "메뉴가 너무 많아 고르기 어려울 때 나는?",
+          "options": [
+            { "id": "a", "text": "처음 눈에 들어온 메뉴를 바로 고른다", "scores": { "instinct": 2 } },
+            { "id": "b", "text": "후기와 가격을 비교한 뒤 고른다", "scores": { "analyst": 2 } },
+            { "id": "c", "text": "함께 온 사람이 좋아할 메뉴를 묻는다", "scores": { "harmony": 2 } },
+            { "id": "d", "text": "평소 안 먹어본 메뉴에 도전한다", "scores": { "explorer": 2 } }
+          ]
+        },
+        {
+          "id": "decision-q2",
+          "text": "예상하지 못한 제안을 받았을 때 첫 반응은?",
+          "options": [
+            { "id": "a", "text": "느낌이 좋으면 일단 해보겠다고 한다", "scores": { "instinct": 2 } },
+            { "id": "b", "text": "조건과 위험을 먼저 정리한다", "scores": { "analyst": 2 } },
+            { "id": "c", "text": "관련된 사람들의 생각을 확인한다", "scores": { "harmony": 2 } },
+            { "id": "d", "text": "제안에서 더 재미있는 가능성을 찾는다", "scores": { "explorer": 2 } }
+          ]
+        },
+        {
+          "id": "decision-q3",
+          "text": "여행지를 정할 때 가장 중요한 기준은?",
+          "options": [
+            { "id": "a", "text": "사진을 봤을 때 마음이 끌리는가", "scores": { "instinct": 2 } },
+            { "id": "b", "text": "비용과 이동시간이 합리적인가", "scores": { "analyst": 2 } },
+            { "id": "c", "text": "함께 가는 모두가 만족하는가", "scores": { "harmony": 2 } },
+            { "id": "d", "text": "새롭고 특별한 경험이 있는가", "scores": { "explorer": 2 } }
+          ]
+        },
+        {
+          "id": "decision-q4",
+          "text": "두 선택지가 비슷하게 좋아 보인다면?",
+          "options": [
+            { "id": "a", "text": "동전 없이도 마음이 먼저 가는 쪽을 택한다", "scores": { "instinct": 2 } },
+            { "id": "b", "text": "장단점을 적어 더 나은 쪽을 찾는다", "scores": { "analyst": 2 } },
+            { "id": "c", "text": "믿는 사람에게 의견을 구한다", "scores": { "harmony": 2 } },
+            { "id": "d", "text": "둘을 조합할 세 번째 방법을 찾는다", "scores": { "explorer": 2 } }
+          ]
+        },
+        {
+          "id": "decision-q5",
+          "text": "결정을 내린 뒤 가장 자주 하는 행동은?",
+          "options": [
+            { "id": "a", "text": "뒤돌아보지 않고 빠르게 움직인다", "scores": { "instinct": 2 } },
+            { "id": "b", "text": "놓친 조건이 없는지 한 번 더 확인한다", "scores": { "analyst": 2 } },
+            { "id": "c", "text": "주변 사람이 편한지 살핀다", "scores": { "harmony": 2 } },
+            { "id": "d", "text": "진행하면서 더 좋은 방향으로 바꾼다", "scores": { "explorer": 2 } }
+          ]
+        },
+        {
+          "id": "decision-q6",
+          "text": "내 선택에 대한 가장 듣고 싶은 평가는?",
+          "options": [
+            { "id": "a", "text": "결단력이 정말 빠르다", "scores": { "instinct": 2 } },
+            { "id": "b", "text": "언제나 근거가 탄탄하다", "scores": { "analyst": 2 } },
+            { "id": "c", "text": "사람을 생각하는 선택이다", "scores": { "harmony": 2 } },
+            { "id": "d", "text": "남들이 못 본 길을 찾았다", "scores": { "explorer": 2 } }
+          ]
+        }
+      ],
+      "results": [
+        {
+          "id": "instinct",
+          "emoji": "⚡",
+          "label": "QUICK INSTINCT",
+          "title": "번개 직감형",
+          "summary": "핵심을 빠르게 느끼고 적절한 순간에 움직이는 사람",
+          "description": "많은 정보를 오래 붙잡기보다 경험과 감각을 활용해 방향을 정하는 편이에요. 속도가 필요한 순간에 강하고 기회를 놓치지 않습니다.",
+          "traits": ["빠른 결단", "기회 포착", "강한 추진력"],
+          "tips": ["큰 결정에는 확인할 조건 세 가지만 정해보세요.", "첫 느낌과 실제 결과를 기록하면 직감이 더 정교해져요."],
+          "shareText": "나의 결정 스타일은 기회를 놓치지 않는 번개 직감형! 당신은 어떤 유형?"
+        },
+        {
+          "id": "analyst",
+          "emoji": "📊",
+          "label": "CLEAR ANALYST",
+          "title": "근거 수집형",
+          "summary": "정보를 비교해 후회가 적은 답을 만드는 사람",
+          "description": "선택의 기준을 분명히 세우고 장단점을 꼼꼼히 살펴요. 복잡한 상황에서도 감정에 휩쓸리지 않고 안정적인 결론을 냅니다.",
+          "traits": ["논리적 비교", "위험 관리", "신중한 판단"],
+          "tips": ["정보 수집의 마감시간을 정하면 결정 피로가 줄어요.", "완벽한 답보다 지금 충분히 좋은 답을 선택해도 괜찮아요."],
+          "shareText": "나의 결정 스타일은 후회가 적은 근거 수집형! 당신의 선택 방식도 확인해봐."
+        },
+        {
+          "id": "harmony",
+          "emoji": "🤝",
+          "label": "WARM HARMONY",
+          "title": "조화 설계형",
+          "summary": "선택이 사람에게 미칠 영향까지 함께 보는 사람",
+          "description": "나의 이익뿐 아니라 함께하는 사람의 마음과 관계를 중요하게 생각해요. 서로 받아들일 수 있는 답을 찾아 협력을 오래 이어갑니다.",
+          "traits": ["넓은 배려", "갈등 조율", "관계 중심 판단"],
+          "tips": ["모두의 만족보다 꼭 지켜야 할 내 기준도 적어보세요.", "의견을 들은 뒤 최종 결정권자가 누구인지 분명히 하면 편해요."],
+          "shareText": "나의 결정 스타일은 사람을 함께 보는 조화 설계형! 친구 결과도 궁금하다면?"
+        },
+        {
+          "id": "explorer",
+          "emoji": "🧭",
+          "label": "OPEN EXPLORER",
+          "title": "가능성 탐색형",
+          "summary": "정해진 답 밖에서 새로운 선택지를 발견하는 사람",
+          "description": "둘 중 하나만 고르기보다 더 재미있고 유연한 방법을 찾는 편이에요. 변화에 빠르게 적응하며 예상 밖의 기회를 만들어냅니다.",
+          "traits": ["창의적 대안", "높은 유연성", "새로움 추구"],
+          "tips": ["가능성을 넓힌 뒤 최종 기준 하나로 범위를 좁혀보세요.", "새로운 선택에도 시간과 비용의 상한선을 정하면 더 자유로워요."],
+          "shareText": "나의 결정 스타일은 답 밖의 길을 찾는 가능성 탐색형! 당신은?"
+        }
+      ],
+      "recommendations": ["hidden-energy", "work-mode", "weekend-persona"]
+    },
+    {
+      "id": "test-weekend-persona",
+      "slug": "weekend-persona",
+      "status": "published",
+      "category": "일상·라이프",
+      "icon": "🌤️",
+      "accent": "blue",
+      "title": "주말에 드러나는 나의 본모습",
+      "shortTitle": "나의 주말 본캐",
+      "description": "쉬는 날의 선택에는 진짜 취향이 숨어 있어요. 집콕 회복형, 사람 충전형, 성취 정리형, 즉흥 탐험형 중 나의 주말 본캐를 찾아보세요.",
+      "duration": "약 2분",
+      "questionCount": 6,
+      "participantLabel": "주말 취향 테스트",
+      "disclaimer": "이 테스트는 재미와 생활 취향 탐색을 위한 콘텐츠이며 성격을 단정하지 않습니다.",
+      "seo": {
+        "title": "집콕형 vs 밖으로 나가는 형 나의 주말 본캐 테스트",
+        "description": "6가지 질문으로 알아보는 나의 주말 취향. 회복형, 사람 충전형, 성취형, 탐험형 결과를 무료로 확인하세요."
+      },
+      "questions": [
+        {
+          "id": "weekend-q1",
+          "text": "아무 약속 없는 토요일 아침, 가장 먼저 하는 일은?",
+          "options": [
+            { "id": "a", "text": "알람을 끄고 충분히 더 잔다", "scores": { "nest": 2 } },
+            { "id": "b", "text": "친구들에게 오늘 뭐 하는지 연락한다", "scores": { "festival": 2 } },
+            { "id": "c", "text": "미뤄둔 집안일과 할 일을 정리한다", "scores": { "builder": 2 } },
+            { "id": "d", "text": "날씨를 보고 갈 곳부터 찾아본다", "scores": { "roamer": 2 } }
+          ]
+        },
+        {
+          "id": "weekend-q2",
+          "text": "주말 오후에 가장 마음이 편한 장면은?",
+          "options": [
+            { "id": "a", "text": "편한 옷으로 영화나 드라마 몰아보기", "scores": { "nest": 2 } },
+            { "id": "b", "text": "좋아하는 사람들과 맛있는 것 먹기", "scores": { "festival": 2 } },
+            { "id": "c", "text": "운동이나 공부를 끝내고 체크 표시하기", "scores": { "builder": 2 } },
+            { "id": "d", "text": "처음 가는 동네나 가게 발견하기", "scores": { "roamer": 2 } }
+          ]
+        },
+        {
+          "id": "weekend-q3",
+          "text": "친구가 갑자기 만나자고 연락하면 나는?",
+          "options": [
+            { "id": "a", "text": "오늘은 쉬기로 했다며 다음을 약속한다", "scores": { "nest": 2 } },
+            { "id": "b", "text": "반갑게 준비하고 바로 나간다", "scores": { "festival": 2 } },
+            { "id": "c", "text": "할 일을 마친 뒤 가능한 시간을 정한다", "scores": { "builder": 2 } },
+            { "id": "d", "text": "어디든 재미있어 보이면 따라간다", "scores": { "roamer": 2 } }
+          ]
+        },
+        {
+          "id": "weekend-q4",
+          "text": "일요일 저녁에 가장 뿌듯한 것은?",
+          "options": [
+            { "id": "a", "text": "아무것도 안 하고 제대로 쉰 것", "scores": { "nest": 2 } },
+            { "id": "b", "text": "좋은 사람과 추억을 만든 것", "scores": { "festival": 2 } },
+            { "id": "c", "text": "계획한 일을 끝내고 다음 주를 준비한 것", "scores": { "builder": 2 } },
+            { "id": "d", "text": "예상하지 못한 재미를 만난 것", "scores": { "roamer": 2 } }
+          ]
+        },
+        {
+          "id": "weekend-q5",
+          "text": "나에게 최고의 주말 장소는?",
+          "options": [
+            { "id": "a", "text": "익숙하고 편안한 내 공간", "scores": { "nest": 2 } },
+            { "id": "b", "text": "사람과 웃음이 많은 모임 장소", "scores": { "festival": 2 } },
+            { "id": "c", "text": "집중할 수 있는 운동실이나 작업 공간", "scores": { "builder": 2 } },
+            { "id": "d", "text": "지도에 저장해 둔 낯선 장소", "scores": { "roamer": 2 } }
+          ]
+        },
+        {
+          "id": "weekend-q6",
+          "text": "주말이 하루 더 생긴다면 가장 하고 싶은 것은?",
+          "options": [
+            { "id": "a", "text": "수면과 휴식을 더 넉넉히 채운다", "scores": { "nest": 2 } },
+            { "id": "b", "text": "보고 싶었던 사람을 한 번 더 만난다", "scores": { "festival": 2 } },
+            { "id": "c", "text": "배우고 싶었던 일을 시작한다", "scores": { "builder": 2 } },
+            { "id": "d", "text": "가벼운 당일치기 여행을 떠난다", "scores": { "roamer": 2 } }
+          ]
+        }
+      ],
+      "results": [
+        {
+          "id": "nest",
+          "emoji": "🛋️",
+          "label": "COZY NEST",
+          "title": "포근한 집콕 회복형",
+          "summary": "편안한 공간에서 에너지를 차분히 되찾는 사람",
+          "description": "주말은 바깥의 속도에서 잠시 내려와 나만의 리듬을 회복하는 시간이에요. 익숙한 공간과 충분한 휴식이 다음 주를 움직일 힘이 됩니다.",
+          "traits": ["깊은 휴식", "혼자만의 여유", "안정적인 재충전"],
+          "tips": ["완전히 쉬는 시간과 가벼운 산책 시간을 함께 넣어보세요.", "쉬는 날의 죄책감보다 회복된 에너지를 기준으로 보세요."],
+          "shareText": "나의 주말 본캐는 포근한 집콕 회복형! 당신의 쉬는 날은 어떤 모습?"
+        },
+        {
+          "id": "festival",
+          "emoji": "🎈",
+          "label": "SOCIAL FESTIVAL",
+          "title": "사람 충전형",
+          "summary": "좋아하는 사람과 웃고 나눌 때 주말이 완성되는 사람",
+          "description": "혼자 쉬는 것보다 마음 맞는 사람과 좋은 시간을 보낼 때 에너지가 차올라요. 사람을 모으고 즐거운 추억을 만드는 능력이 돋보입니다.",
+          "traits": ["활발한 교류", "따뜻한 친밀감", "추억 만들기"],
+          "tips": ["약속 사이에 짧은 혼자만의 회복 시간도 남겨두세요.", "많이 만나기보다 정말 보고 싶은 사람을 먼저 선택해보세요."],
+          "shareText": "나의 주말 본캐는 함께할수록 신나는 사람 충전형! 친구 결과도 확인해봐."
+        },
+        {
+          "id": "builder",
+          "emoji": "✅",
+          "label": "WEEKEND BUILDER",
+          "title": "차곡차곡 성취형",
+          "summary": "쉬는 날에도 작은 완성에서 만족을 얻는 사람",
+          "description": "미뤄둔 일을 정리하거나 몸과 실력을 키울 때 주말을 잘 보냈다고 느껴요. 생활을 스스로 정돈하는 힘이 강한 유형입니다.",
+          "traits": ["꾸준한 성장", "생활 정리", "강한 자기관리"],
+          "tips": ["할 일 목록에 즐거움과 휴식도 정식 일정으로 넣어보세요.", "완료한 일의 개수보다 만족도를 함께 기록해보세요."],
+          "shareText": "나의 주말 본캐는 하루를 알차게 만드는 차곡차곡 성취형! 당신은?"
+        },
+        {
+          "id": "roamer",
+          "emoji": "🎒",
+          "label": "FREE ROAMER",
+          "title": "즉흥 탐험형",
+          "summary": "새로운 장소와 우연에서 주말의 재미를 찾는 사람",
+          "description": "정해진 계획보다 그날의 기분과 호기심을 따라 움직일 때 살아 있음을 느껴요. 평범한 주말도 작은 여행으로 바꾸는 재능이 있습니다.",
+          "traits": ["강한 호기심", "자유로운 일정", "새로운 경험"],
+          "tips": ["즉흥 일정에도 귀가 시간과 예산 상한은 정해두세요.", "발견한 장소를 기록하면 나만의 주말 지도가 만들어져요."],
+          "shareText": "나의 주말 본캐는 우연을 즐기는 즉흥 탐험형! 이번 주말 어디로 갈까?"
+        }
+      ],
+      "recommendations": ["hidden-energy", "friend-view", "decision-style"]
     }
   ]
 }
