@@ -289,7 +289,7 @@ function createTestPageHtml(test, view) {
     <footer class="site-footer">
       <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
       <nav aria-label="운영 정책">
-        <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+        <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a><a href="https://dailytestlabkr.blogspot.com/" target="_blank" rel="noopener">읽을거리</a>
       </nav>
     </footer>
 
@@ -384,7 +384,7 @@ function createBalancePageHtml(game) {
     <footer class="site-footer">
       <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
       <nav aria-label="운영 정책">
-        <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+        <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a><a href="https://dailytestlabkr.blogspot.com/" target="_blank" rel="noopener">읽을거리</a>
       </nav>
     </footer>
 
@@ -480,7 +480,7 @@ function createMiniGamePageHtml(game, allGames) {
     <footer class="site-footer">
       <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
       <nav aria-label="운영 정책">
-        <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a>
+        <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a><a href="https://dailytestlabkr.blogspot.com/" target="_blank" rel="noopener">읽을거리</a>
       </nav>
     </footer>
 

@@ -57,6 +57,10 @@ if (!indexHtml.includes('DAILY TEST LAB')) {
   throw new Error('index.html brand text is missing.');
 }
 
+if (!indexHtml.includes('https://dailytestlabkr.blogspot.com/')) {
+  throw new Error('Blogger reading hub link is missing from the main site.');
+}
+
 for (const requiredText of [
   '오늘 테스트',
   '밸런스 게임',
