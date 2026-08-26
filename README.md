@@ -19,9 +19,9 @@
 
 ## 운영 주소
 
-- 서비스: https://kpa100plus-debug.github.io/daily-test-lab/
-- 서비스 소개: https://kpa100plus-debug.github.io/daily-test-lab/about/
-- 관리자: https://kpa100plus-debug.github.io/daily-test-lab/admin/
+- 서비스: https://dtlabkr.dpdns.org/
+- 서비스 소개: https://dtlabkr.dpdns.org/about/
+- 관리자: https://dtlabkr.dpdns.org/admin/
 - 저장소: https://github.com/kpa100plus-debug/daily-test-lab
 - Firebase 프로젝트 ID: `daily-test-lab` (Spark 무료 요금제)
 

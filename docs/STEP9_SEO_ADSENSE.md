@@ -14,7 +14,7 @@
 
 값이 없으면 관련 외부 스크립트와 인증값을 출력하지 않습니다.
 
-- `PUBLIC_SITE_URL`: 기본값 `https://kpa100plus-debug.github.io/daily-test-lab`
+- `PUBLIC_SITE_URL`: 기본값 `https://dtlabkr.dpdns.org`
 - `GOOGLE_SITE_VERIFICATION`: Search Console 확인 토큰
 - `GOOGLE_ANALYTICS_ID`: `G-`로 시작하는 실제 측정 ID
 - `ADSENSE_CLIENT_ID`: `ca-pub-`로 시작하는 실제 AdSense 클라이언트 ID
@@ -36,7 +36,7 @@ API 키, 비밀번호, 인증번호는 저장소에 넣지 않습니다. 공개�
 
 ## 현재 AdSense 신청 차단 요인
 
-현재 사이트는 `https://kpa100plus-debug.github.io/daily-test-lab/` 하위 경로에서 제공됩니다. Google 공식 안내상 AdSense 신청 URL에는 경로가 포함될 수 없고, `ads.txt`도 사이트 호스트의 최상위 경로에 있어야 합니다. 따라서 현재 주소는 검색·기능 테스트에는 정상이나 AdSense 사이트 신청 주소로는 사용할 수 없습니다.
+현재 사이트는 `https://dtlabkr.dpdns.org/` 하위 경로에서 제공됩니다. Google 공식 안내상 AdSense 신청 URL에는 경로가 포함될 수 없고, `ads.txt`도 사이트 호스트의 최상위 경로에 있어야 합니다. 따라서 현재 주소는 검색·기능 테스트에는 정상이나 AdSense 사이트 신청 주소로는 사용할 수 없습니다.
 
 비용 0원을 절대 유지한다면 Google이 명시한 호스트 파트너인 Blogger를 수익화 진입 주소로 구성해야 합니다. 자체 도메인을 연결하면 현재 정적 앱 구조를 그대로 유지하기 쉽지만 도메인 비용이 발생하므로 현재 조건에서는 보류합니다. 어느 경로든 Google 계정 로그인, 지급 정보 확인, 사이트 제출과 CMP 설정은 계정 소유자가 직접 완료해야 합니다.
 

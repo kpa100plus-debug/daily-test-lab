@@ -7,7 +7,7 @@ This folder is the GitHub source of truth for the DAILY TEST LAB Blogger support
 `content.json` → Google Apps Script → Blogger API v3 → DAILY TEST LAB Blogger
 
 - Blog ID: `5587300283797440679`
-- Primary site: `https://kpa100plus-debug.github.io/daily-test-lab/`
+- Primary site: `https://dtlabkr.dpdns.org/`
 - Sync interval: every 6 hours
 - Cost: free-tier Google Apps Script and Blogger
 - Local installation: none

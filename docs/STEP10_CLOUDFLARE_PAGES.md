@@ -8,7 +8,7 @@
 - Production branch: `main`
 - GitHub Actions 빌드: `node scripts/build.mjs`
 - Build output directory: `dist`
-- 실제 공개 주소: `https://kpa100plus-debug.github.io/daily-test-lab/`
+- 실제 공개 주소: `https://dtlabkr.dpdns.org/`
 
 Cloudflare Pages 연결은 반복 보안 확인 문제로 운영 경로에서 제외했습니다. GitHub Pages를 단일 배포 경로로 사용하며 canonical, sitemap.xml, robots.txt도 동일 주소를 가리킵니다.
 

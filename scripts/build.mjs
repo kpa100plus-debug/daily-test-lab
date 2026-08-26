@@ -14,7 +14,7 @@ const sourceDirectory = path.join(projectRoot, 'src', 'site');
 const contentDirectory = path.join(projectRoot, 'src', 'content');
 const outputDirectory = path.join(projectRoot, 'dist');
 const siteBasePath = (process.env.SITE_BASE_PATH ?? '').replace(/\/$/, '');
-const defaultPublicSiteUrl = 'https://kpa100plus-debug.github.io/daily-test-lab';
+const defaultPublicSiteUrl = 'https://dtlabkr.dpdns.org';
 const cloudflarePagesUrl = process.env.CF_PAGES === '1'
   ? process.env.CF_PAGES_URL
   : '';

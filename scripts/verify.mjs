@@ -10,6 +10,7 @@ const requiredFiles = [
   'index.html',
   '404.html',
   'robots.txt',
+  'CNAME',
   'sitemap.xml',
   '_headers',
   'assets/css/app.css',
@@ -653,7 +654,7 @@ if (
   throw new Error('STEP 8 unpublished content slot fallback is incomplete.');
 }
 
-const defaultPublicSiteUrl = 'https://kpa100plus-debug.github.io/daily-test-lab';
+const defaultPublicSiteUrl = 'https://dtlabkr.dpdns.org';
 const cloudflarePagesUrl = process.env.CF_PAGES === '1'
   ? process.env.CF_PAGES_URL
   : '';
@@ -750,6 +751,10 @@ if (
 }
 
 const robotsText = await readFile(path.join(outputDirectory, 'robots.txt'), 'utf8');
+const cnameText = await readFile(path.join(outputDirectory, 'CNAME'), 'utf8');
+if (cnameText.trim() !== new URL(publicSiteUrl).hostname) {
+  throw new Error('CNAME must match the public site hostname.');
+}
 const publicPath = new URL(publicSiteUrl).pathname.replace(/\/$/, '') || '/';
 const expectedAllowRule = `Allow: ${publicPath === '/' ? '/' : `${publicPath}/`}`;
 if (

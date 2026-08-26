@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /daily-test-lab/
 
-Sitemap: https://kpa100plus-debug.github.io/daily-test-lab/sitemap.xml
+Sitemap: https://dtlabkr.dpdns.org/sitemap.xml
