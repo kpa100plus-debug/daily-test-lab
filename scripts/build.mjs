@@ -76,8 +76,8 @@ const safeJson = (value) => JSON.stringify(value).replaceAll('<', '\\u003c');
 const publisherSchema = {
   '@type': 'Organization',
   '@id': `${publicSiteUrl}/#organization`,
-  name: '㈜ISEA GROUP',
-  alternateName: 'ISEA GROUP',
+  name: 'DAILY TEST LAB',
+  alternateName: 'DAILY TEST LAB',
   url: `${publicSiteUrl}/`
 };
 
@@ -307,7 +307,7 @@ function createTestPageHtml(test, view) {
 
     ${test.status === 'published' ? '<!-- ADSENSE_SLOT:footer -->' : ''}
     <footer class="site-footer">
-      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>© 2026 ISEA GROUP. All rights reserved.</span></div>
       <nav aria-label="운영 정책">
         <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a><a href="https://dailytestlabkr.blogspot.com/" target="_blank" rel="noopener">읽을거리</a>
       </nav>
@@ -402,7 +402,7 @@ function createBalancePageHtml(game) {
 
     ${indexable ? '<!-- ADSENSE_SLOT:footer -->' : ''}
     <footer class="site-footer">
-      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>© 2026 ISEA GROUP. All rights reserved.</span></div>
       <nav aria-label="운영 정책">
         <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a><a href="https://dailytestlabkr.blogspot.com/" target="_blank" rel="noopener">읽을거리</a>
       </nav>
@@ -498,7 +498,7 @@ function createMiniGamePageHtml(game, allGames) {
 
     <!-- ADSENSE_SLOT:footer -->
     <footer class="site-footer">
-      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>㈜ISEA GROUP 운영</span><span>© 2026 ISEA GROUP. All Rights Reserved.</span></div>
+      <div class="footer-brand"><strong>DAILY TEST LAB</strong><span>© 2026 ISEA GROUP. All rights reserved.</span></div>
       <nav aria-label="운영 정책">
         <a href="/about/">소개</a><a href="/legal/privacy/">개인정보처리방침</a><a href="/legal/terms/">이용약관</a><a href="/legal/ads/">광고 안내</a><a href="/contact/">문의</a><a href="https://dailytestlabkr.blogspot.com/" target="_blank" rel="noopener">읽을거리</a>
       </nav>
@@ -603,7 +603,7 @@ const staticSeoPages = [
   },
   {
     path: 'legal/privacy/index.html', route: '/legal/privacy/', title: '개인정보처리방침 | DAILY TEST LAB',
-    description: '㈜ISEA GROUP이 운영하는 DAILY TEST LAB의 개인정보 수집, 이용, 보관, 파기 및 이용자 권리 안내입니다.', breadcrumbName: '개인정보처리방침'
+    description: 'DAILY TEST LAB의 개인정보 수집, 이용, 보관, 파기 및 이용자 권리 안내입니다.', breadcrumbName: '개인정보처리방침'
   },
   {
     path: 'legal/terms/index.html', route: '/legal/terms/', title: '이용약관 | DAILY TEST LAB',
@@ -615,7 +615,7 @@ const staticSeoPages = [
   },
   {
     path: 'contact/index.html', route: '/contact/', title: '문의 | DAILY TEST LAB',
-    description: 'DAILY TEST LAB 서비스 운영, 개인정보, 광고와 제휴 관련 문의 방법 및 ㈜ISEA GROUP 운영 정보입니다.', breadcrumbName: '문의'
+    description: 'DAILY TEST LAB 서비스 운영, 개인정보, 광고와 제휴 관련 문의 방법입니다.', breadcrumbName: '문의'
   }
 ];
 

@@ -127,7 +127,7 @@ function createLoginGate(message = '') {
     element('span', 'admin-gate-icon', '🔐'),
     element('p', 'section-kicker', 'AUTHORIZED ACCESS'),
     element('h2', '', '관리자 로그인이 필요합니다'),
-    element('p', '', message || '승인된 ISEA GROUP Google 계정만 콘텐츠를 변경할 수 있습니다.')
+    element('p', '', message || '승인된 관리자 Google 계정만 콘텐츠를 변경할 수 있습니다.')
   );
   const login = element('button', 'member-google-button', 'Google로 관리자 로그인');
   login.type = 'button';

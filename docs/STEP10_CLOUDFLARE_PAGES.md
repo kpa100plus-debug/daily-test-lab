@@ -26,4 +26,4 @@ Cloudflare Pages 연결은 반복 보안 확인 문제로 운영 경로에서 �
 
 현재 GitHub Pages 프로젝트 경로는 AdSense 신청 URL 요건을 충족하지 않습니다. 비용 0원 유지 시 Blogger 호스트 파트너 경로를 별도로 구성하고, 실제 AdSense 게시자 ID가 발급된 뒤에만 광고 코드와 `ads.txt`를 활성화합니다. 비밀번호, 인증번호, API 키는 저장소에 기록하지 않습니다.
 
-© 2026 ISEA GROUP. All Rights Reserved.
+© 2026 ISEA GROUP. All rights reserved.

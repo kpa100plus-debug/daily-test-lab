@@ -2,7 +2,6 @@
 
 참조: `REF-DAILYFUN-AUTOPILOT-CONTENT-ADSENSE-01`
 
-- 운영 주체: ㈜ISEA GROUP
 - 서비스 관리자: juyoungkim
 - 기간: 2026-08-25 ~ 2026-09-23
 - 비용 원칙: GitHub Pages, Firebase 무료 플랜, Blogger, Google Analytics 무료 범위만 사용

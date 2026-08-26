@@ -66,6 +66,22 @@ for (const relativePath of requiredFiles) {
   await access(path.join(outputDirectory, relativePath));
 }
 
+const copyrightNotice = '© 2026 ISEA GROUP. All rights reserved.';
+const generatedSiteFiles = await readdir(outputDirectory, { recursive: true });
+for (const relativePath of generatedSiteFiles.filter((file) => file.endsWith('.html'))) {
+  const html = await readFile(path.join(outputDirectory, relativePath), 'utf8');
+  const withoutCopyright = html.replaceAll(copyrightNotice, '');
+  if (
+    withoutCopyright.includes('㈜ISEA GROUP') ||
+    withoutCopyright.includes('ISEA GROUP')
+  ) {
+    throw new Error(`Corporate name must appear only in the copyright notice: ${relativePath}`);
+  }
+  if (html.includes('All Rights Reserved.')) {
+    throw new Error(`Copyright capitalization is outdated: ${relativePath}`);
+  }
+}
+
 const indexHtml = await readFile(path.join(outputDirectory, 'index.html'), 'utf8');
 if (!indexHtml.includes('DAILY TEST LAB')) {
   throw new Error('index.html brand text is missing.');
@@ -571,7 +587,7 @@ const adsPolicyHtml = await readFile(path.join(outputDirectory, 'legal/ads/index
 if (
   !myPageHtml.includes('my-app.js') ||
   !myAppJavaScript.includes('Google로 기록 보관') ||
-  !privacyHtml.includes('㈜ISEA GROUP') ||
+  privacyHtml.includes('㈜ISEA GROUP') ||
   !privacyHtml.includes('Firebase 사용자 식별값') ||
   !privacyHtml.includes('책임자는 juyoungkim') ||
   !termsHtml.includes('관리 책임자는 juyoungkim') ||
@@ -593,7 +609,7 @@ const adminAppJavaScript = await readFile(
 );
 if (
   !adminPageHtml.includes('admin-app.js') ||
-  !adminPageHtml.includes('㈜ISEA GROUP 소유·운영') ||
+  adminPageHtml.includes('㈜ISEA GROUP') ||
   !adminAppJavaScript.includes('REF-DAILYFUN-STEP8-CONTENT-CRUD-01') ||
   adminAppJavaScript.includes('kpa100plus@gmail.com') ||
   adminAppJavaScript.includes('승인 계정:') ||
