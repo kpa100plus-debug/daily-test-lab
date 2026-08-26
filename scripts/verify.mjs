@@ -15,6 +15,7 @@ const requiredFiles = [
   '_headers',
   'assets/css/app.css',
   'assets/js/app.js',
+  'assets/js/locale.js',
   'assets/js/test-list.js',
   'assets/js/test-app.js',
   'assets/js/test-engine.js',
@@ -81,6 +82,9 @@ for (const relativePath of generatedSiteFiles.filter((file) => file.endsWith('.h
   if (html.includes('All Rights Reserved.')) {
     throw new Error(`Copyright capitalization is outdated: ${relativePath}`);
   }
+  if (/juyoungkim|김주영/i.test(html)) {
+    throw new Error(`Personal administrator name must not be public: ${relativePath}`);
+  }
 }
 
 const indexHtml = await readFile(path.join(outputDirectory, 'index.html'), 'utf8');
@@ -134,6 +138,23 @@ if (
   !appJavaScript.includes("'daily_contents'")
 ) {
   throw new Error('STEP 7 Firebase daily content connection is missing.');
+}
+
+const localeJavaScript = await readFile(
+  path.join(outputDirectory, 'assets/js/locale.js'),
+  'utf8'
+);
+if (
+  !indexHtml.includes('global-visitor-count') ||
+  !indexHtml.includes('published-test-count') ||
+  !appJavaScript.includes('counterapi.com/api/dtlabkr.dpdns.org/view/home') ||
+  !appJavaScript.includes('updateServiceStats') ||
+  !localeJavaScript.includes("'zh-CN'") ||
+  !localeJavaScript.includes("'ar'") ||
+  !localeJavaScript.includes('countries.dev/ip') ||
+  !localeJavaScript.includes('site-language-selector')
+) {
+  throw new Error('Multilingual interface or meaningful service counters are incomplete.');
 }
 
 const testListJavaScript = await readFile(
