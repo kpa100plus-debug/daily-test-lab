@@ -543,6 +543,8 @@ if (!gameListHtml.includes('game-list.js') || !gameListHtml.includes('오늘의 
   throw new Error('Mini game list page is incomplete.');
 }
 
+const buildJavaScript = await readFile(path.join(projectRoot, 'scripts/build.mjs'), 'utf8');
+const balanceListShareHtml = await readFile(path.join(outputDirectory, 'vote/index.html'), 'utf8');
 const gameAppJavaScript = await readFile(
   path.join(outputDirectory, 'assets/js/game-app.js'),
   'utf8'
@@ -559,7 +561,11 @@ if (
   !appJavaScript.includes("from './share-service.js'") ||
   !testAppJavaScript.includes("from './share-service.js'") ||
   !balanceAppJavaScript.includes("from './share-service.js'") ||
-  !gameAppJavaScript.includes("from './share-service.js'")
+  !gameAppJavaScript.includes("from './share-service.js'") ||
+  !indexHtml.includes('app.js?v=share-1') ||
+  !balanceListShareHtml.includes('balance-app.js?v=share-1') ||
+  !buildJavaScript.includes('test-app.js?v=share-1') ||
+  !buildJavaScript.includes('game-app.js?v=share-1')
 ) {
   throw new Error('Reliable share and copy fallback is incomplete.');
 }
