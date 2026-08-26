@@ -255,8 +255,70 @@ function setupPlayTracking() {
   });
 }
 
+const serviceStatSources = {
+  tests: new URL('../../data/tests.json', import.meta.url),
+  balance: new URL('../../data/balance-games.json', import.meta.url),
+  games: new URL('../../data/mini-games.json', import.meta.url)
+};
+
+const formatStatNumber = (value) => new Intl.NumberFormat(
+  document.documentElement.lang || 'ko'
+).format(value);
+
+async function loadPublishedCount(url) {
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`service stat ${response.status}`);
+  const data = await response.json();
+  return (data.items || []).filter((item) => item.status === 'published').length;
+}
+
+async function updateServiceStats() {
+  try {
+    const [tests, balance, games] = await Promise.all([
+      loadPublishedCount(serviceStatSources.tests),
+      loadPublishedCount(serviceStatSources.balance),
+      loadPublishedCount(serviceStatSources.games)
+    ]);
+    document.querySelector('#published-test-count')?.replaceChildren(formatStatNumber(tests));
+    document.querySelector('#balance-question-count')?.replaceChildren(formatStatNumber(balance));
+    document.querySelector('#mini-game-count')?.replaceChildren(formatStatNumber(games));
+  } catch (error) {
+    console.warn('공개 콘텐츠 수 집계 지연:', error.message);
+  }
+}
+
+async function updateTodayVisitorCount() {
+  const target = document.querySelector('#global-visitor-count');
+  if (!target || !/^(dtlabkr\.dpdns\.org|kpa100plus-debug\.github\.io)$/.test(location.hostname)) return;
+
+  try {
+    const response = await fetch(
+      'https://counterapi.com/api/dtlabkr.dpdns.org/view/home?timeline=1d&unique=true',
+      { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' }
+    );
+    if (!response.ok) throw new Error(`visitor counter ${response.status}`);
+    const data = await response.json();
+    const value = Math.max(0, Number(data.value) || 0);
+    target.dataset.rawValue = String(value);
+    target.replaceChildren(formatStatNumber(value));
+    target.closest('.global-stat-card')?.setAttribute('data-counter-status', 'ready');
+  } catch (error) {
+    target.replaceChildren('—');
+    target.closest('.global-stat-card')?.setAttribute('data-counter-status', 'delayed');
+    console.warn('익명 방문 수 집계 지연:', error.message);
+  }
+}
+
+document.addEventListener('daily-test-lab:locale', () => {
+  document.querySelectorAll('[data-raw-value]').forEach((element) => {
+    element.replaceChildren(formatStatNumber(Number(element.dataset.rawValue) || 0));
+  });
+});
+
 setTodayLabel();
 updateVisitStats();
 setupQuiz();
 setupPlayTracking();
 loadDailyContent();
+updateServiceStats();
+updateTodayVisitorCount();
