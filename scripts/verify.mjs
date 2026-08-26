@@ -146,8 +146,13 @@ const localeJavaScript = await readFile(
 );
 if (
   !indexHtml.includes('global-visitor-count') ||
+  !indexHtml.includes('weekly-visitor-count') ||
+  !indexHtml.includes('monthly-visitor-count') ||
   !indexHtml.includes('published-test-count') ||
   !appJavaScript.includes('counterapi.com/api/dtlabkr.dpdns.org/view/home') ||
+  !appJavaScript.includes("fetchVisitorCount('7d', true)") ||
+  !appJavaScript.includes("fetchVisitorCount('30d', true)") ||
+  !appJavaScript.includes("parameters.set('readOnly', 'true')") ||
   !appJavaScript.includes('updateServiceStats') ||
   !localeJavaScript.includes("'zh-CN'") ||
   !localeJavaScript.includes("'ar'") ||
