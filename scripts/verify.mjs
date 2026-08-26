@@ -16,6 +16,7 @@ const requiredFiles = [
   'assets/css/app.css',
   'assets/js/app.js',
   'assets/js/locale.js',
+  'assets/js/share-service.js',
   'assets/js/test-list.js',
   'assets/js/test-app.js',
   'assets/js/test-engine.js',
@@ -546,6 +547,23 @@ const gameAppJavaScript = await readFile(
   path.join(outputDirectory, 'assets/js/game-app.js'),
   'utf8'
 );
+const shareServicePath = path.join(outputDirectory, 'assets/js/share-service.js');
+const shareServiceJavaScript = await readFile(shareServicePath, 'utf8');
+const { buildShareText } = await import(pathToFileURL(shareServicePath).href);
+if (
+  buildShareText({ text: '기록 7.60초', url: 'https://dtlabkr.dpdns.org/game/number-order/' }) !==
+    '기록 7.60초\\n\\nhttps://dtlabkr.dpdns.org/game/number-order/' ||
+  !shareServiceJavaScript.includes('navigator.userAgentData?.mobile') ||
+  !shareServiceJavaScript.includes('navigator.clipboard?.writeText') ||
+  !shareServiceJavaScript.includes("document.execCommand('copy')") ||
+  !appJavaScript.includes("from './share-service.js'") ||
+  !testAppJavaScript.includes("from './share-service.js'") ||
+  !balanceAppJavaScript.includes("from './share-service.js'") ||
+  !gameAppJavaScript.includes("from './share-service.js'")
+) {
+  throw new Error('Reliable share and copy fallback is incomplete.');
+}
+
 const memberServiceJavaScript = await readFile(
   path.join(outputDirectory, 'assets/js/member-service.js'),
   'utf8'
