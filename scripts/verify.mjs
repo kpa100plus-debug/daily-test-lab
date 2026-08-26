@@ -611,12 +611,12 @@ if (
   !myAppJavaScript.includes('Google로 기록 보관') ||
   privacyHtml.includes('㈜ISEA GROUP') ||
   !privacyHtml.includes('Firebase 사용자 식별값') ||
-  !privacyHtml.includes('책임자는 juyoungkim') ||
-  !termsHtml.includes('관리 책임자는 juyoungkim') ||
-  !contactHtml.includes('관리책임자: juyoungkim') ||
+  !privacyHtml.includes('서비스 운영자가 개인정보 관련 요청을 처리·관리합니다') ||
+  !termsHtml.includes('서비스 운영 문의는 문의 페이지에서 접수합니다') ||
+  !contactHtml.includes('운영·개인정보 문의:') ||
   !contactHtml.includes('daily-test-lab/issues/new') ||
-  !aboutHtml.includes('관리자 juyoungkim') ||
-  !adsPolicyHtml.includes('서비스 관리자: juyoungkim') ||
+  !aboutHtml.includes('운영팀이 테스트 질문') ||
+  !adsPolicyHtml.includes('<h2>광고·제휴 문의</h2>') ||
   [privacyHtml, termsHtml, contactHtml, aboutHtml, adsPolicyHtml].some((html) =>
     html.includes('김주영') || html.includes('kpa100plus@gmail.com')
   )
