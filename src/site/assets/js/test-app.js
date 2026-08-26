@@ -1,3 +1,4 @@
+import { shareOrCopy } from './share-service.js';
 import { calculateTestResult } from './test-engine.js';
 import { loadPublishedTests, loadTestBundle } from './content-repository.js';
 
@@ -180,20 +181,16 @@ async function shareResult(result, status) {
     text: result.shareText,
     url: shareUrl
   };
+  const outcome = await shareOrCopy(shareData);
+  if (outcome.method === 'shared') status.textContent = '결과를 공유했어요.';
+  if (outcome.method === 'copied') status.textContent = '결과와 링크를 복사했어요.';
+  if (outcome.method === 'cancelled') status.textContent = '공유를 취소했어요.';
+  if (outcome.method === 'manual') status.textContent = '공유 내용을 직접 복사해 주세요.';
 
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData);
-      status.textContent = '공유 완료';
-    } else {
-      await navigator.clipboard.writeText(shareUrl);
-      status.textContent = '결과 주소 복사됨';
-    }
+  if (outcome.ok) {
     const shareCountKey = 'daily-test-lab.share-count.v1';
     const shareCount = Number(safeStorage.get(shareCountKey, 0)) || 0;
     safeStorage.set(shareCountKey, shareCount + 1);
-  } catch (error) {
-    if (error?.name !== 'AbortError') status.textContent = '공유를 다시 시도해 주세요';
   }
 }
 
