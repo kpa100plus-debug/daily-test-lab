@@ -1,3 +1,4 @@
+import { shareOrCopy } from './share-service.js';
 import { getFirebaseServices } from './firebase-client.js';
 import { hasScheduledDailyContent, normalizeDailyContent, selectDailyContentItem } from './daily-content-engine.js';
 
@@ -103,18 +104,11 @@ async function shareDailyItem(item, statusTarget) {
     text: item.description,
     url: new URL(toSiteUrl(item.route), location.origin).href
   };
-
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData);
-      statusTarget.textContent = '공유 완료';
-      return;
-    }
-    await navigator.clipboard.writeText(shareData.url);
-    statusTarget.textContent = '주소 복사됨';
-  } catch (error) {
-    if (error?.name !== 'AbortError') statusTarget.textContent = '다시 시도';
-  }
+  const outcome = await shareOrCopy(shareData);
+  if (outcome.method === 'shared') statusTarget.textContent = '공유 완료';
+  if (outcome.method === 'copied') statusTarget.textContent = '내용·주소 복사됨';
+  if (outcome.method === 'cancelled') statusTarget.textContent = '공유 취소';
+  if (outcome.method === 'manual') statusTarget.textContent = '직접 복사';
 }
 
 function renderDailyFeature(item) {
