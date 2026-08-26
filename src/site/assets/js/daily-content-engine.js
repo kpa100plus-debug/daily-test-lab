@@ -24,6 +24,18 @@ export function isSafeDailyRoute(route) {
   return /^\/(test|vote|game)\/[a-z0-9]+(?:-[a-z0-9]+)*\/$/.test(String(route || ''));
 }
 
+export function hasScheduledDailyContent(data = {}, todayKey) {
+  const activeDate = String(data?.activeDate || '').trim();
+  const activeItemId = String(data?.activeItemId || '').trim();
+  const items = Array.isArray(data?.items) ? data.items : [];
+  return Boolean(
+    activeDate &&
+    activeDate === todayKey &&
+    activeItemId &&
+    items.some((item) => item.id === activeItemId)
+  );
+}
+
 export function selectDailyContentItem(data = {}, todayKey) {
   const items = Array.isArray(data?.items) ? data.items : [];
   if (!items.length) return null;

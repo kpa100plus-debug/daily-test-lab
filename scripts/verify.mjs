@@ -153,6 +153,7 @@ const {
 const dailyContentEnginePath = path.join(outputDirectory, 'assets/js/daily-content-engine.js');
 const {
   createDailyContentDocument,
+  hasScheduledDailyContent,
   isSafeDailyRoute,
   normalizeDailyContent,
   selectDailyContentItem
@@ -168,7 +169,9 @@ const datedDailyFixture = {
 };
 if (
   selectDailyContentItem(datedDailyFixture, '2026-08-26')?.id !== 'dated-feature' ||
-  selectDailyContentItem(datedDailyFixture, '2026-08-27')?.id !== 'rotation-fallback'
+  selectDailyContentItem(datedDailyFixture, '2026-08-27')?.id !== 'rotation-fallback' ||
+  !hasScheduledDailyContent(datedDailyFixture, '2026-08-26') ||
+  hasScheduledDailyContent(datedDailyFixture, '2026-08-27')
 ) {
   throw new Error('Date-scoped daily content selection failed.');
 }

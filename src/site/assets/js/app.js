@@ -1,5 +1,5 @@
 import { getFirebaseServices } from './firebase-client.js';
-import { normalizeDailyContent, selectDailyContentItem } from './daily-content-engine.js';
+import { hasScheduledDailyContent, normalizeDailyContent, selectDailyContentItem } from './daily-content-engine.js';
 
 const buildStep = 'REF-DAILYFUN-STEP7-ADMIN-DAILY-01';
 const appUrl = new URL(import.meta.url);
@@ -193,6 +193,7 @@ async function loadDailyContent() {
     const selectedItem = selectDailyContentItem(data, todayKey);
     renderDailyFeature(selectedItem);
     renderPopularItems(data.items, selectedItem);
+    if (hasScheduledDailyContent(data, todayKey)) return;
   } catch (error) {
     console.warn('오늘의 콘텐츠를 기본 화면으로 표시합니다.', error.message);
     return;
