@@ -1,5 +1,5 @@
 import { getFirebaseServices } from './firebase-client.js';
-import { normalizeDailyContent } from './daily-content-engine.js';
+import { normalizeDailyContent, selectDailyContentItem } from './daily-content-engine.js';
 
 const buildStep = 'REF-DAILYFUN-STEP7-ADMIN-DAILY-01';
 const appUrl = new URL(import.meta.url);
@@ -81,17 +81,6 @@ function incrementPlayCount() {
   const nextCount = (Number(safeStorage.get(key, 0)) || 0) + 1;
   safeStorage.set(key, nextCount);
   document.querySelector('#play-count')?.replaceChildren(String(nextCount));
-}
-
-function selectDailyItem(data) {
-  const items = Array.isArray(data?.items) ? data.items : [];
-  if (!items.length) return null;
-
-  const activeItem = items.find((item) => item.id === data.activeItemId);
-  if (activeItem) return activeItem;
-
-  const dayNumber = Math.floor(Date.parse(`${todayKey}T00:00:00+09:00`) / 86400000);
-  return items[Math.abs(dayNumber) % items.length];
 }
 
 function createMeta(text) {
@@ -201,7 +190,7 @@ async function loadDailyContent() {
     const response = await fetch(dailyContentUrl, { cache: 'no-store' });
     if (!response.ok) throw new Error(`daily content ${response.status}`);
     data = await response.json();
-    const selectedItem = selectDailyItem(data);
+    const selectedItem = selectDailyContentItem(data, todayKey);
     renderDailyFeature(selectedItem);
     renderPopularItems(data.items, selectedItem);
   } catch (error) {

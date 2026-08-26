@@ -24,6 +24,22 @@ export function isSafeDailyRoute(route) {
   return /^\/(test|vote|game)\/[a-z0-9]+(?:-[a-z0-9]+)*\/$/.test(String(route || ''));
 }
 
+export function selectDailyContentItem(data = {}, todayKey) {
+  const items = Array.isArray(data?.items) ? data.items : [];
+  if (!items.length) return null;
+
+  const activeDate = String(data?.activeDate || '').trim();
+  const activeItemId = String(data?.activeItemId || '').trim();
+  const activeItem = (!activeDate || activeDate === todayKey)
+    ? items.find((item) => item.id === activeItemId)
+    : null;
+  if (activeItem) return activeItem;
+
+  const dayNumber = Math.floor(Date.parse(`${todayKey}T00:00:00+09:00`) / 86400000);
+  if (!Number.isFinite(dayNumber)) return items[0];
+  return items[Math.abs(dayNumber) % items.length];
+}
+
 export function normalizeDailyContent(input = {}) {
   const accent = String(input.accent || 'violet').trim();
   if (!DAILY_CONTENT_ACCENTS.includes(accent)) {

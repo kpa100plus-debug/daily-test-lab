@@ -154,8 +154,24 @@ const dailyContentEnginePath = path.join(outputDirectory, 'assets/js/daily-conte
 const {
   createDailyContentDocument,
   isSafeDailyRoute,
-  normalizeDailyContent
+  normalizeDailyContent,
+  selectDailyContentItem
 } = await import(pathToFileURL(dailyContentEnginePath).href);
+
+const datedDailyFixture = {
+  activeDate: '2026-08-26',
+  activeItemId: 'dated-feature',
+  items: [
+    { id: 'dated-feature' },
+    { id: 'rotation-fallback' }
+  ]
+};
+if (
+  selectDailyContentItem(datedDailyFixture, '2026-08-26')?.id !== 'dated-feature' ||
+  selectDailyContentItem(datedDailyFixture, '2026-08-27')?.id !== 'rotation-fallback'
+) {
+  throw new Error('Date-scoped daily content selection failed.');
+}
 const contentAdminEnginePath = path.join(outputDirectory, 'assets/js/content-admin-engine.js');
 const {
   createBalanceDocument,
