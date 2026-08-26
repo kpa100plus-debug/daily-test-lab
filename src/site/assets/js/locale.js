@@ -137,6 +137,28 @@ const messages = {
   }
 };
 
+const visitorPeriodMessages = {
+  ko: { todayVisitors: '오늘 방문자', weekVisitors: '이번 주 방문자', monthVisitors: '이번 달 방문자', todayWindow: '오늘 기준', weekWindow: '최근 7일 기준', monthWindow: '최근 30일 기준', visitorStats: '방문 현황', contentStats: '콘텐츠 현황', statsNote: '방문자 수는 익명 추정치이며, 주·월 표시는 최근 7일·30일 기준입니다.' },
+  en: { todayVisitors: "Today's visitors", weekVisitors: "This week's visitors", monthVisitors: "This month's visitors", todayWindow: 'Today', weekWindow: 'Last 7 days', monthWindow: 'Last 30 days', visitorStats: 'Visitor activity', contentStats: 'Content totals', statsNote: 'Visitor counts are anonymous estimates; weekly and monthly figures cover the last 7 and 30 days.' },
+  ja: { todayVisitors: '今日の訪問者', weekVisitors: '今週の訪問者', monthVisitors: '今月の訪問者', todayWindow: '今日', weekWindow: '直近7日間', monthWindow: '直近30日間', visitorStats: '訪問状況', contentStats: 'コンテンツ数', statsNote: '訪問者数は匿名の推定値で、週・月は直近7日・30日を表示します。' },
+  'zh-CN': { todayVisitors: '今日访客', weekVisitors: '本周访客', monthVisitors: '本月访客', todayWindow: '今日', weekWindow: '最近7天', monthWindow: '最近30天', visitorStats: '访问情况', contentStats: '内容数量', statsNote: '访客数为匿名估算；周、月数据分别按最近7天和30天统计。' },
+  'zh-TW': { todayVisitors: '今日訪客', weekVisitors: '本週訪客', monthVisitors: '本月訪客', todayWindow: '今日', weekWindow: '最近7天', monthWindow: '最近30天', visitorStats: '造訪情況', contentStats: '內容數量', statsNote: '訪客數為匿名估算；週、月資料分別以最近7天和30天計算。' },
+  es: { todayVisitors: 'Visitantes de hoy', weekVisitors: 'Visitantes de la semana', monthVisitors: 'Visitantes del mes', todayWindow: 'Hoy', weekWindow: 'Últimos 7 días', monthWindow: 'Últimos 30 días', visitorStats: 'Visitas', contentStats: 'Contenido', statsNote: 'Las cifras son estimaciones anónimas; semana y mes cubren los últimos 7 y 30 días.' },
+  fr: { todayVisitors: "Visiteurs aujourd'hui", weekVisitors: 'Visiteurs de la semaine', monthVisitors: 'Visiteurs du mois', todayWindow: "Aujourd'hui", weekWindow: '7 derniers jours', monthWindow: '30 derniers jours', visitorStats: 'Visites', contentStats: 'Contenus', statsNote: 'Les chiffres sont des estimations anonymes ; semaine et mois couvrent les 7 et 30 derniers jours.' },
+  de: { todayVisitors: 'Besucher heute', weekVisitors: 'Besucher diese Woche', monthVisitors: 'Besucher diesen Monat', todayWindow: 'Heute', weekWindow: 'Letzte 7 Tage', monthWindow: 'Letzte 30 Tage', visitorStats: 'Besuche', contentStats: 'Inhalte', statsNote: 'Besucherzahlen sind anonyme Schätzwerte; Woche und Monat umfassen die letzten 7 bzw. 30 Tage.' },
+  pt: { todayVisitors: 'Visitantes de hoje', weekVisitors: 'Visitantes da semana', monthVisitors: 'Visitantes do mês', todayWindow: 'Hoje', weekWindow: 'Últimos 7 dias', monthWindow: 'Últimos 30 dias', visitorStats: 'Visitas', contentStats: 'Conteúdo', statsNote: 'Os números são estimativas anônimas; semana e mês cobrem os últimos 7 e 30 dias.' },
+  id: { todayVisitors: 'Pengunjung hari ini', weekVisitors: 'Pengunjung minggu ini', monthVisitors: 'Pengunjung bulan ini', todayWindow: 'Hari ini', weekWindow: '7 hari terakhir', monthWindow: '30 hari terakhir', visitorStats: 'Kunjungan', contentStats: 'Konten', statsNote: 'Jumlah pengunjung adalah perkiraan anonim; minggu dan bulan mencakup 7 dan 30 hari terakhir.' },
+  th: { todayVisitors: 'ผู้เข้าชมวันนี้', weekVisitors: 'ผู้เข้าชมสัปดาห์นี้', monthVisitors: 'ผู้เข้าชมเดือนนี้', todayWindow: 'วันนี้', weekWindow: '7 วันล่าสุด', monthWindow: '30 วันล่าสุด', visitorStats: 'การเข้าชม', contentStats: 'จำนวนคอนเทนต์', statsNote: 'จำนวนผู้เข้าชมเป็นค่าประมาณแบบไม่ระบุตัวตน โดยสัปดาห์และเดือนใช้ช่วง 7 และ 30 วันล่าสุด' },
+  vi: { todayVisitors: 'Khách hôm nay', weekVisitors: 'Khách tuần này', monthVisitors: 'Khách tháng này', todayWindow: 'Hôm nay', weekWindow: '7 ngày gần nhất', monthWindow: '30 ngày gần nhất', visitorStats: 'Lượt truy cập', contentStats: 'Nội dung', statsNote: 'Số khách là ước tính ẩn danh; tuần và tháng tính theo 7 và 30 ngày gần nhất.' },
+  hi: { todayVisitors: 'आज के विज़िटर', weekVisitors: 'इस सप्ताह के विज़िटर', monthVisitors: 'इस महीने के विज़िटर', todayWindow: 'आज', weekWindow: 'पिछले 7 दिन', monthWindow: 'पिछले 30 दिन', visitorStats: 'विज़िटर गतिविधि', contentStats: 'कंटेंट संख्या', statsNote: 'विज़िटर संख्या गुमनाम अनुमान है; सप्ताह और महीना पिछले 7 और 30 दिनों पर आधारित हैं।' },
+  ar: { todayVisitors: 'زوار اليوم', weekVisitors: 'زوار هذا الأسبوع', monthVisitors: 'زوار هذا الشهر', todayWindow: 'اليوم', weekWindow: 'آخر 7 أيام', monthWindow: 'آخر 30 يومًا', visitorStats: 'حركة الزيارات', contentStats: 'عدد المحتويات', statsNote: 'أعداد الزوار تقديرات مجهولة الهوية، والأسبوع والشهر يغطيان آخر 7 و30 يومًا.' },
+  ru: { todayVisitors: 'Посетители сегодня', weekVisitors: 'Посетители за неделю', monthVisitors: 'Посетители за месяц', todayWindow: 'Сегодня', weekWindow: 'Последние 7 дней', monthWindow: 'Последние 30 дней', visitorStats: 'Посещения', contentStats: 'Контент', statsNote: 'Число посетителей — анонимная оценка; неделя и месяц охватывают последние 7 и 30 дней.' }
+};
+
+for (const locale of supportedLocales) {
+  Object.assign(messages[locale], visitorPeriodMessages[locale]);
+}
+
 const countryLocales = {
   KR: 'ko', JP: 'ja', CN: 'zh-CN', TW: 'zh-TW', HK: 'zh-TW', MO: 'zh-TW',
   ES: 'es', MX: 'es', AR: 'es', CO: 'es', CL: 'es', PE: 'es', VE: 'es', EC: 'es', UY: 'es', PY: 'es', BO: 'es', CR: 'es', PA: 'es', DO: 'es', GT: 'es', HN: 'es', SV: 'es', NI: 'es', CU: 'es',
