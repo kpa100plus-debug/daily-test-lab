@@ -156,6 +156,14 @@ function injectAdPlacements(html) {
   );
 }
 
+function injectGlobalEnhancements(html) {
+  if (html.includes('/assets/js/locale.js')) return html;
+  return html.replace(
+    '</body>',
+    '    <script type="module" src="/assets/js/locale.js?v=i18n-1"></script>\n  </body>'
+  );
+}
+
 function createSeoHead({ route, title, description, indexable = true, integrations = indexable, schemas = [] }) {
   const canonicalUrl = toPublicUrl(route);
   const robots = indexable
@@ -706,7 +714,7 @@ for (const entry of htmlEntries) {
   if (!entry.isFile() || !entry.name.endsWith('.html')) continue;
   const htmlPath = path.join(entry.parentPath, entry.name);
   const html = await readFile(htmlPath, 'utf8');
-  const securedHtml = ensureSecurityMeta(injectAdPlacements(html));
+  const securedHtml = ensureSecurityMeta(injectGlobalEnhancements(injectAdPlacements(html)));
   if (securedHtml !== html) await writeFile(htmlPath, securedHtml, 'utf8');
 }
 
