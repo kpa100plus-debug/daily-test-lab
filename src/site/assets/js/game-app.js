@@ -1,3 +1,4 @@
+import { shareOrCopy } from './share-service.js';
 import {
   createNumberBoard,
   createReactionDelay,
@@ -108,18 +109,11 @@ async function shareResult(score, status) {
     text: `${game.shareText} 내 기록은 ${formatGameScore(game.slug, score)}!`,
     url: shareUrl
   };
-
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData);
-      status.textContent = '친구에게 공유했어요.';
-    } else {
-      await navigator.clipboard.writeText(shareUrl);
-      status.textContent = '게임 주소를 복사했어요.';
-    }
-  } catch (error) {
-    if (error?.name !== 'AbortError') status.textContent = '공유를 다시 시도해 주세요.';
-  }
+  const outcome = await shareOrCopy(shareData);
+  if (outcome.method === 'shared') status.textContent = '친구에게 공유했어요.';
+  if (outcome.method === 'copied') status.textContent = '기록과 링크를 복사했어요. 원하는 곳에 붙여넣으세요.';
+  if (outcome.method === 'cancelled') status.textContent = '공유를 취소했어요.';
+  if (outcome.method === 'manual') status.textContent = '공유 내용을 직접 복사해 주세요.';
 }
 
 function renderIntro() {
