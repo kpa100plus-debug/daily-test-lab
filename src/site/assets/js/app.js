@@ -287,25 +287,52 @@ async function updateServiceStats() {
   }
 }
 
-async function updateTodayVisitorCount() {
-  const target = document.querySelector('#global-visitor-count');
-  if (!target || !/^(dtlabkr\.dpdns\.org|kpa100plus-debug\.github\.io)$/.test(location.hostname)) return;
+const visitorCounterBaseUrl = 'https://counterapi.com/api/dtlabkr.dpdns.org/view/home';
 
-  try {
-    const response = await fetch(
-      'https://counterapi.com/api/dtlabkr.dpdns.org/view/home?timeline=1d&unique=true',
-      { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' }
-    );
-    if (!response.ok) throw new Error(`visitor counter ${response.status}`);
-    const data = await response.json();
-    const value = Math.max(0, Number(data.value) || 0);
-    target.dataset.rawValue = String(value);
-    target.replaceChildren(formatStatNumber(value));
-    target.closest('.global-stat-card')?.setAttribute('data-counter-status', 'ready');
-  } catch (error) {
-    target.replaceChildren('—');
-    target.closest('.global-stat-card')?.setAttribute('data-counter-status', 'delayed');
-    console.warn('익명 방문 수 집계 지연:', error.message);
+async function fetchVisitorCount(timeline, readOnly = false) {
+  const parameters = new URLSearchParams({ timeline, unique: 'true' });
+  if (readOnly) parameters.set('readOnly', 'true');
+  const response = await fetch(
+    `${visitorCounterBaseUrl}?${parameters.toString()}`,
+    { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' }
+  );
+  if (!response.ok) throw new Error(`visitor counter ${response.status}`);
+  const data = await response.json();
+  return Math.max(0, Number(data.value) || 0);
+}
+
+function renderVisitorCount(targetId, result) {
+  const target = document.querySelector(`#${targetId}`);
+  if (!target) return;
+  const card = target.closest('.global-stat-card');
+  if (result.status === 'fulfilled') {
+    target.dataset.rawValue = String(result.value);
+    target.replaceChildren(formatStatNumber(result.value));
+    card?.setAttribute('data-counter-status', 'ready');
+    return;
+  }
+  target.replaceChildren('—');
+  card?.setAttribute('data-counter-status', 'delayed');
+}
+
+async function updateVisitorCounts() {
+  const allowedHost = /^(dtlabkr\.dpdns\.org|kpa100plus-debug\.github\.io)$/.test(location.hostname);
+  if (!allowedHost || !document.querySelector('#global-visitor-count')) return;
+
+  const todayResult = await Promise.allSettled([fetchVisitorCount('1d')]);
+  renderVisitorCount('global-visitor-count', todayResult[0]);
+
+  const [weekResult, monthResult] = await Promise.allSettled([
+    fetchVisitorCount('7d', true),
+    fetchVisitorCount('30d', true)
+  ]);
+  renderVisitorCount('weekly-visitor-count', weekResult);
+  renderVisitorCount('monthly-visitor-count', monthResult);
+
+  for (const result of [todayResult[0], weekResult, monthResult]) {
+    if (result.status === 'rejected') {
+      console.warn('익명 방문 수 집계 지연:', result.reason?.message || result.reason);
+    }
   }
 }
 
@@ -321,4 +348,4 @@ setupQuiz();
 setupPlayTracking();
 loadDailyContent();
 updateServiceStats();
-updateTodayVisitorCount();
+updateVisitorCounts();
