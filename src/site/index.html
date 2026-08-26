@@ -38,15 +38,41 @@
 
       <section class="global-stats" aria-labelledby="global-stats-title">
         <div class="global-stats-copy">
-          <p class="section-kicker">LIVE SERVICE</p>
-          <h2 id="global-stats-title" data-i18n="statsHeading">숫자로 보는 DAILY TEST LAB</h2>
-          <p data-i18n="statsNote">방문 수는 익명 추정치이며 콘텐츠 수는 공개 데이터를 기준으로 자동 갱신됩니다.</p>
+          <div>
+            <p class="section-kicker">LIVE SERVICE</p>
+            <h2 id="global-stats-title" data-i18n="statsHeading">숫자로 보는 DAILY TEST LAB</h2>
+          </div>
+          <p data-i18n="statsNote">방문자 수는 익명 추정치이며, 주·월 표시는 최근 7일·30일 기준입니다.</p>
         </div>
-        <div class="global-stats-grid">
-          <div class="global-stat-card global-stat-live"><strong id="global-visitor-count" aria-live="polite">—</strong><span data-i18n="todayVisitors">오늘 방문</span></div>
-          <div class="global-stat-card"><strong id="published-test-count">16</strong><span data-i18n="publicTests">공개 테스트</span></div>
-          <div class="global-stat-card"><strong id="balance-question-count">50</strong><span data-i18n="balanceQuestions">밸런스 질문</span></div>
-          <div class="global-stat-card"><strong id="mini-game-count">3</strong><span data-i18n="miniGames">미니게임</span></div>
+
+        <div class="stats-group" aria-labelledby="visitor-stats-title">
+          <h3 id="visitor-stats-title" data-i18n="visitorStats">방문 현황</h3>
+          <div class="visitor-stats-grid">
+            <div class="global-stat-card visitor-stat-card visitor-stat-today">
+              <strong id="global-visitor-count" aria-live="polite">—</strong>
+              <span data-i18n="todayVisitors">오늘 방문자</span>
+              <small data-i18n="todayWindow">오늘 기준</small>
+            </div>
+            <div class="global-stat-card visitor-stat-card visitor-stat-week">
+              <strong id="weekly-visitor-count" aria-live="polite">—</strong>
+              <span data-i18n="weekVisitors">이번 주 방문자</span>
+              <small data-i18n="weekWindow">최근 7일 기준</small>
+            </div>
+            <div class="global-stat-card visitor-stat-card visitor-stat-month">
+              <strong id="monthly-visitor-count" aria-live="polite">—</strong>
+              <span data-i18n="monthVisitors">이번 달 방문자</span>
+              <small data-i18n="monthWindow">최근 30일 기준</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-group content-stats-group" aria-labelledby="content-stats-title">
+          <h3 id="content-stats-title" data-i18n="contentStats">콘텐츠 현황</h3>
+          <div class="content-stats-grid">
+            <div class="global-stat-card content-stat-card"><strong id="published-test-count">16</strong><span data-i18n="publicTests">공개 테스트</span></div>
+            <div class="global-stat-card content-stat-card"><strong id="balance-question-count">50</strong><span data-i18n="balanceQuestions">밸런스 질문</span></div>
+            <div class="global-stat-card content-stat-card"><strong id="mini-game-count">3</strong><span data-i18n="miniGames">미니게임</span></div>
+          </div>
         </div>
       </section>
 
