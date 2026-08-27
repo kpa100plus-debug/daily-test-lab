@@ -1,4 +1,5 @@
 name: Cloudflare read-only asset audit
+# Automated verification: REF-ISEA-CODEX-CHATGPTWEB-HANDOFF-20260827-01
 
 on:
   workflow_dispatch:
