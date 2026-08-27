@@ -174,6 +174,18 @@ const expectedQuizTranslations = {
   ar: 'أي جزء من الدماغ يؤدي دورًا مهمًا في تكوين الذكريات؟',
   ru: 'Какая часть мозга играет важную роль в формировании воспоминаний?'
 };
+const expectedEnglishUiTranslations = {
+  '문의': 'Contact',
+  '소개': 'About',
+  '이용약관': 'Terms of Use',
+  '개인정보처리방침': 'Privacy Policy',
+  '광고 안내': 'Advertising',
+  '반응속도 테스트': 'Reaction Speed Test',
+  '기록 공유': 'Share score',
+  '누적 도전': 'Total attempts',
+  '다시 도전': 'Try again',
+  '이제 몸이 풀렸어요': 'You’re warmed up'
+};
 const collectStrings = (value, output = []) => {
   if (typeof value === 'string') output.push(value);
   else if (Array.isArray(value)) value.forEach((item) => collectStrings(item, output));
@@ -221,6 +233,14 @@ for (const locale of foreignLocales) {
     ))
   ) {
     throw new Error(`Critical or dynamic translation failed: ${locale}`);
+  }
+  if (
+    locale === 'en' &&
+    Object.entries(expectedEnglishUiTranslations).some(([source, expected]) => (
+      payload.translations[source] !== expected
+    ))
+  ) {
+    throw new Error('Curated English UI translations regressed.');
   }
 }
 if (
