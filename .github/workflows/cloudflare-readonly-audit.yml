@@ -2,6 +2,10 @@ name: Cloudflare read-only asset audit
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cloudflare-readonly-audit.yml'
 
 permissions:
   contents: read
