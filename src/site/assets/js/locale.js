@@ -360,7 +360,7 @@ export const getCurrentLocale = () => normalizeLocale(
 async function loadPhraseDictionary(locale) {
   if (locale === 'ko') return {};
   if (!phraseDictionaryCache.has(locale)) {
-    const dictionaryUrl = new URL(`../../data/locales/${locale}.json?v=20260827-1`, import.meta.url);
+    const dictionaryUrl = new URL(`../../data/locales/${locale}.json?v=20260827-2`, import.meta.url);
     phraseDictionaryCache.set(locale, fetch(dictionaryUrl, { cache: 'force-cache' })
       .then(async (response) => {
         if (!response.ok) throw new Error(`locale ${locale} ${response.status}`);
