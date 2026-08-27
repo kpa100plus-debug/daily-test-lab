@@ -1,4 +1,5 @@
 name: Cloudflare read-only asset audit
+# Automated verification: REF-ISEA-CODEX-CHATGPTWEB-HANDOFF-20260827-01
 
 on:
   workflow_dispatch:
@@ -121,14 +122,16 @@ jobs:
               try {
                 return await paged(path, perPage);
               } catch (error) {
-                unavailable.push(`${label}: ${error.message}`);
+                unavailable.push(`${label}: ${String(error.message).replace(/[a-f0-9]{32}/gi, '[account-id]')}`);
                 return [];
               }
             }
 
-            const pages = await optionalPaged('Cloudflare Pages', `/accounts/${accountId}/pages/projects`);
-            const workers = await optionalPaged('Workers 스크립트', `/accounts/${accountId}/workers/scripts`);
-            const zones = await optionalPaged('DNS 영역(도메인)', `/zones?account.id=${encodeURIComponent(accountId)}`, 50);
+            const zones = await optionalPaged('DNS 영역(도메인)', '/zones', 50);
+            const discoveredAccountId = zones.find((zone) => zone?.account?.id)?.account?.id;
+            const resolvedAccountId = discoveredAccountId || accountId;
+            const pages = await optionalPaged('Cloudflare Pages', `/accounts/${resolvedAccountId}/pages/projects`, 25);
+            const workers = await optionalPaged('Workers 스크립트', `/accounts/${resolvedAccountId}/workers/scripts`);
 
             const dnsRecords = [];
             for (const zone of zones) {
@@ -158,6 +161,11 @@ jobs:
               `- DNS 레코드: ${dnsRecords.length}`,
               ''
             ];
+
+            for (const entry of pageMatches) console.log(`Candidate Page: ${safe(entry.name)} | ${safe(entry.subdomain || (entry.domains || []).join(', '))} | ${safe(entry.source?.config?.owner || '')}/${safe(entry.source?.config?.repo_name || '')} | ${safe(entry.latest_deployment?.modified_on || entry.modified_on || '')}`);
+            for (const entry of workerMatches) console.log(`Candidate Worker: ${safe(entry.id || entry.name)} | ${safe(entry.modified_on || entry.created_on || '')}`);
+            for (const entry of zoneMatches) console.log(`Candidate Zone: ${safe(entry.name)} | ${safe(entry.status)}`);
+            for (const entry of dnsMatches) console.log(`Candidate DNS: ${safe(entry.type)} | ${safe(entry.name)} | ${safe(entry.content)} | ${safe(entry.zoneName)}`);
 
             if (unavailable.length > 0) {
               lines.push('## 확인 불가 항목', '');
@@ -196,7 +204,10 @@ jobs:
             fs.appendFileSync(summaryPath, lines.join('\n') + '\n', 'utf8');
             console.log(`Audit complete. Pages=${pages.length}, Workers=${workers.length}, Zones=${zones.length}, DNS=${dnsRecords.length}`);
             console.log(`Candidate matches. Pages=${pageMatches.length}, Workers=${workerMatches.length}, Zones=${zoneMatches.length}, DNS=${dnsMatches.length}`);
-            if (unavailable.length > 0) console.log(`Unavailable endpoints=${unavailable.length}`);
+            if (unavailable.length > 0) {
+              console.log(`Unavailable endpoints=${unavailable.length}`);
+              for (const item of unavailable) console.log(`Unavailable: ${safe(item)}`);
+            }
           }
 
           main().catch((error) => {
