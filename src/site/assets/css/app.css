@@ -265,6 +265,49 @@ h1 span { color: #ffdc76; }
 .quick-me .quick-icon { background: #eaf0ff; }
 .quick-card strong { margin-top: 17px; font-size: 1.02rem; letter-spacing: -0.025em; }
 .quick-card small { margin-top: 6px; color: var(--muted); font-size: 0.78rem; line-height: 1.35; }
+.quick-fortune { background: linear-gradient(145deg, #f7f0ff, #fff); }
+.quick-tarot { background: linear-gradient(145deg, #eee7ff, #fff); }
+
+.daily-reading-page { background: #f6f3ff; }
+.reading-hero { margin: 22px 0; padding: clamp(28px, 6vw, 62px); border-radius: 34px; color: #fff; box-shadow: var(--shadow); }
+.fortune-hero { background: radial-gradient(circle at 84% 20%, rgba(255,255,255,.25), transparent 25%), linear-gradient(135deg, #6d4aff, #9c66d7); }
+.tarot-hero { background: radial-gradient(circle at 80% 20%, rgba(255,219,130,.22), transparent 28%), linear-gradient(135deg, #271447, #6743a5); }
+.reading-hero h1 { margin: 8px 0 12px; font-size: clamp(2rem, 6vw, 4.2rem); letter-spacing: -.055em; }
+.reading-hero p:last-child { max-width: 650px; margin: 0; line-height: 1.7; color: rgba(255,255,255,.86); }
+.reading-card { padding: clamp(22px, 5vw, 48px); border-radius: 30px; background: #fff; box-shadow: var(--shadow); }
+.reading-card > h2 { margin: 0 0 22px; font-size: clamp(1.35rem, 4vw, 2rem); }
+.zodiac-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.zodiac-grid button { min-height: 98px; border: 1px solid #e7e0f3; border-radius: 20px; background: #faf8ff; color: var(--text); cursor: pointer; }
+.zodiac-grid button span, .zodiac-grid button strong { display: block; }
+.zodiac-grid button span { font-size: 2rem; margin-bottom: 7px; }
+.reading-result { scroll-margin-top: 24px; margin-top: 28px; padding: clamp(22px, 5vw, 42px); border: 1px solid #e5dcf4; border-radius: 26px; background: linear-gradient(160deg, #fbf9ff, #f3efff); }
+.reading-date { color: var(--muted); font-weight: 800; }
+.reading-result h2 strong { color: var(--primary); }
+.reading-sections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 22px 0; }
+.reading-sections article { padding: 18px; border-radius: 18px; background: #fff; }
+.reading-sections article span { font-weight: 900; }
+.reading-sections article p { color: var(--muted); line-height: 1.65; }
+.lucky-row { display: flex; gap: 10px; margin-bottom: 22px; }
+.lucky-row span { padding: 10px 14px; border-radius: 999px; background: #fff; }
+.reading-disclaimer { margin: 18px 0 0; color: var(--muted); font-size: .86rem; }
+.reading-next-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.reading-next-grid a { padding: 22px; border-radius: 20px; background: #fff; color: var(--text); font-weight: 900; text-decoration: none; box-shadow: var(--shadow); }
+.tarot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 3vw, 24px); max-width: 720px; margin: 0 auto; }
+.tarot-card-back { aspect-ratio: 2 / 3; border: 2px solid #c7ae70; border-radius: 22px; background: linear-gradient(145deg, #29174d, #6943a0); color: #ffe6a3; cursor: pointer; box-shadow: 0 16px 30px rgba(42,22,77,.2); }
+.tarot-card-back span, .tarot-card-back strong, .tarot-card-back small { display: block; }
+.tarot-card-back span { font-size: 2.2rem; }.tarot-card-back strong { margin: 14px 0; font-size: 1.7rem; }.tarot-card-back small { color: #e6d8ff; }
+.tarot-card-back.selected { outline: 5px solid rgba(109,74,255,.25); transform: translateY(-6px); }
+.tarot-reveal { text-align: center; }.tarot-reveal > span { font-size: 4.5rem; }.tarot-reveal h2 { margin: 5px 0; font-size: 2.1rem; }.tarot-reveal p { color: var(--primary); font-weight: 900; }
+.tarot-message { max-width: 680px; margin: 20px auto; text-align: center; font-size: 1.12rem; line-height: 1.8; }
+
+@media (max-width: 720px) {
+  .zodiac-grid { grid-template-columns: repeat(3, 1fr); }
+  .reading-sections { grid-template-columns: 1fr; }
+  .reading-next-grid { grid-template-columns: 1fr; }
+  .tarot-grid { gap: 8px; }
+  .tarot-card-back { border-radius: 16px; }
+  .tarot-card-back small { font-size: .7rem; }
+}
 
 .text-link { color: var(--primary); font-size: 0.88rem; font-weight: 850; text-decoration: none; white-space: nowrap; }
 .popular-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
@@ -1929,3 +1972,4 @@ html[dir='rtl'] .global-stats-copy > p { text-align: left; }
   .content-stat-card strong { font-size: 1.55rem; }
   .content-stat-card span { font-size: 0.67rem; }
 }
+
