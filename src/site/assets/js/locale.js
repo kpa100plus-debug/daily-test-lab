@@ -1,4 +1,4 @@
-const supportedLocales = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr', 'de', 'pt', 'id', 'th', 'vi', 'hi', 'ar', 'ru'];
+export const supportedLocales = ['ko', 'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr', 'de', 'pt', 'id', 'th', 'vi', 'hi', 'ar', 'ru'];
 
 const localeNames = {
   ko: '한국어', en: 'English', ja: '日本語', 'zh-CN': '简体中文', 'zh-TW': '繁體中文',
@@ -175,13 +175,295 @@ const normalizeLocale = (value = '') => {
   return supportedLocales.includes(short) ? short : 'en';
 };
 
-const getMessage = (locale, key) => messages[locale]?.[key] ?? en[key] ?? key;
+export const getMessage = (locale, key) => messages[locale]?.[key] ?? en[key] ?? key;
 
-function applyTranslations(locale) {
-  document.documentElement.lang = locale;
-  document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
-  document.documentElement.dataset.locale = locale;
+const phraseDictionaryCache = new Map([['ko', Promise.resolve({})]]);
+const originalTextValues = new WeakMap();
+const originalAttributeValues = new WeakMap();
+const browserDocument = typeof document === 'undefined' ? null : document;
+const originalDocumentTitle = browserDocument?.title || '';
+const originalDocumentDescription = browserDocument?.querySelector('meta[name="description"]')?.content || '';
+let localeRequestId = 0;
 
+const criticalPhraseOverrides = {
+  en: {
+    '내 반응속도는 상위 몇 %?': 'What percentile is my reaction speed?',
+    '화면이 바뀌는 순간 얼마나 빠르게 누를 수 있을까요?': 'How quickly can you tap when the screen changes?',
+    '기록 도전': 'Challenge the record',
+    '방문 기록은 이 브라우저에, 미니게임 최고 기록은 Firebase에 저장됩니다. Google 로그인하면 다른 기기에서도 이어볼 수 있어요.': 'Visit history is stored in this browser, while your best mini-game scores are stored in Firebase. Sign in with Google to continue on other devices.',
+    '내 결과를 계속 모아보세요': 'Keep all your results',
+    'Google 로그인으로 미니게임 최고 기록을 어느 기기에서나 이어보세요.': 'Sign in with Google to continue your best mini-game scores on any device.',
+    '내 기록 열기': 'Open my records', '연속 방문': 'Visit streak', '플레이': 'Plays', '누적 방문일': 'Total visit days', '오늘의 1문제': "Today's question",
+    '나를 알아보는 2분': 'Discover yourself in 2 minutes', '둘 중 하나만 고르기': 'Pick one of two', '짧고 강한 기록 도전': 'Quick, intense record challenges', '하루 한 문제': 'One question a day', '방문과 플레이 기록': 'Visits and play history',
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': 'Which part of the brain plays an important role in forming memories?',
+    'A. 소뇌': 'A. Cerebellum', 'B. 해마': 'B. Hippocampus', 'C. 연수': 'C. Medulla oblongata',
+    '정답이에요! 해마는 새로운 기억의 형성과 학습에 중요한 역할을 해요.': 'Correct! The hippocampus plays an important role in forming new memories and learning.',
+    '아쉬워요. 정답은 B. 해마예요. 새로운 기억을 만드는 데 중요한 역할을 합니다.': 'Not quite. The answer is B. Hippocampus, which plays an important role in forming new memories.'
+  },
+  ja: {
+    '내 반응속도는 상위 몇 %?': '私の反応速度は上位何％？',
+    '화면이 바뀌는 순간 얼마나 빠르게 누를 수 있을까요?': '画面が変わった瞬間、どれくらい速く押せるでしょうか？',
+    '기록 도전': '記録に挑戦',
+    '방문 기록은 이 브라우저에, 미니게임 최고 기록은 Firebase에 저장됩니다. Google 로그인하면 다른 기기에서도 이어볼 수 있어요.': '訪問履歴はこのブラウザに、ミニゲームの最高記録はFirebaseに保存されます。Googleでログインすると他の端末でも続けられます。',
+    '내 결과를 계속 모아보세요': '結果をまとめて残しましょう',
+    'Google 로그인으로 미니게임 최고 기록을 어느 기기에서나 이어보세요.': 'Googleでログインすると、どの端末でもミニゲームの最高記録を引き継げます。',
+    '내 기록 열기': '自分の記録を開く', '연속 방문': '連続訪問', '플레이': 'プレイ', '누적 방문일': '累計訪問日数', '오늘의 1문제': '今日の1問',
+    '나를 알아보는 2분': '自分を知る2分', '둘 중 하나만 고르기': '2つから1つを選ぶ', '짧고 강한 기록 도전': '短時間の記録チャレンジ', '하루 한 문제': '1日1問', '방문과 플레이 기록': '訪問・プレイ記録',
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': '記憶の形成に重要な役割を果たす脳の部位は？',
+    'A. 소뇌': 'A. 小脳', 'B. 해마': 'B. 海馬', 'C. 연수': 'C. 延髄',
+    '정답이에요! 해마는 새로운 기억의 형성과 학습에 중요한 역할을 해요.': '正解です！海馬は新しい記憶の形成と学習に重要な役割を果たします。',
+    '아쉬워요. 정답은 B. 해마예요. 새로운 기억을 만드는 데 중요한 역할을 합니다.': '惜しい！正解はBの海馬です。新しい記憶の形成に重要な役割を果たします。'
+  },
+  'zh-CN': {
+    '내 반응속도는 상위 몇 %?': '我的反应速度排在前百分之几？',
+    '화면이 바뀌는 순간 얼마나 빠르게 누를 수 있을까요?': '画面变化时，你能多快点击？',
+    '기록 도전': '挑战纪录',
+    '방문 기록은 이 브라우저에, 미니게임 최고 기록은 Firebase에 저장됩니다. Google 로그인하면 다른 기기에서도 이어볼 수 있어요.': '访问记录保存在此浏览器中，小游戏最高纪录保存在Firebase中。登录Google后可在其他设备上继续。',
+    '내 결과를 계속 모아보세요': '继续收集我的结果',
+    'Google 로그인으로 미니게임 최고 기록을 어느 기기에서나 이어보세요.': '登录Google后，可在任何设备上继续查看小游戏最高纪录。',
+    '내 기록 열기': '打开我的记录', '연속 방문': '连续访问', '플레이': '游玩次数', '누적 방문일': '累计访问天数', '오늘의 1문제': '今日一题',
+    '나를 알아보는 2분': '2分钟了解自己', '둘 중 하나만 고르기': '二选一', '짧고 강한 기록 도전': '短时高强度纪录挑战', '하루 한 문제': '每日一题', '방문과 플레이 기록': '访问和游玩记录',
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': '在记忆形成中起重要作用的大脑部位是？',
+    'A. 소뇌': 'A. 小脑', 'B. 해마': 'B. 海马', 'C. 연수': 'C. 延髓',
+    '정답이에요! 해마는 새로운 기억의 형성과 학습에 중요한 역할을 해요.': '答对了！海马在形成新记忆和学习中起着重要作用。',
+    '아쉬워요. 정답은 B. 해마예요. 새로운 기억을 만드는 데 중요한 역할을 합니다.': '很遗憾，正确答案是B. 海马。它在形成新记忆中起着重要作用。'
+  },
+  'zh-TW': {
+    '내 반응속도는 상위 몇 %?': '我的反應速度排在前百分之幾？',
+    '화면이 바뀌는 순간 얼마나 빠르게 누를 수 있을까요?': '畫面變化時，你能多快點擊？',
+    '기록 도전': '挑戰紀錄',
+    '방문 기록은 이 브라우저에, 미니게임 최고 기록은 Firebase에 저장됩니다. Google 로그인하면 다른 기기에서도 이어볼 수 있어요.': '造訪紀錄儲存在此瀏覽器中，小遊戲最高紀錄儲存在Firebase中。登入Google後可在其他裝置上繼續。',
+    '내 결과를 계속 모아보세요': '繼續收集我的結果',
+    'Google 로그인으로 미니게임 최고 기록을 어느 기기에서나 이어보세요.': '登入Google後，可在任何裝置上繼續查看小遊戲最高紀錄。',
+    '내 기록 열기': '開啟我的紀錄', '연속 방문': '連續造訪', '플레이': '遊玩次數', '누적 방문일': '累計造訪天數', '오늘의 1문제': '今日一題',
+    '나를 알아보는 2분': '2分鐘瞭解自己', '둘 중 하나만 고르기': '二選一', '짧고 강한 기록 도전': '短時高強度紀錄挑戰', '하루 한 문제': '每日一題', '방문과 플레이 기록': '造訪和遊玩紀錄',
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': '在記憶形成中扮演重要角色的大腦部位是？',
+    'A. 소뇌': 'A. 小腦', 'B. 해마': 'B. 海馬', 'C. 연수': 'C. 延髓',
+    '정답이에요! 해마는 새로운 기억의 형성과 학습에 중요한 역할을 해요.': '答對了！海馬在形成新記憶和學習中扮演重要角色。',
+    '아쉬워요. 정답은 B. 해마예요. 새로운 기억을 만드는 데 중요한 역할을 합니다.': '很可惜，正確答案是B. 海馬。它在形成新記憶中扮演重要角色。'
+  },
+  es: {
+    '내 반응속도는 상위 몇 %?': '¿En qué percentil está mi velocidad de reacción?',
+    '화면이 바뀌는 순간 얼마나 빠르게 누를 수 있을까요?': '¿Qué tan rápido puedes pulsar cuando cambia la pantalla?',
+    '기록 도전': 'Desafiar el récord',
+    '방문 기록은 이 브라우저에, 미니게임 최고 기록은 Firebase에 저장됩니다. Google 로그인하면 다른 기기에서도 이어볼 수 있어요.': 'El historial de visitas se guarda en este navegador y los mejores resultados de los minijuegos en Firebase. Inicia sesión con Google para continuar en otros dispositivos.',
+    '내 결과를 계속 모아보세요': 'Guarda todos tus resultados',
+    'Google 로그인으로 미니게임 최고 기록을 어느 기기에서나 이어보세요.': 'Inicia sesión con Google para continuar tus mejores resultados en cualquier dispositivo.',
+    '내 기록 열기': 'Abrir mis registros', '연속 방문': 'Racha de visitas', '플레이': 'Partidas', '누적 방문일': 'Días de visita acumulados', '오늘의 1문제': 'Pregunta del día',
+    '나를 알아보는 2분': 'Descúbrete en 2 minutos', '둘 중 하나만 고르기': 'Elige una de dos', '짧고 강한 기록 도전': 'Retos rápidos e intensos', '하루 한 문제': 'Una pregunta al día', '방문과 플레이 기록': 'Historial de visitas y partidas',
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': '¿Qué parte del cerebro desempeña un papel importante en la formación de recuerdos?',
+    'A. 소뇌': 'A. Cerebelo', 'B. 해마': 'B. Hipocampo', 'C. 연수': 'C. Bulbo raquídeo',
+    '정답이에요! 해마는 새로운 기억의 형성과 학습에 중요한 역할을 해요.': '¡Correcto! El hipocampo desempeña un papel importante en la formación de nuevos recuerdos y el aprendizaje.',
+    '아쉬워요. 정답은 B. 해마예요. 새로운 기억을 만드는 데 중요한 역할을 합니다.': 'Casi. La respuesta es B. Hipocampo, que desempeña un papel importante en la formación de nuevos recuerdos.'
+  },
+  fr: {
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': 'Quelle partie du cerveau joue un rôle important dans la formation des souvenirs ?',
+    'A. 소뇌': 'A. Cervelet', 'B. 해마': 'B. Hippocampe', 'C. 연수': 'C. Bulbe rachidien'
+  },
+  de: {
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': 'Welcher Teil des Gehirns spielt eine wichtige Rolle bei der Bildung von Erinnerungen?',
+    'A. 소뇌': 'A. Kleinhirn', 'B. 해마': 'B. Hippocampus', 'C. 연수': 'C. Verlängertes Mark'
+  },
+  pt: {
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': 'Qual parte do cérebro desempenha um papel importante na formação de memórias?',
+    'A. 소뇌': 'A. Cerebelo', 'B. 해마': 'B. Hipocampo', 'C. 연수': 'C. Bulbo raquidiano'
+  },
+  id: {
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': 'Bagian otak mana yang berperan penting dalam pembentukan ingatan?',
+    'A. 소뇌': 'A. Otak kecil', 'B. 해마': 'B. Hipokampus', 'C. 연수': 'C. Medula oblongata'
+  },
+  th: {
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': 'สมองส่วนใดมีบทบาทสำคัญในการสร้างความทรงจำ?',
+    'A. 소뇌': 'A. สมองน้อย', 'B. 해마': 'B. ฮิปโปแคมปัส', 'C. 연수': 'C. เมดัลลาออบลองกาตา'
+  },
+  vi: {
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': 'Phần nào của não đóng vai trò quan trọng trong việc hình thành ký ức?',
+    'A. 소뇌': 'A. Tiểu não', 'B. 해마': 'B. Hồi hải mã', 'C. 연수': 'C. Hành não'
+  },
+  hi: {
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': 'स्मृतियों के निर्माण में मस्तिष्क का कौन-सा भाग महत्वपूर्ण भूमिका निभाता है?',
+    'A. 소뇌': 'A. अनुमस्तिष्क', 'B. 해마': 'B. हिप्पोकैम्पस', 'C. 연수': 'C. मेडुला ऑब्लोंगाटा'
+  },
+  ar: {
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': 'أي جزء من الدماغ يؤدي دورًا مهمًا في تكوين الذكريات؟',
+    'A. 소뇌': 'A. المخيخ', 'B. 해마': 'B. الحُصين', 'C. 연수': 'C. النخاع المستطيل'
+  },
+  ru: {
+    '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?': 'Какая часть мозга играет важную роль в формировании воспоминаний?',
+    'A. 소뇌': 'A. Мозжечок', 'B. 해마': 'B. Гиппокамп', 'C. 연수': 'C. Продолговатый мозг'
+  }
+};
+
+const dynamicUnitLabels = {
+  en: { tests: ' tests', questions: ' questions', attempts: ' attempts', times: ' times', stages: ' levels', seconds: ' sec', participants: ' participants', votes: ' votes', question: 'Question', selected: 'my choice', challenge: 'Challenge →', start: 'Start →' },
+  ja: { tests: '件のテスト', questions: '問', attempts: '回挑戦', times: '回', stages: '段階', seconds: '秒', participants: '人参加', votes: '票', question: '質問', selected: '自分の選択', challenge: '挑戦 →', start: '開始 →' },
+  'zh-CN': { tests: '个测试', questions: '题', attempts: '次挑战', times: '次', stages: '关', seconds: '秒', participants: '人参与', votes: '票', question: '问题', selected: '我的选择', challenge: '挑战 →', start: '开始 →' },
+  'zh-TW': { tests: '個測驗', questions: '題', attempts: '次挑戰', times: '次', stages: '關', seconds: '秒', participants: '人參與', votes: '票', question: '問題', selected: '我的選擇', challenge: '挑戰 →', start: '開始 →' },
+  es: { tests: ' pruebas', questions: ' preguntas', attempts: ' intentos', times: ' veces', stages: ' niveles', seconds: ' s', participants: ' participantes', votes: ' votos', question: 'Pregunta', selected: 'mi elección', challenge: 'Desafiar →', start: 'Empezar →' },
+  fr: { tests: ' tests', questions: ' questions', attempts: ' tentatives', times: ' fois', stages: ' niveaux', seconds: ' s', participants: ' participants', votes: ' votes', question: 'Question', selected: 'mon choix', challenge: 'Relever le défi →', start: 'Commencer →' },
+  de: { tests: ' Tests', questions: ' Fragen', attempts: ' Versuche', times: '-mal', stages: ' Stufen', seconds: ' Sek.', participants: ' Teilnehmende', votes: ' Stimmen', question: 'Frage', selected: 'meine Wahl', challenge: 'Ausprobieren →', start: 'Starten →' },
+  pt: { tests: ' testes', questions: ' perguntas', attempts: ' tentativas', times: ' vezes', stages: ' níveis', seconds: ' s', participants: ' participantes', votes: ' votos', question: 'Pergunta', selected: 'minha escolha', challenge: 'Desafiar →', start: 'Começar →' },
+  id: { tests: ' tes', questions: ' pertanyaan', attempts: ' percobaan', times: ' kali', stages: ' level', seconds: ' dtk', participants: ' peserta', votes: ' suara', question: 'Pertanyaan', selected: 'pilihan saya', challenge: 'Tantang →', start: 'Mulai →' },
+  th: { tests: ' แบบทดสอบ', questions: ' ข้อ', attempts: ' ครั้ง', times: ' ครั้ง', stages: ' ด่าน', seconds: ' วินาที', participants: ' คน', votes: ' โหวต', question: 'คำถาม', selected: 'ตัวเลือกของฉัน', challenge: 'ท้าทาย →', start: 'เริ่ม →' },
+  vi: { tests: ' bài kiểm tra', questions: ' câu hỏi', attempts: ' lần thử', times: ' lần', stages: ' cấp', seconds: ' giây', participants: ' người tham gia', votes: ' phiếu', question: 'Câu hỏi', selected: 'lựa chọn của tôi', challenge: 'Thử thách →', start: 'Bắt đầu →' },
+  hi: { tests: ' टेस्ट', questions: ' प्रश्न', attempts: ' प्रयास', times: ' बार', stages: ' स्तर', seconds: ' सेकंड', participants: ' प्रतिभागी', votes: ' वोट', question: 'प्रश्न', selected: 'मेरी पसंद', challenge: 'चुनौती →', start: 'शुरू करें →' },
+  ar: { tests: ' اختبارات', questions: ' أسئلة', attempts: ' محاولات', times: ' مرات', stages: ' مستويات', seconds: ' ث', participants: ' مشاركين', votes: ' أصوات', question: 'السؤال', selected: 'اختياري', challenge: 'تحدَّ →', start: 'ابدأ →' },
+  ru: { tests: ' тестов', questions: ' вопросов', attempts: ' попыток', times: ' раз', stages: ' уровней', seconds: ' сек.', participants: ' участников', votes: ' голосов', question: 'Вопрос', selected: 'мой выбор', challenge: 'Испытать →', start: 'Начать →' }
+};
+
+const dynamicSharedLabels = {
+  en: { myResult: 'My result', recordsSuffix: '’s records', sameAccount: 'Continue on other devices with the same account.' },
+  ja: { myResult: '自分の結果', recordsSuffix: 'の記録', sameAccount: '他の端末でも同じアカウントで続けられます。' },
+  'zh-CN': { myResult: '我的结果', recordsSuffix: '的记录', sameAccount: '可在其他设备上使用同一账号继续。' },
+  'zh-TW': { myResult: '我的結果', recordsSuffix: '的紀錄', sameAccount: '可在其他裝置上使用同一帳號繼續。' },
+  es: { myResult: 'Mi resultado', recordsSuffix: ': registros', sameAccount: 'Continúa en otros dispositivos con la misma cuenta.' },
+  fr: { myResult: 'Mon résultat', recordsSuffix: ' : résultats', sameAccount: 'Continuez sur vos autres appareils avec le même compte.' },
+  de: { myResult: 'Mein Ergebnis', recordsSuffix: ' – Rekorde', sameAccount: 'Mit demselben Konto auf anderen Geräten fortfahren.' },
+  pt: { myResult: 'Meu resultado', recordsSuffix: ': recordes', sameAccount: 'Continue em outros dispositivos com a mesma conta.' },
+  id: { myResult: 'Hasil saya', recordsSuffix: ' – catatan', sameAccount: 'Lanjutkan di perangkat lain dengan akun yang sama.' },
+  th: { myResult: 'ผลลัพธ์ของฉัน', recordsSuffix: ' – สถิติ', sameAccount: 'เล่นต่อบนอุปกรณ์อื่นด้วยบัญชีเดียวกัน' },
+  vi: { myResult: 'Kết quả của tôi', recordsSuffix: ' – thành tích', sameAccount: 'Tiếp tục trên thiết bị khác bằng cùng một tài khoản.' },
+  hi: { myResult: 'मेरा परिणाम', recordsSuffix: ' के रिकॉर्ड', sameAccount: 'इसी खाते से दूसरे डिवाइस पर जारी रखें।' },
+  ar: { myResult: 'نتيجتي', recordsSuffix: ' – السجلات', sameAccount: 'تابع على الأجهزة الأخرى بالحساب نفسه.' },
+  ru: { myResult: 'Мой результат', recordsSuffix: ' — рекорды', sameAccount: 'Продолжайте на других устройствах с той же учётной записью.' }
+};
+
+function translateDynamicPhrase(value, locale) {
+  const labels = dynamicUnitLabels[locale];
+  const shared = dynamicSharedLabels[locale];
+  if (!labels || typeof value !== 'string') return value;
+  return value
+    .replace(/([\d,.]+)\s*개 테스트/g, `$1${labels.tests}`)
+    .replace(/([\d,.]+)\s*개 질문/g, `$1${labels.questions}`)
+    .replace(/([\d,.]+)\s*문항/g, `$1${labels.questions}`)
+    .replace(/([\d,.]+)\s*회 도전/g, `$1${labels.attempts}`)
+    .replace(/([\d,.]+)\s*회/g, `$1${labels.times}`)
+    .replace(/([\d,.]+)\s*단계/g, `$1${labels.stages}`)
+    .replace(/([\d,.]+)\s*초/g, `$1${labels.seconds}`)
+    .replace(/([\d,.]+)\s*명 참여/g, `$1${labels.participants}`)
+    .replace(/([\d,.]+)\s*표/g, `$1${labels.votes}`)
+    .replace(/질문\s+([\d,.]+\s*\/\s*[\d,.]+)/g, `${labels.question} $1`)
+    .replaceAll('나의 선택', labels.selected)
+    .replaceAll('도전 →', labels.challenge)
+    .replaceAll('시작 →', labels.start)
+    .replaceAll('내 결과', shared.myResult)
+    .replaceAll('님의 기록', shared.recordsSuffix)
+    .replaceAll('다른 기기에서도 같은 계정으로 이어볼 수 있어요.', shared.sameAccount);
+}
+
+const normalizePhrase = (value = '') => value.replace(/\s+/g, ' ').trim();
+
+export const getCurrentLocale = () => normalizeLocale(
+  browserDocument?.documentElement.dataset.locale || browserDocument?.documentElement.lang || 'ko'
+);
+
+async function loadPhraseDictionary(locale) {
+  if (locale === 'ko') return {};
+  if (!phraseDictionaryCache.has(locale)) {
+    const dictionaryUrl = new URL(`../../data/locales/${locale}.json?v=20260827-1`, import.meta.url);
+    phraseDictionaryCache.set(locale, fetch(dictionaryUrl, { cache: 'force-cache' })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`locale ${locale} ${response.status}`);
+        const payload = await response.json();
+        return payload.translations || {};
+      })
+      .catch((error) => {
+        console.warn('전체 번역 파일을 불러오지 못했습니다:', error.message);
+        phraseDictionaryCache.delete(locale);
+        return {};
+      }));
+  }
+  return phraseDictionaryCache.get(locale);
+}
+
+export function translatePhraseWithDictionary(value, locale, dictionary = {}) {
+  if (locale === 'ko' || typeof value !== 'string') return value;
+  const key = normalizePhrase(value);
+  if (!key) return value;
+  const translated = criticalPhraseOverrides[locale]?.[key] || dictionary[key];
+  if (!translated || translated === key) return translateDynamicPhrase(value, locale);
+  const leading = value.match(/^\s*/)?.[0] || '';
+  const trailing = value.match(/\s*$/)?.[0] || '';
+  return `${leading}${translated}${trailing}`;
+}
+
+export async function translateText(value, locale = getCurrentLocale()) {
+  const dictionary = await loadPhraseDictionary(locale);
+  return translatePhraseWithDictionary(value, locale, dictionary);
+}
+
+export async function localizeContentData(value, locale = getCurrentLocale()) {
+  const dictionary = await loadPhraseDictionary(locale);
+  const localize = (entry, fieldName = '') => {
+    if (fieldName === 'sourceCategory') return entry;
+    if (typeof entry === 'string') return translatePhraseWithDictionary(entry, locale, dictionary);
+    if (Array.isArray(entry)) return entry.map((item) => localize(item));
+    if (entry && typeof entry === 'object') {
+      return Object.fromEntries(
+        Object.entries(entry).map(([key, item]) => [key, localize(item, key)])
+      );
+    }
+    return entry;
+  };
+  return localize(value);
+}
+
+function shouldSkipTextNode(node) {
+  const parent = node.parentElement;
+  return !parent || Boolean(parent.closest(
+    '#site-language-selector, script, style, noscript, code, pre, [data-i18n], [data-i18n-html]'
+  ));
+}
+
+function applyDictionaryToDocument(locale, dictionary) {
+  if (document.body.classList.contains('admin-page')) return;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const node of nodes) {
+    if (shouldSkipTextNode(node)) continue;
+    if (!originalTextValues.has(node)) originalTextValues.set(node, node.nodeValue);
+    const original = originalTextValues.get(node);
+    const translated = translatePhraseWithDictionary(original, locale, dictionary);
+    if (node.nodeValue !== translated) node.nodeValue = translated;
+  }
+
+  const attributes = ['aria-label', 'title', 'placeholder', 'alt'];
+  document.querySelectorAll(attributes.map((name) => `[${name}]`).join(',')).forEach((element) => {
+    if (element.closest('#site-language-selector')) return;
+    if (!originalAttributeValues.has(element)) originalAttributeValues.set(element, new Map());
+    const originals = originalAttributeValues.get(element);
+    for (const name of attributes) {
+      const current = element.getAttribute(name);
+      if (current === null) continue;
+      if (!originals.has(name)) originals.set(name, current);
+      const translated = translatePhraseWithDictionary(originals.get(name), locale, dictionary);
+      if (current !== translated) element.setAttribute(name, translated);
+    }
+  });
+
+  const localizedTitle = translatePhraseWithDictionary(originalDocumentTitle, locale, dictionary);
+  document.title = localizedTitle;
+  const description = document.querySelector('meta[name="description"]');
+  const localizedDescription = translatePhraseWithDictionary(
+    originalDocumentDescription,
+    locale,
+    dictionary
+  );
+  if (description && originalDocumentDescription) {
+    description.content = localizedDescription;
+  }
+  document.querySelectorAll('meta[property="og:title"], meta[name="twitter:title"]').forEach((meta) => {
+    meta.content = localizedTitle;
+  });
+  document.querySelectorAll('meta[property="og:description"], meta[name="twitter:description"]').forEach((meta) => {
+    meta.content = localizedDescription;
+  });
+  const openGraphLocale = document.querySelector('meta[property="og:locale"]');
+  if (openGraphLocale) openGraphLocale.content = locale.replace('-', '_');
+}
+
+function applyBaseTranslations(locale) {
   document.querySelectorAll('[data-i18n]').forEach((element) => {
     const value = getMessage(locale, element.dataset.i18n);
     if (value && element.textContent !== value) element.textContent = value;
@@ -191,31 +473,34 @@ function applyTranslations(locale) {
     if (value && element.innerHTML !== value) element.innerHTML = value;
   });
 
-  const exactText = {
-    '내 기록': 'records', '홈': 'home', '테스트': 'tests', '심리테스트': 'tests', '밸런스': 'balance', '밸런스 게임': 'balance', '게임': 'games',
-    '소개': 'about', '개인정보처리방침': 'privacy', '이용약관': 'terms', '광고 안내': 'ads', '문의': 'contact', '읽을거리': 'reading',
-    '전체 보기': 'viewAll', '지금 시작': 'start', '테스트 시작하기': 'start', '공유': 'share', '테스트 목록': 'testList', '밸런스 목록': 'balanceList', '게임 목록': 'gameList',
-    '오늘의 추천': 'todayPick', '매일 변경': 'changesDaily', '지금 인기 있어요': 'trending', '오늘의 퀴즈': 'dailyQuiz', '오늘의 나': 'todayMe'
-  };
-
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  while (walker.nextNode()) nodes.push(walker.currentNode);
-  for (const node of nodes) {
-    const trimmed = node.nodeValue.trim();
-    const key = exactText[trimmed];
-    if (!key) continue;
-    const translated = getMessage(locale, key);
-    if (translated !== trimmed) node.nodeValue = node.nodeValue.replace(trimmed, translated);
-  }
-
   const selector = document.querySelector('#site-language-selector');
   if (selector) {
     selector.value = locale;
     selector.setAttribute('aria-label', getMessage(locale, 'languageLabel'));
     selector.title = getMessage(locale, 'languageLabel');
   }
-  document.dispatchEvent(new CustomEvent('daily-test-lab:locale', { detail: { locale } }));
+}
+
+export async function applyTranslations(locale) {
+  if (!browserDocument) return;
+  const normalizedLocale = normalizeLocale(locale);
+  const requestId = ++localeRequestId;
+  document.documentElement.lang = normalizedLocale;
+  document.documentElement.dir = normalizedLocale === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.dataset.locale = normalizedLocale;
+  document.documentElement.dataset.localeStatus = 'loading';
+  applyBaseTranslations(normalizedLocale);
+  document.dispatchEvent(new CustomEvent('daily-test-lab:locale', {
+    detail: { locale: normalizedLocale }
+  }));
+
+  const dictionary = await loadPhraseDictionary(normalizedLocale);
+  if (requestId !== localeRequestId || getCurrentLocale() !== normalizedLocale) return;
+  applyDictionaryToDocument(normalizedLocale, dictionary);
+  document.documentElement.dataset.localeStatus = 'ready';
+  document.dispatchEvent(new CustomEvent('daily-test-lab:locale-ready', {
+    detail: { locale: normalizedLocale }
+  }));
 }
 
 function installLanguageSelector() {
@@ -263,20 +548,30 @@ async function detectCountryLocale() {
   }
 }
 
-installLanguageSelector();
-const manualLocale = localStorage.getItem('daily-test-lab.locale-choice.v1');
-const browserLocale = normalizeLocale(navigator.languages?.[0] || navigator.language || 'en');
-applyTranslations(manualLocale && supportedLocales.includes(manualLocale) ? manualLocale : browserLocale);
+const isAdminPage = browserDocument?.body.classList.contains('admin-page');
+const manualLocale = browserDocument ? localStorage.getItem('daily-test-lab.locale-choice.v1') : null;
+const browserLocale = normalizeLocale(
+  typeof navigator === 'undefined' ? 'ko' : navigator.languages?.[0] || navigator.language || 'en'
+);
 
-if (!manualLocale) {
-  detectCountryLocale().then((countryLocale) => {
-    if (countryLocale) applyTranslations(countryLocale);
-  });
+if (browserDocument && !isAdminPage) {
+  installLanguageSelector();
+  applyTranslations(manualLocale && supportedLocales.includes(manualLocale) ? manualLocale : browserLocale);
+
+  if (!manualLocale) {
+    detectCountryLocale().then((countryLocale) => {
+      if (countryLocale) applyTranslations(countryLocale);
+    });
+  }
+
+  let translationTimer;
+  new MutationObserver(() => {
+    clearTimeout(translationTimer);
+    translationTimer = setTimeout(async () => {
+      const locale = getCurrentLocale();
+      const dictionary = await loadPhraseDictionary(locale);
+      applyDictionaryToDocument(locale, dictionary);
+    }, 80);
+  }).observe(document.body, { childList: true, subtree: true });
 }
-
-let translationTimer;
-new MutationObserver(() => {
-  clearTimeout(translationTimer);
-  translationTimer = setTimeout(() => applyTranslations(document.documentElement.dataset.locale || browserLocale), 80);
-}).observe(document.body, { childList: true, subtree: true });
 

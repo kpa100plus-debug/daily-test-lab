@@ -58,9 +58,12 @@ function createTestCard(test) {
 
   const previousResult = resultHistory[test.slug];
   if (previousResult?.resultTitle) {
+    const localizedResultTitle = test.results?.find(
+      (result) => result.id === previousResult.resultId
+    )?.title || previousResult.resultTitle;
     const completed = document.createElement('span');
     completed.className = 'test-completed-badge';
-    completed.textContent = `내 결과 · ${previousResult.resultTitle}`;
+    completed.textContent = `내 결과 · ${localizedResultTitle}`;
     link.append(completed);
   }
 
@@ -75,7 +78,7 @@ function renderTests() {
 
   const visibleTests = activeCategory === 'all'
     ? publishedTests
-    : publishedTests.filter((test) => test.category.includes(activeCategory));
+    : publishedTests.filter((test) => test.sourceCategory.includes(activeCategory));
 
   grid.replaceChildren(...visibleTests.map(createTestCard));
   if (status) status.textContent = `${visibleTests.length}개 테스트`;
@@ -108,3 +111,4 @@ async function loadTests() {
 
 setupFilters();
 loadTests();
+document.addEventListener('daily-test-lab:locale-ready', loadTests);

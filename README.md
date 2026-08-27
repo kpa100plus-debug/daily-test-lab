@@ -15,6 +15,7 @@
 - STEP 10 기능: GitHub Pages 자동 빌드·검증·배포
 - STEP 11 기능: 심리테스트 10종·밸런스게임 50종으로 공개 콘텐츠 확장
 - STEP 12 기능: 서비스 소개·콘텐츠 운영 원칙, 승인 전 빈 광고 제거, 실제 ID가 있을 때만 광고·ads.txt를 생성하는 AdSense 안전장치
+- 다국어: 한국어 포함 15개 언어로 공개 화면·콘텐츠·동적 단위를 전환하며, 관리자 화면은 한국어로 유지
 - 보안 강화: App Check 모니터링 준비, Firestore 정상·비상 규칙 Emulator 테스트, 읽기 전용 사고 대응, 암호화 백업 구조, CodeQL·SHA 고정 Actions
 
 ## 운영 주소
@@ -40,6 +41,8 @@ npm test
 npm run test:rules
 npm run scan:secrets
 ```
+
+다국어 정적 사전은 `src/content/locales/`에 있으며 방문자 브라우저에서 선택한 언어 파일 하나만 불러옵니다. 번역 모델은 `scripts/generate-static-translations.py`를 실행하는 제작 단계에서만 사용하고 서비스 런타임에는 포함하지 않습니다.
 
 ## 배포 설정
 

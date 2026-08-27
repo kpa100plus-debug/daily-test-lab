@@ -21,7 +21,9 @@ const koreaDateFormatter = new Intl.DateTimeFormat('en-CA', {
   day: '2-digit'
 });
 const todayKey = koreaDateFormatter.format(new Date());
-const numberFormatter = new Intl.NumberFormat('ko-KR');
+const formatNumber = (value) => new Intl.NumberFormat(
+  document.documentElement.lang || 'ko'
+).format(value);
 
 document.documentElement.dataset.buildStep = buildStep;
 
@@ -237,7 +239,7 @@ function renderResult(game, choice, stats, source = 'local') {
   const resultTop = createElement('div', 'balance-result-topline');
   resultTop.append(
     createElement('h2', '', '선택 결과'),
-    createElement('strong', '', `${numberFormatter.format(normalizedStats.total)}명 참여`)
+    createElement('strong', '', `${formatNumber(normalizedStats.total)}명 참여`)
   );
   const bars = createElement('div', 'balance-result-bars');
 
@@ -254,7 +256,7 @@ function renderResult(game, choice, stats, source = 'local') {
     const fill = createElement('span', 'balance-result-fill');
     fill.style.width = `${percentage}%`;
     track.append(fill);
-    const countLabel = createElement('small', '', `${numberFormatter.format(count)}표${option.id === choice ? ' · 나의 선택' : ''}`);
+    const countLabel = createElement('small', '', `${formatNumber(count)}표${option.id === choice ? ' · 나의 선택' : ''}`);
     row.append(labels, track, countLabel);
     bars.append(row);
   });
@@ -347,7 +349,7 @@ function renderCatalog() {
   if (!grid) return;
   const visibleGames = state.category === 'all'
     ? state.games
-    : state.games.filter((game) => game.category === state.category);
+    : state.games.filter((game) => game.sourceCategory === state.category);
   grid.replaceChildren(...visibleGames.map(createCatalogCard));
   if (status) status.textContent = `${visibleGames.length}개 질문`;
 }
@@ -429,3 +431,4 @@ async function loadBalanceGames() {
 
 setupFilters();
 loadBalanceGames();
+document.addEventListener('daily-test-lab:locale-ready', loadBalanceGames);
