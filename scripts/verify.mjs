@@ -715,6 +715,8 @@ const staticIndexableRoutes = [
   '/test/',
   '/vote/',
   '/game/',
+  '/fortune/',
+  '/tarot/',
   '/about/',
   '/legal/privacy/',
   '/legal/terms/',
@@ -940,3 +942,4 @@ if (buildMeta.integrations.adsense) {
 }
 
 console.log(`Verification complete: ${requiredFiles.length} required files`);
+
