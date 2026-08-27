@@ -555,7 +555,7 @@ const { buildShareText } = await import(pathToFileURL(shareServicePath).href);
 if (
   buildShareText({ text: '기록 7.60초', url: 'https://dtlabkr.dpdns.org/game/number-order/' }) !==
     '기록 7.60초\n\nhttps://dtlabkr.dpdns.org/game/number-order/' ||
-  !shareServiceJavaScript.includes('navigator.userAgentData?.mobile') ||
+  !shareServiceJavaScript.includes("typeof navigator.share !== 'function'") ||
   !shareServiceJavaScript.includes('navigator.clipboard?.writeText') ||
   !shareServiceJavaScript.includes("document.execCommand('copy')") ||
   !appJavaScript.includes("from './share-service.js'") ||
