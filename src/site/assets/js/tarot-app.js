@@ -37,8 +37,14 @@ function drawCard(index) {
   result.innerHTML = `<p class="reading-date">${dateKey} · 오늘의 한 장</p><div class="tarot-reveal"><span>${card.icon}</span><p>${card.theme}</p><h2>${card.name}</h2></div><p class="tarot-message">${card.message}</p><div class="reading-sections"><article><span>💰 돈·일</span><p>${card.money}</p></article><article><span>💗 사랑·관계</span><p>${card.love}</p></article></div><button class="result-share-button" type="button" id="tarot-share">카드 공유하기</button><p class="reading-disclaimer">타로는 재미와 자기성찰을 위한 참고 콘텐츠입니다. 내일 새로운 카드를 만나보세요.</p>`;
   grid.querySelectorAll('button').forEach((button, cardIndex) => { button.disabled = true; button.classList.toggle('selected', cardIndex === choice); });
   document.querySelector('#tarot-share').addEventListener('click', async (event) => {
+    const button = event.currentTarget;
+    button.disabled = true;
     const response = await shareOrCopy({ title: '오늘의 타로', text: `오늘의 카드는 ${card.name} — ${card.message}`, url: location.href });
-    event.currentTarget.textContent = response.method === 'copied' ? '링크 복사 완료' : '카드 공유하기';
+    button.disabled = false;
+    if (response.method === 'copied') button.textContent = '공유 링크 복사 완료';
+    else if (response.method === 'shared') button.textContent = '공유 완료';
+    else if (response.method !== 'cancelled') button.textContent = '복사 창을 확인하세요';
+    setTimeout(() => { button.textContent = '카드 공유하기'; }, 2200);
   });
   result.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }

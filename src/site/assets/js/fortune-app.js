@@ -33,8 +33,14 @@ function showFortune(name, index) {
   result.hidden = false;
   result.innerHTML = `<p class="reading-date">${dateKey} · ${icons[index]} ${name}띠</p><h2>오늘의 운세 점수 <strong>${score}점</strong></h2><div class="reading-sections"><article><span>🌤️ 전체운</span><p>${overall}</p></article><article><span>💰 재물·일운</span><p>${money}</p></article><article><span>💗 연애·관계운</span><p>${love}</p></article></div><div class="lucky-row"><span>행운 숫자 <b>${luckyNumber}</b></span><span>행운 색 <b>${luckyColor}</b></span></div><button class="result-share-button" type="button" id="fortune-share">결과 공유하기</button><p class="reading-disclaimer">운세는 재미와 하루의 긍정적인 참고를 위한 콘텐츠입니다.</p>`;
   document.querySelector('#fortune-share').addEventListener('click', async (event) => {
+    const button = event.currentTarget;
+    button.disabled = true;
     const response = await shareOrCopy({ title: `${name}띠 오늘의 운세`, text: `${name}띠 오늘의 운세는 ${score}점! ${overall}`, url: location.href });
-    event.currentTarget.textContent = response.method === 'copied' ? '링크 복사 완료' : '결과 공유하기';
+    button.disabled = false;
+    if (response.method === 'copied') button.textContent = '공유 링크 복사 완료';
+    else if (response.method === 'shared') button.textContent = '공유 완료';
+    else if (response.method !== 'cancelled') button.textContent = '복사 창을 확인하세요';
+    setTimeout(() => { button.textContent = '결과 공유하기'; }, 2200);
   });
   result.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
