@@ -108,13 +108,23 @@ jobs:
 
           async function main() {
             await cf('/user/tokens/verify');
-            const pages = await paged(`/accounts/${accountId}/pages/projects`);
-            const workers = await paged(`/accounts/${accountId}/workers/scripts`);
-            const zones = await paged(`/zones?account.id=${encodeURIComponent(accountId)}`, 50);
+            const unavailable = [];
+            async function optionalPaged(label, path, perPage = 100) {
+              try {
+                return await paged(path, perPage);
+              } catch (error) {
+                unavailable.push(`${label}: ${error.message}`);
+                return [];
+              }
+            }
+
+            const pages = await optionalPaged('Cloudflare Pages', `/accounts/${accountId}/pages/projects`);
+            const workers = await optionalPaged('Workers 스크립트', `/accounts/${accountId}/workers/scripts`);
+            const zones = await optionalPaged('DNS 영역(도메인)', `/zones?account.id=${encodeURIComponent(accountId)}`, 50);
 
             const dnsRecords = [];
             for (const zone of zones) {
-              const records = await paged(`/zones/${zone.id}/dns_records`);
+              const records = await optionalPaged(`DNS 레코드(${zone.name})`, `/zones/${zone.id}/dns_records`);
               for (const record of records) {
                 dnsRecords.push({ ...record, zoneName: zone.name });
               }
@@ -140,6 +150,12 @@ jobs:
               `- DNS 레코드: ${dnsRecords.length}`,
               ''
             ];
+
+            if (unavailable.length > 0) {
+              lines.push('## 확인 불가 항목', '');
+              for (const item of unavailable) lines.push(`- ${safe(item)}`);
+              lines.push('');
+            }
 
             appendSection(lines, 'Pages 일치 후보', pageMatches, (entry) => ({
               kind: 'Pages',
@@ -172,6 +188,7 @@ jobs:
             fs.appendFileSync(summaryPath, lines.join('\n') + '\n', 'utf8');
             console.log(`Audit complete. Pages=${pages.length}, Workers=${workers.length}, Zones=${zones.length}, DNS=${dnsRecords.length}`);
             console.log(`Candidate matches. Pages=${pageMatches.length}, Workers=${workerMatches.length}, Zones=${zoneMatches.length}, DNS=${dnsMatches.length}`);
+            if (unavailable.length > 0) console.log(`Unavailable endpoints=${unavailable.length}`);
           }
 
           main().catch((error) => {
