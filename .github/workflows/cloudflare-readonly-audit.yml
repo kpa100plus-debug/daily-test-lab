@@ -197,7 +197,10 @@ jobs:
             fs.appendFileSync(summaryPath, lines.join('\n') + '\n', 'utf8');
             console.log(`Audit complete. Pages=${pages.length}, Workers=${workers.length}, Zones=${zones.length}, DNS=${dnsRecords.length}`);
             console.log(`Candidate matches. Pages=${pageMatches.length}, Workers=${workerMatches.length}, Zones=${zoneMatches.length}, DNS=${dnsMatches.length}`);
-            if (unavailable.length > 0) console.log(`Unavailable endpoints=${unavailable.length}`);
+            if (unavailable.length > 0) {
+              console.log(`Unavailable endpoints=${unavailable.length}`);
+              for (const item of unavailable) console.log(`Unavailable: ${safe(item)}`);
+            }
           }
 
           main().catch((error) => {
