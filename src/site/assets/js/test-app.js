@@ -334,3 +334,4 @@ async function loadTest() {
 }
 
 loadTest();
+document.addEventListener('daily-test-lab:locale-ready', loadTest);

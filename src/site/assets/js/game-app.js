@@ -1,4 +1,5 @@
 import { shareOrCopy } from './share-service.js';
+import { localizeContentData } from './locale.js?v=i18n-2';
 import {
   createNumberBoard,
   createReactionDelay,
@@ -461,7 +462,7 @@ async function initialize() {
   try {
     const response = await fetch(gamesUrl);
     if (!response.ok) throw new Error('게임 데이터를 불러오지 못했습니다.');
-    const data = await response.json();
+    const data = await localizeContentData(await response.json());
     games = (data.items || []).filter((item) => item.status === 'published');
     game = games.find((item) => item.slug === requestedSlug);
     if (!game) throw new Error('게임을 찾을 수 없습니다.');
@@ -479,3 +480,7 @@ async function initialize() {
 }
 
 initialize();
+document.addEventListener('daily-test-lab:locale-ready', () => {
+  stopRuntime();
+  initialize();
+});

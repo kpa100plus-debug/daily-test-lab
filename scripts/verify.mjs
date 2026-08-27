@@ -51,6 +51,12 @@ const requiredFiles = [
   'data/daily-content.json'
 ];
 
+const foreignLocales = [
+  'en', 'ja', 'zh-CN', 'zh-TW', 'es', 'fr', 'de',
+  'pt', 'id', 'th', 'vi', 'hi', 'ar', 'ru'
+];
+requiredFiles.push(...foreignLocales.map((locale) => `data/locales/${locale}.json`));
+
 for (const sourceFile of [
   'firestore.lockdown.rules',
   'firebase.lockdown.json',
@@ -145,6 +151,78 @@ const localeJavaScript = await readFile(
   path.join(outputDirectory, 'assets/js/locale.js'),
   'utf8'
 );
+const contentRepositoryJavaScript = await readFile(
+  path.join(outputDirectory, 'assets/js/content-repository.js'),
+  'utf8'
+);
+const localeModulePath = path.join(outputDirectory, 'assets/js/locale.js');
+const { translatePhraseWithDictionary } = await import(pathToFileURL(localeModulePath).href);
+let expectedLocaleKeys;
+const expectedQuizTranslations = {
+  en: 'Which part of the brain plays an important role in forming memories?',
+  ja: '記憶の形成に重要な役割を果たす脳の部位は？',
+  'zh-CN': '在记忆形成中起重要作用的大脑部位是？',
+  'zh-TW': '在記憶形成中扮演重要角色的大腦部位是？',
+  es: '¿Qué parte del cerebro desempeña un papel importante en la formación de recuerdos?',
+  fr: 'Quelle partie du cerveau joue un rôle important dans la formation des souvenirs ?',
+  de: 'Welcher Teil des Gehirns spielt eine wichtige Rolle bei der Bildung von Erinnerungen?',
+  pt: 'Qual parte do cérebro desempenha um papel importante na formação de memórias?',
+  id: 'Bagian otak mana yang berperan penting dalam pembentukan ingatan?',
+  th: 'สมองส่วนใดมีบทบาทสำคัญในการสร้างความทรงจำ?',
+  vi: 'Phần nào của não đóng vai trò quan trọng trong việc hình thành ký ức?',
+  hi: 'स्मृतियों के निर्माण में मस्तिष्क का कौन-सा भाग महत्वपूर्ण भूमिका निभाता है?',
+  ar: 'أي جزء من الدماغ يؤدي دورًا مهمًا في تكوين الذكريات؟',
+  ru: 'Какая часть мозга играет важную роль в формировании воспоминаний?'
+};
+const collectStrings = (value, output = []) => {
+  if (typeof value === 'string') output.push(value);
+  else if (Array.isArray(value)) value.forEach((item) => collectStrings(item, output));
+  else if (value && typeof value === 'object') Object.values(value).forEach((item) => collectStrings(item, output));
+  return output;
+};
+const localizedContentSources = [];
+for (const fileName of ['tests.json', 'balance-games.json', 'mini-games.json', 'daily-content.json']) {
+  collectStrings(
+    JSON.parse(await readFile(path.join(outputDirectory, 'data', fileName), 'utf8')),
+    localizedContentSources
+  );
+}
+
+for (const locale of foreignLocales) {
+  const payload = JSON.parse(await readFile(
+    path.join(outputDirectory, 'data', 'locales', `${locale}.json`),
+    'utf8'
+  ));
+  const entries = Object.entries(payload.translations || {});
+  const keys = entries.map(([source]) => source).sort();
+  if (
+    payload.schemaVersion !== 1 ||
+    payload.locale !== locale ||
+    payload.sourceLocale !== 'ko' ||
+    entries.length < 2400 ||
+    entries.some(([, target]) => (
+      typeof target !== 'string' || !target.trim() || /[가-힣]/.test(target)
+    ))
+  ) {
+    throw new Error(`Static translation dictionary is incomplete: ${locale}`);
+  }
+  if (!expectedLocaleKeys) expectedLocaleKeys = keys;
+  if (keys.length !== expectedLocaleKeys.length || keys.some((key, index) => key !== expectedLocaleKeys[index])) {
+    throw new Error(`Static translation keys differ by locale: ${locale}`);
+  }
+
+  const quizSource = '기억을 만드는 데 중요한 역할을 하는 뇌 부위는?';
+  if (
+    translatePhraseWithDictionary(quizSource, locale, payload.translations) !== expectedQuizTranslations[locale] ||
+    /[가-힣]/.test(translatePhraseWithDictionary('6문항 · 3회 도전', locale, payload.translations)) ||
+    localizedContentSources.some((source) => (
+      /[가-힣]/.test(source) &&
+      /[가-힣]/.test(translatePhraseWithDictionary(source, locale, payload.translations))
+    ))
+  ) {
+    throw new Error(`Critical or dynamic translation failed: ${locale}`);
+  }
+}
 if (
   !indexHtml.includes('global-visitor-count') ||
   !indexHtml.includes('weekly-visitor-count') ||
@@ -158,9 +236,25 @@ if (
   !localeJavaScript.includes("'zh-CN'") ||
   !localeJavaScript.includes("'ar'") ||
   !localeJavaScript.includes('countries.dev/ip') ||
-  !localeJavaScript.includes('site-language-selector')
+  !localeJavaScript.includes('site-language-selector') ||
+  !localeJavaScript.includes('data/locales/${locale}.json?v=20260827-1') ||
+  !contentRepositoryJavaScript.includes('localizeContentData') ||
+  !contentRepositoryJavaScript.includes('sourceCategory')
 ) {
   throw new Error('Multilingual interface or meaningful service counters are incomplete.');
+}
+
+for (const relativePath of ['index.html', 'test/index.html', 'vote/index.html', 'game/index.html', 'my/index.html']) {
+  const html = await readFile(path.join(outputDirectory, relativePath), 'utf8');
+  if (html.includes('src="/assets/js/locale.js')) {
+    throw new Error(`Interactive page loads duplicate locale modules: ${relativePath}`);
+  }
+}
+for (const relativePath of ['about/index.html', 'legal/privacy/index.html']) {
+  const html = await readFile(path.join(outputDirectory, relativePath), 'utf8');
+  if (!html.includes('src="/assets/js/locale.js?v=i18n-2"')) {
+    throw new Error(`Static policy page is missing locale support: ${relativePath}`);
+  }
 }
 
 const testListJavaScript = await readFile(
@@ -562,10 +656,10 @@ if (
   !testAppJavaScript.includes("from './share-service.js'") ||
   !balanceAppJavaScript.includes("from './share-service.js'") ||
   !gameAppJavaScript.includes("from './share-service.js'") ||
-  !indexHtml.includes('app.js?v=share-1') ||
-  !balanceListShareHtml.includes('balance-app.js?v=share-1') ||
-  !buildJavaScript.includes('test-app.js?v=share-1') ||
-  !buildJavaScript.includes('game-app.js?v=share-1')
+  !indexHtml.includes('app.js?v=i18n-2') ||
+  !balanceListShareHtml.includes('balance-app.js?v=i18n-2') ||
+  !buildJavaScript.includes('test-app.js?v=i18n-2') ||
+  !buildJavaScript.includes('game-app.js?v=i18n-2')
 ) {
   throw new Error('Reliable share and copy fallback is incomplete.');
 }

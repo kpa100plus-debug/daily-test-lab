@@ -1,4 +1,5 @@
 import { formatGameScore } from './mini-game-engine.js';
+import { localizeContentData } from './locale.js?v=i18n-2';
 import {
   getMemberDashboard,
   signInWithGoogle,
@@ -139,7 +140,7 @@ async function initialize() {
   try {
     const response = await fetch(gamesUrl);
     if (!response.ok) throw new Error('게임 데이터를 불러오지 못했습니다.');
-    const data = await response.json();
+    const data = await localizeContentData(await response.json());
     games = (data.items || []).filter((game) => game.status === 'published');
     const { user, records } = await getMemberDashboard(games);
     renderDashboard(user, records);
@@ -150,3 +151,4 @@ async function initialize() {
 }
 
 initialize();
+document.addEventListener('daily-test-lab:locale-ready', initialize);

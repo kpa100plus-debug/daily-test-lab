@@ -1,4 +1,5 @@
 import { formatGameScore } from './mini-game-engine.js';
+import { getCurrentLocale, localizeContentData } from './locale.js?v=i18n-2';
 import {
   hasRecordSession,
   readLocalGameRecords,
@@ -59,14 +60,14 @@ async function initialize() {
   try {
     const response = await fetch(gamesUrl);
     if (!response.ok) throw new Error('게임 목록을 불러오지 못했습니다.');
-    const data = await response.json();
+    const data = await localizeContentData(await response.json());
     const games = (data.items || []).filter((game) => game.status === 'published');
     catalog?.replaceChildren(...games.map(createGameCard));
     const attempts = Object.values(records).reduce(
       (sum, record) => sum + (Number(record?.attempts) || 0),
       0
     );
-    if (totalAttempts) totalAttempts.textContent = attempts.toLocaleString('ko-KR');
+    if (totalAttempts) totalAttempts.textContent = attempts.toLocaleString(getCurrentLocale());
     if (hasRecordSession()) synchronizeLocalGameRecords(games)
       .then((result) => {
         records = result.records;
@@ -75,7 +76,7 @@ async function initialize() {
           (sum, record) => sum + (Number(record?.attempts) || 0),
           0
         );
-        if (totalAttempts) totalAttempts.textContent = synchronizedAttempts.toLocaleString('ko-KR');
+        if (totalAttempts) totalAttempts.textContent = synchronizedAttempts.toLocaleString(getCurrentLocale());
       })
       .catch(() => {});
   } catch (error) {
@@ -89,3 +90,4 @@ async function initialize() {
 }
 
 initialize();
+document.addEventListener('daily-test-lab:locale-ready', initialize);

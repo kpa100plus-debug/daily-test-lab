@@ -1,6 +1,7 @@
 import { shareOrCopy } from './share-service.js';
 import { getFirebaseServices } from './firebase-client.js';
 import { hasScheduledDailyContent, normalizeDailyContent, selectDailyContentItem } from './daily-content-engine.js';
+import { getCurrentLocale, getMessage, localizeContentData } from './locale.js?v=i18n-2';
 
 const buildStep = 'REF-DAILYFUN-STEP7-ADMIN-DAILY-01';
 const appUrl = new URL(import.meta.url);
@@ -43,13 +44,14 @@ function setTodayLabel() {
   const label = document.querySelector('#today-label');
   if (!label) return;
 
-  const formatted = new Intl.DateTimeFormat('ko-KR', {
+  const locale = getCurrentLocale();
+  const formatted = new Intl.DateTimeFormat(locale, {
     timeZone: 'Asia/Seoul',
     month: 'long',
     day: 'numeric',
     weekday: 'short'
   }).format(new Date());
-  label.textContent = `${formatted} · 오늘도 가볍게 한 판`;
+  label.textContent = `${formatted} · ${getMessage(locale, 'heroEyebrow')}`;
 }
 
 function calculateStreak(days) {
@@ -183,7 +185,7 @@ async function loadDailyContent() {
   try {
     const response = await fetch(dailyContentUrl, { cache: 'no-store' });
     if (!response.ok) throw new Error(`daily content ${response.status}`);
-    data = await response.json();
+    data = await localizeContentData(await response.json());
     const selectedItem = selectDailyContentItem(data, todayKey);
     renderDailyFeature(selectedItem);
     renderPopularItems(data.items, selectedItem);
@@ -198,7 +200,7 @@ async function loadDailyContent() {
     const { doc, getDoc } = services.firestoreSdk;
     const snapshot = await getDoc(doc(services.db, 'daily_contents', 'current'));
     if (!snapshot.exists() || snapshot.data().status !== 'published') return;
-    const remoteItem = normalizeDailyContent(snapshot.data());
+    const remoteItem = await localizeContentData(normalizeDailyContent(snapshot.data()));
     renderDailyFeature(remoteItem);
     renderPopularItems(data.items, remoteItem);
     document.querySelector('#daily-feature')?.setAttribute('data-content-source', 'firebase');
@@ -331,9 +333,16 @@ async function updateVisitorCounts() {
 }
 
 document.addEventListener('daily-test-lab:locale', () => {
+  setTodayLabel();
   document.querySelectorAll('[data-raw-value]').forEach((element) => {
     element.replaceChildren(formatStatNumber(Number(element.dataset.rawValue) || 0));
   });
+});
+
+document.addEventListener('daily-test-lab:locale-ready', () => {
+  loadDailyContent();
+  const savedAnswer = safeStorage.get(`daily-test-lab.quiz.${todayKey}`, null);
+  if (savedAnswer) showQuizResult(savedAnswer);
 });
 
 setTodayLabel();

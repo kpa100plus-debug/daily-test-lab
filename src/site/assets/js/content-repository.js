@@ -1,4 +1,5 @@
 import { getFirebaseServices } from './firebase-client.js';
+import { localizeContentData } from './locale.js?v=i18n-2';
 
 const staticUrls = {
   tests: new URL('../../data/tests.json', import.meta.url),
@@ -6,6 +7,10 @@ const staticUrls = {
 };
 
 const staticCache = new Map();
+const preserveSourceCategories = (items) => (items || []).map((item) => ({
+  ...item,
+  sourceCategory: item.sourceCategory || item.category
+}));
 
 async function loadStatic(kind) {
   if (!staticCache.has(kind)) {
@@ -57,7 +62,9 @@ export async function loadPublishedTests() {
     loadStatic('tests'),
     loadRemoteOrEmpty('tests')
   ]);
-  return mergePublishedContent(staticItems, remoteItems);
+  return localizeContentData(preserveSourceCategories(
+    mergePublishedContent(staticItems, remoteItems)
+  ));
 }
 
 export async function loadTestBundle(testSlug) {
@@ -68,7 +75,9 @@ export async function loadTestBundle(testSlug) {
   const staticTest = staticItems.find((item) => item.slug === testSlug && item.status === 'published');
   const remoteTest = remoteItems.find((item) => item.slug === testSlug);
   if (remoteTest?.status === 'archived') return null;
-  if (!remoteTest) return staticTest || null;
+  if (!remoteTest) return localizeContentData(
+    staticTest ? preserveSourceCategories([staticTest])[0] : null
+  );
 
   try {
     const services = await getFirebaseServices();
@@ -80,14 +89,17 @@ export async function loadTestBundle(testSlug) {
     if (!questionSnapshot.exists() || !resultSnapshot.exists()) {
       throw new Error('질문 또는 결과 문서가 없습니다.');
     }
-    return {
+    return localizeContentData({
       ...remoteTest,
+      sourceCategory: remoteTest.sourceCategory || remoteTest.category,
       questions: questionSnapshot.data().items || [],
       results: resultSnapshot.data().items || []
-    };
+    });
   } catch (error) {
     console.warn(`심리테스트 ${testSlug} 세부 콘텐츠 연결 지연:`, error?.message || error);
-    return staticTest || null;
+    return localizeContentData(
+      staticTest ? preserveSourceCategories([staticTest])[0] : null
+    );
   }
 }
 
@@ -96,5 +108,7 @@ export async function loadPublishedBalanceGames() {
     loadStatic('balance'),
     loadRemoteOrEmpty('balance_content')
   ]);
-  return mergePublishedContent(staticItems, remoteItems);
+  return localizeContentData(preserveSourceCategories(
+    mergePublishedContent(staticItems, remoteItems)
+  ));
 }
