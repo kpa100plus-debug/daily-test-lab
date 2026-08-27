@@ -122,14 +122,16 @@ jobs:
               try {
                 return await paged(path, perPage);
               } catch (error) {
-                unavailable.push(`${label}: ${error.message}`);
+                unavailable.push(`${label}: ${String(error.message).replace(/[a-f0-9]{32}/gi, '[account-id]')}`);
                 return [];
               }
             }
 
-            const pages = await optionalPaged('Cloudflare Pages', `/accounts/${accountId}/pages/projects`);
-            const workers = await optionalPaged('Workers 스크립트', `/accounts/${accountId}/workers/scripts`);
-            const zones = await optionalPaged('DNS 영역(도메인)', `/zones?account.id=${encodeURIComponent(accountId)}`, 50);
+            const zones = await optionalPaged('DNS 영역(도메인)', '/zones', 50);
+            const discoveredAccountId = zones.find((zone) => zone?.account?.id)?.account?.id;
+            const resolvedAccountId = discoveredAccountId || accountId;
+            const pages = await optionalPaged('Cloudflare Pages', `/accounts/${resolvedAccountId}/pages/projects`);
+            const workers = await optionalPaged('Workers 스크립트', `/accounts/${resolvedAccountId}/workers/scripts`);
 
             const dnsRecords = [];
             for (const zone of zones) {
