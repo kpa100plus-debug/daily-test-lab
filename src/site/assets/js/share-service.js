@@ -1,9 +1,13 @@
+const mobileDevicePattern = /Android|iPhone|iPad|iPod/i;
+
 export function buildShareText({ text = '', url = '' } = {}) {
   return [String(text).trim(), String(url).trim()].filter(Boolean).join('\n\n');
 }
 
-function canUseNativeShare(shareData) {
-  if (typeof navigator.share !== 'function') return false;
+function canUseMobileShare(shareData) {
+  const mobileHint = navigator.userAgentData?.mobile === true
+    || mobileDevicePattern.test(navigator.userAgent || '');
+  if (!mobileHint || typeof navigator.share !== 'function') return false;
   return typeof navigator.canShare !== 'function' || navigator.canShare(shareData);
 }
 
@@ -45,7 +49,7 @@ export async function shareOrCopy(shareData) {
     url: String(shareData?.url || location.href).trim()
   };
 
-  if (canUseNativeShare(normalizedData)) {
+  if (canUseMobileShare(normalizedData)) {
     try {
       await navigator.share(normalizedData);
       return { ok: true, method: 'shared' };
@@ -62,4 +66,3 @@ export async function shareOrCopy(shareData) {
   window.prompt('아래 내용을 복사해 원하는 곳에 붙여넣으세요.', copyText);
   return { ok: false, method: 'manual' };
 }
-

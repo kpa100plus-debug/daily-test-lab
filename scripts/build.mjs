@@ -606,14 +606,6 @@ const staticSeoPages = [
     description: '반응속도, 기억력, 숫자 순서 게임을 설치 없이 무료로 플레이하고 오늘의 최고 기록에 도전하세요.', type: 'CollectionPage', breadcrumbName: '10초 게임', monetizable: true
   },
   {
-    path: 'fortune/index.html', route: '/fortune/', title: '오늘의 띠별 운세·재물운·연애운 | DAILY TEST LAB',
-    description: '쥐띠부터 돼지띠까지 오늘의 전체운, 재물운, 연애운과 행운의 숫자·색을 무료로 확인하세요.', type: 'WebPage', breadcrumbName: '오늘의 운세', monetizable: true
-  },
-  {
-    path: 'tarot/index.html', route: '/tarot/', title: '오늘의 타로 한 장 무료 뽑기 | DAILY TEST LAB',
-    description: '마음이 끌리는 타로 카드 한 장을 선택하고 오늘의 메시지, 돈·일운과 사랑·관계운을 확인하세요.', type: 'WebPage', breadcrumbName: '오늘의 타로', monetizable: true
-  },
-  {
     path: 'about/index.html', route: '/about/', title: '서비스 소개·콘텐츠 운영 원칙 | DAILY TEST LAB',
     description: 'DAILY TEST LAB의 무료 테스트·게임 서비스 소개, 자체 콘텐츠 운영 원칙, 결과 산정 방식과 운영 정보를 안내합니다.', breadcrumbName: '서비스 소개'
   },
@@ -804,4 +796,3 @@ await writeFile(
 );
 
 console.log('Build complete: dist/');
-
