@@ -332,6 +332,12 @@ function translateDynamicPhrase(value, locale) {
   const labels = dynamicUnitLabels[locale];
   const shared = dynamicSharedLabels[locale];
   if (!labels || typeof value !== 'string') return value;
+  if (locale === 'en') value = value
+    .replace(/^다음 숫자: (\d+)$/, 'Next number: $1')
+    .replace(/^(\d+) 선택$/, 'Select $1')
+    .replace(/^(\d+)번 기억 타일$/, 'Memory tile $1')
+    .replace(/^(\d+) \/ (\d+) 완료$/, '$1 / $2 complete')
+    .replace(/^(\d+)부터 찾아보세요\. 틀린 선택 (\d+)회$/, 'Find $1 first. Incorrect choices: $2');
   return value
     .replace(/([\d,.]+)\s*개 테스트/g, `$1${labels.tests}`)
     .replace(/([\d,.]+)\s*개 질문/g, `$1${labels.questions}`)
