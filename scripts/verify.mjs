@@ -257,7 +257,7 @@ if (
   !localeJavaScript.includes("'ar'") ||
   !localeJavaScript.includes('countries.dev/ip') ||
   !localeJavaScript.includes('site-language-selector') ||
-  !localeJavaScript.includes('data/locales/${locale}.json?v=20260908-1') ||
+  !localeJavaScript.includes('data/locales/${locale}.json?v=20260908-2') ||
   !contentRepositoryJavaScript.includes('localizeContentData') ||
   !contentRepositoryJavaScript.includes('sourceCategory')
 ) {
