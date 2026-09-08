@@ -1,14 +1,14 @@
-const mobileDevicePattern = /Android|iPhone|iPad|iPod/i;
-
 export function buildShareText({ text = '', url = '' } = {}) {
   return [String(text).trim(), String(url).trim()].filter(Boolean).join('\n\n');
 }
 
-function canUseMobileShare(shareData) {
-  const mobileHint = navigator.userAgentData?.mobile === true
-    || mobileDevicePattern.test(navigator.userAgent || '');
-  if (!mobileHint || typeof navigator.share !== 'function') return false;
-  return typeof navigator.canShare !== 'function' || navigator.canShare(shareData);
+function canUseNativeShare(shareData) {
+  if (typeof navigator.share !== 'function') return false;
+  try {
+    return typeof navigator.canShare !== 'function' || navigator.canShare(shareData);
+  } catch {
+    return false;
+  }
 }
 
 async function copyWithClipboard(text) {
@@ -49,7 +49,7 @@ export async function shareOrCopy(shareData) {
     url: String(shareData?.url || location.href).trim()
   };
 
-  if (canUseMobileShare(normalizedData)) {
+  if (canUseNativeShare(normalizedData)) {
     try {
       await navigator.share(normalizedData);
       return { ok: true, method: 'shared' };
