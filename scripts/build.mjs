@@ -15,10 +15,7 @@ const contentDirectory = path.join(projectRoot, 'src', 'content');
 const outputDirectory = path.join(projectRoot, 'dist');
 const siteBasePath = (process.env.SITE_BASE_PATH ?? '').replace(/\/$/, '');
 const defaultPublicSiteUrl = 'https://dtlabkr.dpdns.org';
-const cloudflarePagesUrl = process.env.CF_PAGES === '1'
-  ? process.env.CF_PAGES_URL
-  : '';
-const publicSiteUrl = (process.env.PUBLIC_SITE_URL || cloudflarePagesUrl || defaultPublicSiteUrl)
+const publicSiteUrl = (process.env.PUBLIC_SITE_URL || defaultPublicSiteUrl)
   .replace(/\/$/, '');
 const releaseDate = '2026-08-24';
 const firebaseAppCheckSiteKey = /^[A-Za-z0-9_-]{20,}$/.test(
@@ -595,6 +592,7 @@ for (const [relativePath, elementId, cards, statusPattern, statusText] of [
   const filePath = path.join(outputDirectory, relativePath);
   let html = await readFile(filePath, 'utf8');
   html = replaceCatalogContents(html, elementId, cards);
+  if (relativePath === 'test/index.html') html = html.replace(/(<strong id="published-test-count">)[^<]*(<\/strong>)/, (_, start, end) => `${start}${publishedTests.length}${end}`);
   if (statusPattern) html = html.replace(statusPattern, `$1${statusText}$2`);
   await writeFile(filePath, html, 'utf8');
 }

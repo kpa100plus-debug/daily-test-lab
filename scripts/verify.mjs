@@ -669,7 +669,7 @@ const { buildShareText } = await import(pathToFileURL(shareServicePath).href);
 if (
   buildShareText({ text: '기록 7.60초', url: 'https://dtlabkr.dpdns.org/game/number-order/' }) !==
     '기록 7.60초\n\nhttps://dtlabkr.dpdns.org/game/number-order/' ||
-  !shareServiceJavaScript.includes('navigator.userAgentData?.mobile') ||
+  !shareServiceJavaScript.includes('canUseNativeShare(normalizedData)') ||
   !shareServiceJavaScript.includes('navigator.clipboard?.writeText') ||
   !shareServiceJavaScript.includes("document.execCommand('copy')") ||
   !appJavaScript.includes("from './share-service.js'") ||
@@ -784,7 +784,7 @@ if (
   !adminAppJavaScript.includes("'test_questions'") ||
   !adminAppJavaScript.includes("'test_results'") ||
   !adminAppJavaScript.includes("'balance_content'") ||
-  !adminAppJavaScript.includes("'juyoungkim'") ||
+  !adminAppJavaScript.includes("'Service Admin'") ||
   !adminAppJavaScript.includes("provider.providerId === 'google.com'") ||
   !adminAppJavaScript.includes('currentUser.getIdToken(true)') ||
   adminAppJavaScript.includes('김주영 관리자')
@@ -819,10 +819,7 @@ if (
 }
 
 const defaultPublicSiteUrl = 'https://dtlabkr.dpdns.org';
-const cloudflarePagesUrl = process.env.CF_PAGES === '1'
-  ? process.env.CF_PAGES_URL
-  : '';
-const publicSiteUrl = (process.env.PUBLIC_SITE_URL || cloudflarePagesUrl || defaultPublicSiteUrl)
+const publicSiteUrl = (process.env.PUBLIC_SITE_URL || defaultPublicSiteUrl)
   .replace(/\/$/, '');
 const staticIndexableRoutes = [
   '/',

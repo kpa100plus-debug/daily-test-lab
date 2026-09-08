@@ -17,7 +17,7 @@ import {
 } from './content-admin-engine.js';
 
 const buildStep = 'REF-DAILYFUN-STEP8-CONTENT-CRUD-01';
-const administratorName = 'juyoungkim';
+const administratorName = 'Service Admin';
 const appUrl = new URL(import.meta.url);
 const siteBasePath = appUrl.pathname.replace(/\/assets\/js\/admin-app\.js$/, '');
 const dataUrls = {
