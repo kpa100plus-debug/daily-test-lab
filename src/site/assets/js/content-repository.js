@@ -7,6 +7,7 @@ const staticUrls = {
 };
 
 const staticCache = new Map();
+const pendingRemoteRequests = new Map();
 const preserveSourceCategories = (items) => (items || []).map((item) => ({
   ...item,
   sourceCategory: item.sourceCategory || item.category
@@ -14,11 +15,16 @@ const preserveSourceCategories = (items) => (items || []).map((item) => ({
 
 async function loadStatic(kind) {
   if (!staticCache.has(kind)) {
-    staticCache.set(kind, fetch(staticUrls[kind], { cache: 'no-store' }).then(async (response) => {
+    const pending = fetch(staticUrls[kind], { cache: 'no-store' }).then(async (response) => {
       if (!response.ok) throw new Error(`${kind} ${response.status}`);
       const data = await response.json();
       return Array.isArray(data.items) ? data.items : [];
-    }));
+    }).catch((error) => {
+      // A temporary network/JSON failure must not poison the page's cache.
+      if (staticCache.get(kind) === pending) staticCache.delete(kind);
+      throw error;
+    });
+    staticCache.set(kind, pending);
   }
   return staticCache.get(kind);
 }
@@ -49,12 +55,21 @@ export function mergePublishedContent(staticItems, remoteItems) {
 }
 
 async function loadRemoteOrEmpty(collectionName) {
-  try {
-    return await loadPublicCollection(collectionName);
-  } catch (error) {
-    console.warn(`${collectionName} Firebase 콘텐츠 연결 지연:`, error?.message || error);
-    return [];
+  if (!pendingRemoteRequests.has(collectionName)) {
+    // Share only active reads. The next read still sees new publications/archives.
+    const pending = loadPublicCollection(collectionName)
+      .catch((error) => {
+        console.warn(`${collectionName} Firebase 콘텐츠 연결 지연:`, error?.message || error);
+        return [];
+      })
+      .finally(() => {
+        if (pendingRemoteRequests.get(collectionName) === pending) {
+          pendingRemoteRequests.delete(collectionName);
+        }
+      });
+    pendingRemoteRequests.set(collectionName, pending);
   }
+  return pendingRemoteRequests.get(collectionName);
 }
 
 export async function loadPublishedTests() {
