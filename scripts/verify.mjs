@@ -272,7 +272,7 @@ for (const relativePath of ['index.html', 'test/index.html', 'vote/index.html', 
 }
 for (const relativePath of ['about/index.html', 'legal/privacy/index.html']) {
   const html = await readFile(path.join(outputDirectory, relativePath), 'utf8');
-  if (!html.includes('src="/assets/js/locale.js?v=i18n-2"')) {
+  if (!html.includes('src="/assets/js/locale.js?v=i18n-20261010-1"')) {
     throw new Error(`Static policy page is missing locale support: ${relativePath}`);
   }
 }
@@ -676,10 +676,10 @@ if (
   !testAppJavaScript.includes("from './share-service.js'") ||
   !balanceAppJavaScript.includes("from './share-service.js'") ||
   !gameAppJavaScript.includes("from './share-service.js'") ||
-  !indexHtml.includes('app.js?v=i18n-2') ||
-  !balanceListShareHtml.includes('balance-app.js?v=i18n-2') ||
-  !buildJavaScript.includes('test-app.js?v=i18n-2') ||
-  !buildJavaScript.includes('game-app.js?v=i18n-2')
+  !indexHtml.includes('app.js?v=i18n-20261010-1') ||
+  !balanceListShareHtml.includes('balance-app.js?v=i18n-20261010-1') ||
+  !buildJavaScript.includes('test-app.js?v=i18n-20261010-1') ||
+  !buildJavaScript.includes('game-app.js?v=i18n-20261010-1')
 ) {
   throw new Error('Reliable share and copy fallback is incomplete.');
 }

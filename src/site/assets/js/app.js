@@ -1,7 +1,7 @@
 import { shareOrCopy } from './share-service.js';
 import { getFirebaseServices } from './firebase-client.js';
 import { hasScheduledDailyContent, normalizeDailyContent, selectDailyContentItem } from './daily-content-engine.js';
-import { getCurrentLocale, getMessage, localizeContentData } from './locale.js?v=i18n-2';
+import { getCurrentLocale, getMessage, localizeContentData } from './locale.js?v=i18n-20261010-1';
 
 const buildStep = 'REF-DAILYFUN-STEP7-ADMIN-DAILY-01';
 const appUrl = new URL(import.meta.url);

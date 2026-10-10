@@ -1,5 +1,5 @@
 import { getFirebaseServices } from './firebase-client.js';
-import { localizeContentData } from './locale.js?v=i18n-2';
+import { localizeContentData } from './locale.js?v=i18n-20261010-1';
 
 const staticUrls = {
   tests: new URL('../../data/tests.json', import.meta.url),

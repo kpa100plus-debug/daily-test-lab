@@ -1,6 +1,6 @@
 import { shareOrCopy } from './share-service.js';
 import { getFirebaseServices } from './firebase-client.js';
-import { loadPublishedBalanceGames } from './content-repository.js';
+import { loadPublishedBalanceGames } from './content-repository.js?v=content-20261010-1';
 import {
   applyVote,
   calculateVotePercentages,

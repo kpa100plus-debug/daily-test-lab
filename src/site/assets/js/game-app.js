@@ -1,5 +1,5 @@
 import { shareOrCopy } from './share-service.js';
-import { localizeContentData } from './locale.js?v=i18n-2';
+import { localizeContentData } from './locale.js?v=i18n-20261010-1';
 import {
   createNumberBoard,
   createReactionDelay,

@@ -164,7 +164,7 @@ function injectGlobalEnhancements(html) {
   ) return html;
   return html.replace(
     '</body>',
-    '    <script type="module" src="/assets/js/locale.js?v=i18n-2"></script>\n  </body>'
+    '    <script type="module" src="/assets/js/locale.js?v=i18n-20261010-1"></script>\n  </body>'
   );
 }
 
@@ -328,7 +328,7 @@ function createTestPageHtml(test, view) {
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
       <a href="/"><span>⌂</span>홈</a><a href="/test/" aria-current="page"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/my/"><span>●</span>MY</a>
     </nav>
-    <script type="module" src="/assets/js/test-app.js?v=i18n-2"></script>
+    <script type="module" src="/assets/js/test-app.js?v=i18n-20261010-1"></script>
   </body>
 </html>
 `;
@@ -423,7 +423,7 @@ function createBalancePageHtml(game) {
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
       <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/" aria-current="page"><span>⚖️</span>밸런스</a><a href="/game/"><span>⚡</span>게임</a><a href="/my/"><span>●</span>MY</a>
     </nav>
-    <script type="module" src="/assets/js/balance-app.js?v=i18n-2"></script>
+    <script type="module" src="/assets/js/balance-app.js?v=i18n-20261010-1"></script>
   </body>
 </html>
 `;
@@ -519,7 +519,7 @@ function createMiniGamePageHtml(game, allGames) {
     <nav class="bottom-nav" aria-label="모바일 빠른 메뉴">
       <a href="/"><span>⌂</span>홈</a><a href="/test/"><span>🧠</span>테스트</a><a href="/vote/"><span>⚖️</span>밸런스</a><a href="/game/" aria-current="page"><span>⚡</span>게임</a><a href="/my/"><span>●</span>MY</a>
     </nav>
-    <script type="module" src="/assets/js/game-app.js?v=i18n-2"></script>
+    <script type="module" src="/assets/js/game-app.js?v=i18n-20261010-1"></script>
   </body>
 </html>
 `;

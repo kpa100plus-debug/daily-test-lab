@@ -1,5 +1,5 @@
 import { formatGameScore } from './mini-game-engine.js';
-import { getCurrentLocale, localizeContentData } from './locale.js?v=i18n-2';
+import { getCurrentLocale, localizeContentData } from './locale.js?v=i18n-20261010-1';
 import {
   hasRecordSession,
   readLocalGameRecords,

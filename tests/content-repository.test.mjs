@@ -94,3 +94,27 @@ test('different collections do not share a request', async () => {
   await Promise.all([repo.loadPublishedTests(), repo.loadPublishedBalanceGames()]);
   assert.deepEqual(collections.sort(), ['balance_content', 'tests']);
 });
+
+test('entry scripts and shared locale/content modules use consistent versioned URLs', async () => {
+  const modules = [
+    'app', 'game-list', 'content-repository', 'test-app',
+    'game-app', 'balance-app', 'my-app', 'test-list'
+  ];
+  const localeVersions = new Set();
+  const contentVersions = new Set();
+  for (const name of modules) {
+    const text = await readFile(new URL(`../src/site/assets/js/${name}.js`, import.meta.url), 'utf8');
+    for (const match of text.matchAll(/['"]\.\/locale\.js([^'"]*)['"]/g)) localeVersions.add(match[1]);
+    for (const match of text.matchAll(/['"]\.\/content-repository\.js([^'"]*)['"]/g)) contentVersions.add(match[1]);
+  }
+  assert.equal(localeVersions.size, 1);
+  assert.equal(contentVersions.size, 1);
+  const localeVersion = [...localeVersions][0];
+  assert.match(localeVersion, /^\?v=.+/);
+  assert.match([...contentVersions][0], /^\?v=.+/);
+  for (const [page, entry] of [['index.html', 'app'], ['test/index.html', 'test-list'],
+    ['game/index.html', 'game-list'], ['vote/index.html', 'balance-app'], ['my/index.html', 'my-app']]) {
+    const html = await readFile(new URL(`../src/site/${page}`, import.meta.url), 'utf8');
+    assert.ok(html.includes(`${entry}.js${localeVersion}`), `${page} entry must use the current locale revision`);
+  }
+});

@@ -1,6 +1,6 @@
 import { shareOrCopy } from './share-service.js';
 import { calculateTestResult } from './test-engine.js';
-import { loadPublishedTests, loadTestBundle } from './content-repository.js';
+import { loadPublishedTests, loadTestBundle } from './content-repository.js?v=content-20261010-1';
 
 const buildStep = 'REF-DAILYFUN-STEP8-CONTENT-CRUD-01';
 const appUrl = new URL(import.meta.url);
